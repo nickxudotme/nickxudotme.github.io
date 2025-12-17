@@ -1,31 +1,144 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="这家伙真勤奋，什么都留下了"><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/page/16/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="这家伙真勤奋，什么都留下了"><script type="application/ld+json"></script><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/page/16/index.html"><link rel="preconnect"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css?v=7.1.0"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?3573ab9aac9d53e5c34fea51e076a07d";
-  var s = document.getElementsByTagName("script")[0]; 
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-VBKFEG3YFD');
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-VBKFEG3YFD')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-VBKFEG3YFD', {'page_path': window.location.pathname})
+}, 'google_analytics')
 </script><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  localSearch: undefined,
   translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
-  noticeOutdate: {"limitDay":300,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
   copy: {
     success: '复制成功',
-    error: '复制错误',
+    error: '复制失败',
     noSupport: '浏览器不支持'
   },
   relativeDate: {
     homepage: false,
     post: false
   },
-  runtime: '天',
+  runtime: '',
   dateSuffix: {
     just: '刚刚',
     min: '分钟前',
@@ -34,476 +147,121 @@ gtag('config', 'G-VBKFEG3YFD');
     month: '个月前'
   },
   copyright: undefined,
-  lightbox: 'fancybox',
+  lightbox: 'null',
   Snackbar: undefined,
-  source: {
-    justifiedGallery: {
-      js: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.css'
-    }
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js?v=4.12.0',
+    buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: false,
+  islazyloadPlugin: false,
   isAnchor: false,
   percent: {
     toc: true,
     rightside: false,
   },
-  autoDarkmode: false
+  autoDarkmode: true
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: 'NX の 博客',
-  isPost: false,
-  isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2025-11-18 03:40:07'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
-        }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
-      }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
-      win.activateDarkMode = function () {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      win.activateLightMode = function () {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-      const t = saveToLocal.get('theme')
-    
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        if (asideStatus === 'hide') {
-          document.documentElement.classList.add('hide-aside')
-        } else {
-          document.documentElement.classList.remove('hide-aside')
-        }
-      }
-    
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-    })(window)</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
+  pageType: 'home'
+}</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
 <link rel="alternate" href="/rss2.xml" title="NX の 博客" type="application/rss+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/static/favicon.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/static/202202230023824.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="NX の 博客"><span class="site-name">NX の 博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">NX の 博客</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/14/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89%E9%9B%86%E5%90%88%EF%BC%88Set%EF%BC%89/" title="Python 入门笔记（八）集合（Set）">Python 入门笔记（八）集合（Set）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-14T13:02:25.000Z" title="发表于 2022-03-14 21:02:25">2022-03-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">初识集合
-与数学中的集合一样，Python中 集合（set） 中每一个元素都是独一无二的，因而集合具有去重功能
-Python 中的集合很强大，你可以对集合轻松执行各种运算
-新建集合
-使用大括号 &#123;&#125;
-集合和字典有时很容易弄混，因为它们都是用一对花括号定义的
-只不过当内容是键值对时，表示的是字典，内容是诺干单独元素时，表示的是集合
-12languages = &#123;&#x27;python&#x27;, &#x27;c&#x27;, &#x27;ruby&#x27;, &#x27;python&#x27;&#125;print(languages) # &#123;&#x27;ruby&#x27;, &#x27;python&#x27;, &#x27;c&#x27;&#125; 这里体现了集合的去重功能
-使用  set()
-使用 set() 函数可以将其他类型转换为集合
-1234a = set(&quot;12345&quot;) # 字符串转集合b = set([&#x27;4&#x27;, &#x27;5&#x27;, &#x27;6&#x27;, &#x27;7&#x27;, &#x27;8&#x27;]) # 列表转集合print(a) # [&#x27;1&#x27;, &#x27;2&#x27;, &#x27;3&#x27;, &#x27;4&#x27;, &#x27;5&#x27;]print(b) # [&#x27;4&#x27;, &#x27;5&#x27;, &#x27;6&#x27;, &#x27;7&#x27;, &#x27;8& ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/13/%E3%80%8E%E6%9D%82%E6%96%87%E3%80%8F%E5%9C%A8%E8%BF%B7%E8%8C%AB%E4%B8%AD%E5%89%8D%E8%BF%9B/" title="『杂文』在迷茫中前进">『杂文』在迷茫中前进</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-13T14:35:28.000Z" title="发表于 2022-03-13 22:35:28">2022-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9A%8F%E7%AC%94%E4%B8%8E%E6%80%BB%E7%BB%93/">随笔与总结</a></span></div><div class="content">
-
-现在时间是晚上22点36分，每日一篇的技术文肯定是写不完了，就写一篇近期的个人感想吧
-
-很烦，很累
-这几天我感觉很累，真的
-从周五早上开始放假，再到现在周日晚上，我想了想，我基本就没做什么正事
-玩也没有好好玩，学习也没有好好学习，属于一种不在状态的样子，做什么事情都没有劲
-为什么呢？我不知道，我想找回曾经的状态——有着明确的目标，且精力充沛
-但是不行，即使玩游戏也没法让自己放松
-周五，周六，周日，我基本都在找我感兴趣的游戏，能让我打起精神来，寻找一个目标，然后奋力前进
-但是我发现，好像所有的游戏我都玩腻了
-csgo，WT，缺氧，泰坦陨落2，RA3…我在我的 steam 库里寻找哪怕能让我解闷一点的游戏，但是我找不到——我感觉我都玩腻了，没意思
-周五晚，我连续打了将近8个小时的文明6，玩的是老秦，从酋邦，到商人共和国，到君主制，都法西斯政体，再到后来的联合专家统治…我沉醉其中，但这个档玩到快科技胜利的时候，我又感觉玩腻了，眼睛还贼痛
-然后干什么？我不知道，我知道我给自己定的规则：不管每天有多忙，不管有多少阻碍，每天至少要写一篇博客，记录下今天都学了些什么
-于是，前两天水了一篇python的，一篇gin框架的，但今天，我真的提不起劲了——就是没这个劲
-我知道我在空耗时间，但我就是没劲做任何事，我讨厌虚度光阴，浪费宝贵的时间，我想摆脱这种状态，但是找不出办法
-重复、重复
-一年中，你是真的过了365天，还是过了一天，然后重复了365次？
-如果是之前，我绝对会说是365天，但是我现在真的感觉是在重复
-每一天，我基本都是相同的轨迹：早上7，8点去买个包子加豆奶，中午去买份9块钱的烤冷面 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/12/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89%E5%AD%97%E5%85%B8%EF%BC%88Dictionary%EF%BC%89/" title="Python 入门笔记（七）字典（Dictionary）">Python 入门笔记（七）字典（Dictionary）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-12T12:30:57.000Z" title="发表于 2022-03-12 20:30:57">2022-03-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">初识字典
-字典（Dictionary） 类似于 C++ 中的 Map ，内部都是键值对，用于创建一类对象对另一类对象的映射
-但不同的是，字典中的映射类型是不固定的（键与键之间，值与值之间的类型可以不相同）
-值可以取任何数据类型（甚至可以嵌套字典），但键必须是不可变的，如字符串，数字
-创建字典
-使用大括号 &#123;&#125; 创建
-12personInfo = &#123;&#x27;name&#x27;: &#x27;Tom&#x27;, &#x27;age&#x27;: 18, &#x27;hobby&#x27;: [&#x27;reading&#x27;, &#x27;running&#x27;, &#x27;swimming&#x27;]&#125;print(personInfo) # &#123;&#x27;name&#x27;: &#x27;Tom&#x27;, &#x27;age&#x27;: 18, &#x27;hobby&#x27;: [&#x27;reading&#x27;, &#x27;running&#x27;, &#x27;swimming&#x27;]&#125;
-技巧：写成多行
-在某些场景下，写成多行能让内容更加清晰明了，例如这里统计几个人最喜欢的编程语言
-123456favoriteLanguages = &#123;    &#x27;jen&#x27;: &#x27;python&#x27;,    &#x27;sarch&#x27;: &#x27;c&#x27;,    &#x27;edward&#x27;: &#x27;ruby&# ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/11/Gin-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89Cookie-%E4%B8%8E-Session/" title="Gin 入门笔记（十）Cookie 与 Session">Gin 入门笔记（十）Cookie 与 Session</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-11T00:53:49.000Z" title="发表于 2022-03-11 08:53:49">2022-03-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">初识 Cookie
-HTTP 是无状态协议。简单地说，当你浏览了一个页面，然后转到同一个网站的另一个页 面，服务器无法认识到这是同一个浏览器在访问同一个网站。每一次的访问，都是没有任何关系的。如果我们要实现多个页面之间共享数据的话我们就可以使用 Cookie 或者 Session 实现
-cookie 存储于访问者计算机的浏览器中，可以让我们用同一个浏览器访问同一个域名的时候共享数据
-Cookie 能实现的简单功能：
-
-
-保持用户登录状态
-
-
-保存用户浏览记录
-
-
-
-使用 Cookie
-设置 Cookie
-1con.SetCookie(name string, value string, maxAge int, path string, domain string, secure bool, httpOnly bool)
-
-
-maxAge：过期时间
-
-大于0，设置过期时间，单位为秒
-小于0，删除本Cookie
-等于0，设置为当关闭浏览器时过期
-
-
-
-path：Cookie的路径
-
-
-domain：作用域，若要在多个二级域名中使用，如a.example.com和b.example.com，则要写成.example.com
-
-
-secure：为True时，仅在HTTPS中生效
-
-
-httpOnly：用于防止客户端脚本通过document.cookie属性访问Cookie，有助于保护Cookie不被跨站脚本攻击窃取或篡改
-
-
-读取 Cookie
-1cookie, err := con.Cookie(&quot;name&quot;)
-
-样例
-defaultRouters.go
-1234 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/10/Gin-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="Gin 入门笔记（九）文件上传">Gin 入门笔记（九）文件上传</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-09T23:58:00.000Z" title="发表于 2022-03-10 07:58:00">2022-03-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">单文件上传
-定义模板
-12345678&lt;body&gt;    &lt;h2&gt;文件上传&lt;/h2&gt;    &lt;form action=&quot;/admin/doUpload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;        用户名： &lt;input type=&quot;text&quot; name=&quot;username&quot; placeholder=&quot;用户名&quot;&gt; &lt;br&gt; &lt;br&gt;        文  件：&lt;input type=&quot;file&quot; name=&quot;file&quot;&gt;&lt;br&gt; &lt;br&gt;        &lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;    &lt;/form&gt;&lt;/body&gt;
-注意：enctype=&quot;multipart/form-data&quot;不能漏
-添加控制器
-12345678910111213141516171819func (c AdminController) DoUpload(con *gin.Context) &#123;	username := con.PostForm(&quot;username&quot;)	file, err := con.FormFile( ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/09/%E3%80%8EC-C-%E3%80%8Fmain-%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0/" title="『C/C++』main 函数的参数">『C/C++』main 函数的参数</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-09T13:22:36.000Z" title="发表于 2022-03-09 21:22:36">2022-03-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-C/">C / C++</a></span></div><div class="content">也许你在某些地方会见到这种写法的main函数：
-1234int main(int argc, char *argv[])&#123;	...&#125;
-其中的int argc, char *argv[]的含义是接收从命令行调用时附加的参数
-其中，int argc用于统计参数的总个数，char *argv[]则依次保存这些参数
-argc的值至少为1，即使你没有附加任何参数，因为arge[0]会保存着当前程序的名称或完整路径
-为什么是或呢？arge[]其实保存的是这一行中的所有参数，如果当前程序是在PATH中的（或当前文件夹，Windows环境下），就可以仅凭名称调用
-下面的程序能依次打印接收的参数，你可以借此学习如何使用这一机制
-123456789101112#include &lt;iostream&gt;using namespace std;int main(int argc, char *argv[])&#123;    int i;    for (i = 0; i &lt; argc; i++)    &#123;        cout &lt;&lt; &quot;argument&quot; &lt;&lt; i &lt;&lt; &quot;: &quot; &lt;&lt; argv[i] &lt;&lt; endl;    &#125;    cout &lt;&lt; &quot;total argument:&quot; &lt;&lt; argc;    return 0;&#125;
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/08/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E5%85%83%E7%BB%84%EF%BC%88Tuple%EF%BC%89/" title="Python 入门笔记（六）元组（Tuple）">Python 入门笔记（六）元组（Tuple）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-08T11:48:41.000Z" title="发表于 2022-03-08 19:48:41">2022-03-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">
-元组（Tuple）与列表及其相似，只是元组的内容不能更改，可以认为是列表的常量版本
-
-创建元组
-使用小括号 () 将各个元素括起来即可
-12tup1 = (&#x27;Google&#x27;, &#x27;Runoob&#x27;, 1997, 2000)tup2 = (1, 2, 3, 4, 5 )
-实际上，小括号不是必须的，最初的元组定义就是使用逗号分隔元素即可，小括号只是为了美观
-1tup3 = &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;   #  不需要括号也可以
-所以当元组中只包含一个元素时，必须 在元素后面添加逗号，否则括号会被当作运算符使用
-1234567&gt;&gt;&gt; tup1 = (50)&gt;&gt;&gt; type(tup1)     # 不加逗号，类型为整型&lt;class &#x27;int&#x27;&gt;&gt;&gt;&gt; tup1 = (50,)&gt;&gt;&gt; type(tup1)     # 加上逗号，类型为元组&lt;class &#x27;tuple&#x27;&gt;
-创建只包含一个元素的元组通常没有意义，但自动生成的元组可能只有一个元素
-另外，你还可以通过 tuple() 将其他结构转换为元组
-修改元组
-虽然元组的内容不能更改，但是可以给元组整体重新赋值
-12345dimensions = (200, 50)print(dimensions) # (200, 50)dimensions = (400, 100)print(di ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/07/%E3%80%8EC-C-%E3%80%8F%E5%85%B3%E9%94%AE%E5%AD%97-inline%EF%BC%9A%E5%86%85%E8%81%94%E5%87%BD%E6%95%B0/" title="『C/C++』关键字 inline：内联函数">『C/C++』关键字 inline：内联函数</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-07T06:29:00.000Z" title="发表于 2022-03-07 14:29:00">2022-03-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-C/">C / C++</a></span></div><div class="content">之前参加竞赛时，总是会看见一些大佬的函数前面加上个inline，比如下面的快读：
-12345678inline int read()&#123;   int s=0,w=1;   char ch=getchar();   while(ch&lt;&#x27;0&#x27;||ch&gt;&#x27;9&#x27;)&#123;if(ch==&#x27;-&#x27;)w=-1;ch=getchar();&#125;   while(ch&gt;=&#x27;0&#x27;&amp;&amp;ch&lt;=&#x27;9&#x27;) s=s*10+ch-&#x27;0&#x27;,ch=getchar();   return s*w;&#125;
-问之，则曰：
-“这样会运行快一点”
-但是我一直都没搞懂，为什么说这样运行就会快一点
-
-今天特地查了一下，这个inline是内联函数的标识符，那内联函数又是什么？
-
-如果一个函数是内联的，那么在编译时，编译器会把该函数的代码副本放置在每个调用该函数的地方
-
-这样一来，优点就显而易见了：普通函数都是单独保存的，当你调用函数时，要先通过指针跳到函数的位置再运行，而内联函数直接就嵌在调用该函数的地方（类似于宏替换），省去了寻址步骤，自然更快
-也许你可能会问，一个寻址要耗多少时间呢？但其实对于非常简单的函数来说（如两个int求较大值），寻址的时间占比就很大，而这种简单的函数往往又是比较常用的，一来二去，寻址时间就又被放大了
-但缺点也是显而易见的：增加内存消耗，并且内联函数中不能递归调用自己
-
-所以，只有短小简单，调用又十分频繁的函数才适合作为内 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/07/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%88%97%E8%A1%A8%EF%BC%88List%EF%BC%89/" title="Python 入门笔记（五）列表（List）">Python 入门笔记（五）列表（List）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-07T00:21:01.000Z" title="发表于 2022-03-07 08:21:01">2022-03-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">列表（List） 是 Python 中最基本的数据结构，与 C 中的数组类似
-创建列表
-使用中括号 [] 将各个元素括起来即可，元素类型可不相同
-1234list1 = [&#x27;Google&#x27;, &#x27;Runoob&#x27;, 1997, 2000]list2 = [1, 2, 3, 4, 5 ]list3 = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]list4 = [&#x27;red&#x27;, &#x27;green&#x27;, &#x27;blue&#x27;, &#x27;yellow&#x27;, &#x27;white&#x27;]
-
-访问列表中的值
-索引
-列表的索引和切片与字符串的一样
-使用 列表[下标] 来索引单个元素
-
-
-
-list
-‘red’
-‘green’
-‘blue’
-‘yellow’
-‘white’
-
-
-
-
-从前往后数
-0
-1
-2
-3
-4
-
-
-从后往前数
--5
--4
--3
--2
--1
-
-
-
-1234567list = [&#x27;red&#x27;, &#x27;green&#x27;, &#x27;blue&#x27;, &#x27;yellow&#x27;, &#x27;white&#x27;]print( list[0] ) # redprint( list[1] ) # greenprint( list[2] ) # blueprint( list[-1] ) # whiteprint( list[-2] ) # yellowprin ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/06/Gin-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89-Model/" title="Gin 入门笔记（八）自定义 Model">Gin 入门笔记（八）自定义 Model</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-06T03:36:04.000Z" title="发表于 2022-03-06 11:36:04">2022-03-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">关于 Model
-如果我们的应用非常简单的话，我们可以在 Controller 里面处理常见的业务逻辑。但是如果我们 有一个功能想在多个控制器、或者多个模板里面复用 的话，那么我们就可以把公共的功能单独抽取出来作为一个模块（Model）
-封装一个 Model
-新建 models/tools.go，并在里面实现一个Unix时间戳转日期时间的功能
-12345678910package modelsimport (	&quot;time&quot;)func UnixToDate(timestamp int) string &#123;	t := time.Unix(int64(timestamp), 0)	return t.Format(&quot;2006-01-02 15:04:05&quot;)&#125;
-调用 Model
-在控制器中调用
-以\controllers\admin\adminController.go为例
-1234func (c AdminController) Index(con *gin.Context) &#123;	date := models.UnixToDate(1646554975)	con.String(200, &quot;转换后的日期和时间是：&quot;+date)&#125;
-
-在模板文件中调用
-注意顺序，注册模板函数需要在加载模板上面
-main.go
-123456789101112131415161718192021222324252627282930package mainimport (	&quot;html/template&q ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/05/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%88String%EF%BC%89/" title="Python 入门笔记（四）字符串（String）">Python 入门笔记（四）字符串（String）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-05T02:29:39.000Z" title="发表于 2022-03-05 10:29:39">2022-03-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">初识字符串
-字符串就是一串字符，有短字符串（单行字符串）和长字符串（多行字符串）两种书写形式
-
-与 C 不同，在 Python 中没有单个字符的类型，单个字符也按字符串处理
-
-短字符串（单行字符串）
-简单地使用引号括起来，单引号和双引号均可
-12&quot;This is a string&quot;&#x27;This is also a string&#x27;
-这种灵活性运允许你在字符串中包含引号和撇号，只要确保不与首尾两端的引号冲突
-123&#x27;I told my friend,&quot;Python is my favorite language!&quot;&#x27;&quot;The language &#x27;Python&#x27; is name after Monty Python, not the snake.&quot;&quot;One of Python&#x27;s strengths is its fiverse and supportive community.&quot;
-
-Tip：续行符（反斜杠\）在字符串中也可以使用，故短字符串也可以写成多行
-
-长字符串（多行字符串）
-之前介绍 Python 多行注释时提到使用三个引号（单引号、双引号都行）来包含多行注释内容，这其实是长字符串的写法
-只是由于在长字符串中可以放置任何内容，如果所定义的长字符串没有赋值给任何变量，那么这个字符串就相当于被解释器忽略了，也就相当于注释掉了
-实际上，使用三个引号括起来的长字符串完全可以赋值给变量
-1234s = &#x27;&#x27;&#x27;& ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/04/Gin-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89%E8%B7%AF%E7%94%B1%E4%B8%AD%E9%97%B4%E4%BB%B6/" title="Gin 入门笔记（七）路由中间件">Gin 入门笔记（七）路由中间件</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-04T07:17:55.000Z" title="发表于 2022-03-04 15:17:55">2022-03-04</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">初识中间件
-从最简单的模板开始
-123456789101112131415package mainimport &quot;github.com/gin-gonic/gin&quot;func main() &#123;	r := gin.Default()	r.GET(&quot;/&quot;, func(c *gin.Context) &#123;		c.String(200, &quot;测试页面&quot;)	&#125;)	r.Run()&#125;
-在这个例子中，只有一个函数处理根目录下的路由
-然而其实也可以传递多个函数，它们将被依次执行，最后一个函数前面触发的方法都可以称为中间件
-中间件适合处理一些公共的业务逻辑，比如登录认证、权限校验、数据分页、 记录日志、耗时统计等
-1234567891011121314151617181920212223package mainimport (	&quot;fmt&quot;	&quot;github.com/gin-gonic/gin&quot;)func initMiddleware(ctx *gin.Context) &#123;	fmt.Println(&quot;我是一个中间件&quot;)&#125;func main() &#123;	r := gin.Default()	r.GET(&quot;/&quot;, initMiddleware, func(c *gin.Context) &#123;		c.String(200, &quot;测试页面&quot;)	&#125;)	r.Run()&#125;
- ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/03/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89%E6%95%B0%E5%AD%97%EF%BC%88Number%EF%BC%89/" title="Python 入门笔记（三）数字（Number）">Python 入门笔记（三）数字（Number）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-03T14:42:22.000Z" title="发表于 2022-03-03 22:42:22">2022-03-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">三种数
-Python 支持三种不同的数值类型：
-
-
-整型( int ) ： 通常被称为是整型或整数，是正或负整数，不带小数点
-
-
-浮点型(  float ) ： 浮点型由整数部分与小数部分组成，浮点型也可以使用科学计数法表示 2.5e2
-
-
-复数(  complex  ) ： 复数由实数部分和虚数部分构成，可以用 a + bj （注意是 j ）,或者 complex(a,b) 表示，a 和 b 都将以浮点型存储
-
-
-相互转换
-
-int(x) 将x转换为一个整数。
-float(x) 将x转换到一个浮点数。
-complex(x) 将x转换到一个复数，实数部分为 x，虚数部分为 0
-complex(x, y) 将 x 和 y 转换到一个复数，实数部分为 x，虚数部分为 y
-
-PS：
-
-Python3 中的数字是没有限制大小的！
-Python3 中没有 Python2 的 long 类型，整型简化成只剩一个int类型
-布尔(bool) 是 int 的子类型
-
-数中的下划线
-在 Python3.6+ 中书写很大的数时，可以在任意位置加入下划线，使数字更清晰易读
-1universe_age= 14_000_000_000
-当然，Python 并不会把下划线也存进去
-12print(universe_age)14000000000
-这种方法对整数和浮点数都适用
-七种运算
-
-
-
-运算符
-含义
-例子
-运行结果
-
-
-
-
-+
-加
-3+1
-4
-
-
--
-减
-40-2
-38
-
-
-*
-乘
-3*2
-6
-
-
-/
-除
-6/3
-2.0
-
-
-//
-整除
-3//2
-1
-
-
-**
-幂
-2**3
-8
-
-
-%
-求余
-7%2
- ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/02/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/" title="Python 入门笔记（二）基础语法">Python 入门笔记（二）基础语法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-02T12:52:48.000Z" title="发表于 2022-03-02 20:52:48">2022-03-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">标识符
-Python 中的标识符规则与 C 中的类似，但不完全相同
-
-标识符只能由数字、字母和下划线组成，并且开头不能是数字
-标识符不能与保留字冲突
-标识符对大小写敏感
-在 Python3 中，汉字也可以作为标识符，但不建议使用
-
-标识符前后的下划线有特殊含义
-
-以单下划线开头的标识符（如  _width ），表示不能直接访问的类属性，其无法通过 from...import * 的方式导入
-以双下划线开头的标识符（如 __add ）表示类的私有成员
-以双下划线作为开头和结尾的标识符（如  __init__ ），是专用标识符
-
-保留字
-保留字即关键字，我们不能把它们用作任何标识符名称。Python 的标准库提供了一个 keyword 模块，可以输出当前版本的所有关键字
-12import keywordprint(keyword.kwlist)
-输出为：
-1[&#x27;False&#x27;, &#x27;None&#x27;, &#x27;True&#x27;, &#x27;__peg_parser__&#x27;, &#x27;and&#x27;, &#x27;as&#x27;, &#x27;assert&#x27;, &#x27;async&#x27;, &#x27;await&#x27;, &#x27;break&#x27;, &#x27;class&#x27;, &#x27;continue&#x27;, &#x27;def&#x27;, &#x27;del&#x27;, &#x27;elif&#x27;, &#x27;else&#x27;, &#x27;except& ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/02/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83/" title="Python 入门笔记（一）搭建环境">Python 入门笔记（一）搭建环境</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-02T12:20:32.000Z" title="发表于 2022-03-02 20:20:32">2022-03-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">
-
-❤️又开新坑了！！！
-
-高中的时候学过一段时间的Python3，但是很快就忘了，究其原因还是光看不练，很快就会忘个精光
-这次边学边做笔记，应该能学到很多知识
-基本框架源于菜鸟教程
-Python 简介
-Python 是一门解释性语言，简单易学，上手容易
-虽然在我的认知里在正式场合里用到 Python 的情况不多，但作为著名的胶水语言，还是有必要去学一学的
-环境搭建
-前往官网下载并安装 Python
-
-再在VSCode中安装 Python 的扩展
-
-
-如果你从未使用过VScode，请安装中文插件和CodeRunner，参考这篇
-
-新建文件，就可以开始 Python 学习了，将下面的代码复制进去，按下Ctrl + Alt +  N运行
-1print(&quot;HelloWorld&quot;)
-
-看，你已经成功运行了第一个 Python 程序了！
-当然，作为一门解释性语言，除了写完一整个程序然后运行（脚本式），还可以一句话一句话地与编译器对话来运行（交互式）
-
-你也可以直接运行 Python 来在命令行中进行交互式编程
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/02/Gin-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E5%88%B6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E7%BB%A7%E6%89%BF/" title="Gin 入门笔记（六）自定义控制器和控制器的继承">Gin 入门笔记（六）自定义控制器和控制器的继承</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-02T07:55:24.000Z" title="发表于 2022-03-02 15:55:24">2022-03-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">自定义控制器
-在对路由分组后，我们对控制器也可以进行分组
-首先新建controllers文件夹，然后在其中按业务逻辑创建控制器
-12345678910111213141516171819TEST│  go.mod│  go.sum│  main.go│├─controllers│  ├─admin│  │      adminController.go│  ││  ├─api│  │      apiController.go│  ││  └─homePage│          homePageController.go //因为default是关键字│└─routers        adminRouters.go        apiRouters.go        defaultRouters.go
-以/controllers/admin/adminController.go为例，编辑控制器
-123456789101112131415161718package adminimport &quot;github.com/gin-gonic/gin&quot;type AdminController struct &#123;&#125;func (c AdminController) Index(con *gin.Context) &#123;	con.String(200, &quot;后台首页&quot;)&#125;func (c AdminController) User(con *gin.Context) &#123;	con.String(200, &quo ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/15/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/#content-inner">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/#content-inner">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/#content-inner">19</a><a class="extend next" rel="next" href="/page/17/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Nick Xu</div><div class="author-info__description">这家伙真勤奋，什么都留下了</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/static/202202230023824.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">NX の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">NX の 博客</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/14/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89%E9%9B%86%E5%90%88%EF%BC%88Set%EF%BC%89/" title="Python 入门笔记（八）集合（Set）">Python 入门笔记（八）集合（Set）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-14T13:02:25.000Z" title="发表于 2022-03-14 21:02:25">2022-03-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">初识集合 与数学中的集合一样，Python中 集合（set） 中每一个元素都是独一无二的，因而集合具有去重功能 Python 中的集合很强大，你可以对集合轻松执行各种运算 新建集合 使用大括号 &#123;&#125; 集合和字典有时很容易弄混，因为它们都是用一对花括号定义的 只不过当内容是键值对时，表示的是字典，内容是诺干单独元素时，表示的是集合 12languages = &#123;&#x27;python&#x27;, &#x27;c&#x27;, &#x27;ruby&#x27;, &#x27;python&#x27;&#125;print(languages) # &#123;&#x27;ruby&#x27;, &#x27;python&#x27;, &#x27;c&#x27;&#125; 这里体现了集合的去重功能 使用  set() 使用 set() 函数可以将其他类型转换为集合 1234a = set(&quot;12345&quot;) # 字符串转集合b = set([&#x27;4&#x27;, &#x27;5&#x27;, &#x27;6&#x27;, &#x27;7&#x27;, &#x27;8&#x27;]) # 列表转集合print(a) # [&#x27;1&#x27;, &#x27;2&#x27;, &#x27;3&#x27;, &#x27;4&#x27;, &#x27;5&#x27;]print(b) # [&#x27;4&#x27;, &#x27;5&#x27;, &#x27;6&#x27;, &#x27;7&#x27;, &#x27...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/13/%E3%80%8E%E6%9D%82%E6%96%87%E3%80%8F%E5%9C%A8%E8%BF%B7%E8%8C%AB%E4%B8%AD%E5%89%8D%E8%BF%9B/" title="『杂文』在迷茫中前进">『杂文』在迷茫中前进</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-13T14:35:28.000Z" title="发表于 2022-03-13 22:35:28">2022-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9A%8F%E7%AC%94%E4%B8%8E%E6%80%BB%E7%BB%93/">随笔与总结</a></span></div><div class="content">  现在时间是晚上22点36分，每日一篇的技术文肯定是写不完了，就写一篇近期的个人感想吧  很烦，很累 这几天我感觉很累，真的 从周五早上开始放假，再到现在周日晚上，我想了想，我基本就没做什么正事 玩也没有好好玩，学习也没有好好学习，属于一种不在状态的样子，做什么事情都没有劲 为什么呢？我不知道，我想找回曾经的状态——有着明确的目标，且精力充沛 但是不行，即使玩游戏也没法让自己放松 周五，周六，周日，我基本都在找我感兴趣的游戏，能让我打起精神来，寻找一个目标，然后奋力前进 但是我发现，好像所有的游戏我都玩腻了 csgo，WT，缺氧，泰坦陨落2，RA3…我在我的 steam 库里寻找哪怕能让我解闷一点的游戏，但是我找不到——我感觉我都玩腻了，没意思 周五晚，我连续打了将近8个小时的文明6，玩的是老秦，从酋邦，到商人共和国，到君主制，都法西斯政体，再到后来的联合专家统治…我沉醉其中，但这个档玩到快科技胜利的时候，我又感觉玩腻了，眼睛还贼痛 然后干什么？我不知道，我知道我给自己定的规则：不管每天有多忙，不管有多少阻碍，每天至少要写一篇博客，记录下今天都学了些什么 于是，前两天水了一篇python的，一篇gin框架的，但今天，我真的提不起劲了——就是没这个劲 我知道我在空耗时间，但我就是没劲做任何事，我讨厌虚度光阴，浪费宝贵的时间，我想摆脱这种状态，但是找不出办法 重复、重复 一年中，你是真的过了365天，还是过了一天，然后重复了365次？ 如果是之前，我绝对会说是365天，但是我现在真的感觉是在重复 每一天，我基本都是相同的轨迹：早上7，8点去买个包子加豆奶，中午去买份9块钱的...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/12/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89%E5%AD%97%E5%85%B8%EF%BC%88Dictionary%EF%BC%89/" title="Python 入门笔记（七）字典（Dictionary）">Python 入门笔记（七）字典（Dictionary）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-12T12:30:57.000Z" title="发表于 2022-03-12 20:30:57">2022-03-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">初识字典 字典（Dictionary） 类似于 C++ 中的 Map ，内部都是键值对，用于创建一类对象对另一类对象的映射 但不同的是，字典中的映射类型是不固定的（键与键之间，值与值之间的类型可以不相同） 值可以取任何数据类型（甚至可以嵌套字典），但键必须是不可变的，如字符串，数字 创建字典 使用大括号 &#123;&#125; 创建 12personInfo = &#123;&#x27;name&#x27;: &#x27;Tom&#x27;, &#x27;age&#x27;: 18, &#x27;hobby&#x27;: [&#x27;reading&#x27;, &#x27;running&#x27;, &#x27;swimming&#x27;]&#125;print(personInfo) # &#123;&#x27;name&#x27;: &#x27;Tom&#x27;, &#x27;age&#x27;: 18, &#x27;hobby&#x27;: [&#x27;reading&#x27;, &#x27;running&#x27;, &#x27;swimming&#x27;]&#125; 技巧：写成多行 在某些场景下，写成多行能让内容更加清晰明了，例如这里统计几个人最喜欢的编程语言 123456favoriteLanguages = &#123;    &#x27;jen&#x27;: &#x27;python&#x27;,    &#x27;sarch&#x27;: &#x27;c&#x27;,    &#x27;edward&#x27;: &#x27;rub...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/11/Gin-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%EF%BC%89Cookie-%E4%B8%8E-Session/" title="Gin 入门笔记（十）Cookie 与 Session">Gin 入门笔记（十）Cookie 与 Session</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-11T00:53:49.000Z" title="发表于 2022-03-11 08:53:49">2022-03-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">初识 Cookie HTTP 是无状态协议。简单地说，当你浏览了一个页面，然后转到同一个网站的另一个页 面，服务器无法认识到这是同一个浏览器在访问同一个网站。每一次的访问，都是没有任何关系的。如果我们要实现多个页面之间共享数据的话我们就可以使用 Cookie 或者 Session 实现 cookie 存储于访问者计算机的浏览器中，可以让我们用同一个浏览器访问同一个域名的时候共享数据 Cookie 能实现的简单功能：   保持用户登录状态   保存用户浏览记录    使用 Cookie 设置 Cookie 1con.SetCookie(name string, value string, maxAge int, path string, domain string, secure bool, httpOnly bool)   maxAge：过期时间  大于0，设置过期时间，单位为秒 小于0，删除本Cookie 等于0，设置为当关闭浏览器时过期    path：Cookie的路径   domain：作用域，若要在多个二级域名中使用，如a.example.com和b.example.com，则要写成.example.com   secure：为True时，仅在HTTPS中生效   httpOnly：用于防止客户端脚本通过document.cookie属性访问Cookie，有助于保护Cookie不被跨站脚本攻击窃取或篡改   读取 Cookie 1cookie, err := con.Cookie(&quot;name&quot;)  样例 defaultRouters.go 1...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/10/Gin-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B9%9D%EF%BC%89%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" title="Gin 入门笔记（九）文件上传">Gin 入门笔记（九）文件上传</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-09T23:58:00.000Z" title="发表于 2022-03-10 07:58:00">2022-03-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">单文件上传 定义模板 12345678&lt;body&gt;    &lt;h2&gt;文件上传&lt;/h2&gt;    &lt;form action=&quot;/admin/doUpload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;        用户名： &lt;input type=&quot;text&quot; name=&quot;username&quot; placeholder=&quot;用户名&quot;&gt; &lt;br&gt; &lt;br&gt;        文  件：&lt;input type=&quot;file&quot; name=&quot;file&quot;&gt;&lt;br&gt; &lt;br&gt;        &lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;    &lt;/form&gt;&lt;/body&gt; 注意：enctype=&quot;multipart/form-data&quot;不能漏 添加控制器 12345678910111213141516171819func (c AdminController) DoUpload(con *gin.Context) &#123;	username := con.PostForm(&quot;username&quot;)	file, err := con.FormFi...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/09/%E3%80%8EC-C-%E3%80%8Fmain-%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0/" title="『C/C++』main 函数的参数">『C/C++』main 函数的参数</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-09T13:22:36.000Z" title="发表于 2022-03-09 21:22:36">2022-03-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-C/">C / C++</a></span></div><div class="content">也许你在某些地方会见到这种写法的main函数： 1234int main(int argc, char *argv[])&#123;	...&#125; 其中的int argc, char *argv[]的含义是接收从命令行调用时附加的参数 其中，int argc用于统计参数的总个数，char *argv[]则依次保存这些参数 argc的值至少为1，即使你没有附加任何参数，因为arge[0]会保存着当前程序的名称或完整路径 为什么是或呢？arge[]其实保存的是这一行中的所有参数，如果当前程序是在PATH中的（或当前文件夹，Windows环境下），就可以仅凭名称调用 下面的程序能依次打印接收的参数，你可以借此学习如何使用这一机制 123456789101112#include &lt;iostream&gt;using namespace std;int main(int argc, char *argv[])&#123;    int i;    for (i = 0; i &lt; argc; i++)    &#123;        cout &lt;&lt; &quot;argument&quot; &lt;&lt; i &lt;&lt; &quot;: &quot; &lt;&lt; argv[i] &lt;&lt; endl;    &#125;    cout &lt;&lt; &quot;total argument:&quot; &lt;&lt; argc;    return 0;&#125;  </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/08/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E5%85%83%E7%BB%84%EF%BC%88Tuple%EF%BC%89/" title="Python 入门笔记（六）元组（Tuple）">Python 入门笔记（六）元组（Tuple）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-08T11:48:41.000Z" title="发表于 2022-03-08 19:48:41">2022-03-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content"> 元组（Tuple）与列表及其相似，只是元组的内容不能更改，可以认为是列表的常量版本  创建元组 使用小括号 () 将各个元素括起来即可 12tup1 = (&#x27;Google&#x27;, &#x27;Runoob&#x27;, 1997, 2000)tup2 = (1, 2, 3, 4, 5 ) 实际上，小括号不是必须的，最初的元组定义就是使用逗号分隔元素即可，小括号只是为了美观 1tup3 = &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;   #  不需要括号也可以 所以当元组中只包含一个元素时，必须 在元素后面添加逗号，否则括号会被当作运算符使用 1234567&gt;&gt;&gt; tup1 = (50)&gt;&gt;&gt; type(tup1)     # 不加逗号，类型为整型&lt;class &#x27;int&#x27;&gt;&gt;&gt;&gt; tup1 = (50,)&gt;&gt;&gt; type(tup1)     # 加上逗号，类型为元组&lt;class &#x27;tuple&#x27;&gt; 创建只包含一个元素的元组通常没有意义，但自动生成的元组可能只有一个元素 另外，你还可以通过 tuple() 将其他结构转换为元组 修改元组 虽然元组的内容不能更改，但是可以给元组整体重新赋值 12345dimensions = (200, 50)print(dimensions) # (200, 50)dimensions = (400, 100)print...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/07/%E3%80%8EC-C-%E3%80%8F%E5%85%B3%E9%94%AE%E5%AD%97-inline%EF%BC%9A%E5%86%85%E8%81%94%E5%87%BD%E6%95%B0/" title="『C/C++』关键字 inline：内联函数">『C/C++』关键字 inline：内联函数</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-07T06:29:00.000Z" title="发表于 2022-03-07 14:29:00">2022-03-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-C/">C / C++</a></span></div><div class="content">之前参加竞赛时，总是会看见一些大佬的函数前面加上个inline，比如下面的快读： 12345678inline int read()&#123;   int s=0,w=1;   char ch=getchar();   while(ch&lt;&#x27;0&#x27;||ch&gt;&#x27;9&#x27;)&#123;if(ch==&#x27;-&#x27;)w=-1;ch=getchar();&#125;   while(ch&gt;=&#x27;0&#x27;&amp;&amp;ch&lt;=&#x27;9&#x27;) s=s*10+ch-&#x27;0&#x27;,ch=getchar();   return s*w;&#125; 问之，则曰： “这样会运行快一点” 但是我一直都没搞懂，为什么说这样运行就会快一点  今天特地查了一下，这个inline是内联函数的标识符，那内联函数又是什么？  如果一个函数是内联的，那么在编译时，编译器会把该函数的代码副本放置在每个调用该函数的地方  这样一来，优点就显而易见了：普通函数都是单独保存的，当你调用函数时，要先通过指针跳到函数的位置再运行，而内联函数直接就嵌在调用该函数的地方（类似于宏替换），省去了寻址步骤，自然更快 也许你可能会问，一个寻址要耗多少时间呢？但其实对于非常简单的函数来说（如两个int求较大值），寻址的时间占比就很大，而这种简单的函数往往又是比较常用的，一来二去，寻址时间就又被放大了 但缺点也是显而易见的：增加内存消耗，并且内联函数中不能递归调用自己  所以，只有短小简单，调用又十分频繁的函数才适合...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/07/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89%E5%88%97%E8%A1%A8%EF%BC%88List%EF%BC%89/" title="Python 入门笔记（五）列表（List）">Python 入门笔记（五）列表（List）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-07T00:21:01.000Z" title="发表于 2022-03-07 08:21:01">2022-03-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">列表（List） 是 Python 中最基本的数据结构，与 C 中的数组类似 创建列表 使用中括号 [] 将各个元素括起来即可，元素类型可不相同 1234list1 = [&#x27;Google&#x27;, &#x27;Runoob&#x27;, 1997, 2000]list2 = [1, 2, 3, 4, 5 ]list3 = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]list4 = [&#x27;red&#x27;, &#x27;green&#x27;, &#x27;blue&#x27;, &#x27;yellow&#x27;, &#x27;white&#x27;]  访问列表中的值 索引 列表的索引和切片与字符串的一样 使用 列表[下标] 来索引单个元素    list ‘red’ ‘green’ ‘blue’ ‘yellow’ ‘white’     从前往后数 0 1 2 3 4   从后往前数 -5 -4 -3 -2 -1    1234567list = [&#x27;red&#x27;, &#x27;green&#x27;, &#x27;blue&#x27;, &#x27;yellow&#x27;, &#x27;white&#x27;]print( list[0] ) # redprint( list[1] ) # greenprint( list[2] ) # blueprint( list[-1] ) # whiteprint( list[-2] ) # yellowp...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/06/Gin-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89-Model/" title="Gin 入门笔记（八）自定义 Model">Gin 入门笔记（八）自定义 Model</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-06T03:36:04.000Z" title="发表于 2022-03-06 11:36:04">2022-03-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">关于 Model 如果我们的应用非常简单的话，我们可以在 Controller 里面处理常见的业务逻辑。但是如果我们 有一个功能想在多个控制器、或者多个模板里面复用 的话，那么我们就可以把公共的功能单独抽取出来作为一个模块（Model） 封装一个 Model 新建 models/tools.go，并在里面实现一个Unix时间戳转日期时间的功能 12345678910package modelsimport (	&quot;time&quot;)func UnixToDate(timestamp int) string &#123;	t := time.Unix(int64(timestamp), 0)	return t.Format(&quot;2006-01-02 15:04:05&quot;)&#125; 调用 Model 在控制器中调用 以\controllers\admin\adminController.go为例 1234func (c AdminController) Index(con *gin.Context) &#123;	date := models.UnixToDate(1646554975)	con.String(200, &quot;转换后的日期和时间是：&quot;+date)&#125;  在模板文件中调用 注意顺序，注册模板函数需要在加载模板上面 main.go 123456789101112131415161718192021222324252627282930package mainimport (	&quot;html/templat...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/05/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%88String%EF%BC%89/" title="Python 入门笔记（四）字符串（String）">Python 入门笔记（四）字符串（String）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-05T02:29:39.000Z" title="发表于 2022-03-05 10:29:39">2022-03-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">初识字符串 字符串就是一串字符，有短字符串（单行字符串）和长字符串（多行字符串）两种书写形式  与 C 不同，在 Python 中没有单个字符的类型，单个字符也按字符串处理  短字符串（单行字符串） 简单地使用引号括起来，单引号和双引号均可 12&quot;This is a string&quot;&#x27;This is also a string&#x27; 这种灵活性运允许你在字符串中包含引号和撇号，只要确保不与首尾两端的引号冲突 123&#x27;I told my friend,&quot;Python is my favorite language!&quot;&#x27;&quot;The language &#x27;Python&#x27; is name after Monty Python, not the snake.&quot;&quot;One of Python&#x27;s strengths is its fiverse and supportive community.&quot;  Tip：续行符（反斜杠\）在字符串中也可以使用，故短字符串也可以写成多行  长字符串（多行字符串） 之前介绍 Python 多行注释时提到使用三个引号（单引号、双引号都行）来包含多行注释内容，这其实是长字符串的写法 只是由于在长字符串中可以放置任何内容，如果所定义的长字符串没有赋值给任何变量，那么这个字符串就相当于被解释器忽略了，也就相当于注释掉了 实际上，使用三个引号括起来的长字符串完全可以赋值给变量 1234s = &#x27;&#x27;&#x2...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/04/Gin-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89%E8%B7%AF%E7%94%B1%E4%B8%AD%E9%97%B4%E4%BB%B6/" title="Gin 入门笔记（七）路由中间件">Gin 入门笔记（七）路由中间件</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-04T07:17:55.000Z" title="发表于 2022-03-04 15:17:55">2022-03-04</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">初识中间件 从最简单的模板开始 123456789101112131415package mainimport &quot;github.com/gin-gonic/gin&quot;func main() &#123;	r := gin.Default()	r.GET(&quot;/&quot;, func(c *gin.Context) &#123;		c.String(200, &quot;测试页面&quot;)	&#125;)	r.Run()&#125; 在这个例子中，只有一个函数处理根目录下的路由 然而其实也可以传递多个函数，它们将被依次执行，最后一个函数前面触发的方法都可以称为中间件 中间件适合处理一些公共的业务逻辑，比如登录认证、权限校验、数据分页、 记录日志、耗时统计等 1234567891011121314151617181920212223package mainimport (	&quot;fmt&quot;	&quot;github.com/gin-gonic/gin&quot;)func initMiddleware(ctx *gin.Context) &#123;	fmt.Println(&quot;我是一个中间件&quot;)&#125;func main() &#123;	r := gin.Default()	r.GET(&quot;/&quot;, initMiddleware, func(c *gin.Context) &#123;		c.String(200, &quot;测试页面&quot;)	&#125;)	r.Run()&#12...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/03/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89%E6%95%B0%E5%AD%97%EF%BC%88Number%EF%BC%89/" title="Python 入门笔记（三）数字（Number）">Python 入门笔记（三）数字（Number）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-03T14:42:22.000Z" title="发表于 2022-03-03 22:42:22">2022-03-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">三种数 Python 支持三种不同的数值类型：   整型( int ) ： 通常被称为是整型或整数，是正或负整数，不带小数点   浮点型(  float ) ： 浮点型由整数部分与小数部分组成，浮点型也可以使用科学计数法表示 2.5e2   复数(  complex  ) ： 复数由实数部分和虚数部分构成，可以用 a + bj （注意是 j ）,或者 complex(a,b) 表示，a 和 b 都将以浮点型存储   相互转换  int(x) 将x转换为一个整数。 float(x) 将x转换到一个浮点数。 complex(x) 将x转换到一个复数，实数部分为 x，虚数部分为 0 complex(x, y) 将 x 和 y 转换到一个复数，实数部分为 x，虚数部分为 y  PS：  Python3 中的数字是没有限制大小的！ Python3 中没有 Python2 的 long 类型，整型简化成只剩一个int类型 布尔(bool) 是 int 的子类型  数中的下划线 在 Python3.6+ 中书写很大的数时，可以在任意位置加入下划线，使数字更清晰易读 1universe_age= 14_000_000_000 当然，Python 并不会把下划线也存进去 12print(universe_age)14000000000 这种方法对整数和浮点数都适用 七种运算    运算符 含义 例子 运行结果     + 加 3+1 4   - 减 40-2 38   * 乘 3*2 6   / 除 6/3 2.0   // 整除 3//2 1   ** 幂 2**3 8   % 求余 7...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/02/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/" title="Python 入门笔记（二）基础语法">Python 入门笔记（二）基础语法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-02T12:52:48.000Z" title="发表于 2022-03-02 20:52:48">2022-03-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">标识符 Python 中的标识符规则与 C 中的类似，但不完全相同  标识符只能由数字、字母和下划线组成，并且开头不能是数字 标识符不能与保留字冲突 标识符对大小写敏感 在 Python3 中，汉字也可以作为标识符，但不建议使用  标识符前后的下划线有特殊含义  以单下划线开头的标识符（如  _width ），表示不能直接访问的类属性，其无法通过 from...import * 的方式导入 以双下划线开头的标识符（如 __add ）表示类的私有成员 以双下划线作为开头和结尾的标识符（如  __init__ ），是专用标识符  保留字 保留字即关键字，我们不能把它们用作任何标识符名称。Python 的标准库提供了一个 keyword 模块，可以输出当前版本的所有关键字 12import keywordprint(keyword.kwlist) 输出为： 1[&#x27;False&#x27;, &#x27;None&#x27;, &#x27;True&#x27;, &#x27;__peg_parser__&#x27;, &#x27;and&#x27;, &#x27;as&#x27;, &#x27;assert&#x27;, &#x27;async&#x27;, &#x27;await&#x27;, &#x27;break&#x27;, &#x27;class&#x27;, &#x27;continue&#x27;, &#x27;def&#x27;, &#x27;del&#x27;, &#x27;elif&#x27;, &#x27;else&#x27;, &#x27;exce...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/02/Python-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83/" title="Python 入门笔记（一）搭建环境">Python 入门笔记（一）搭建环境</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-02T12:20:32.000Z" title="发表于 2022-03-02 20:20:32">2022-03-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/">Python3 入门</a></span></div><div class="content">  ❤️又开新坑了！！！  高中的时候学过一段时间的Python3，但是很快就忘了，究其原因还是光看不练，很快就会忘个精光 这次边学边做笔记，应该能学到很多知识 基本框架源于菜鸟教程 Python 简介 Python 是一门解释性语言，简单易学，上手容易 虽然在我的认知里在正式场合里用到 Python 的情况不多，但作为著名的胶水语言，还是有必要去学一学的 环境搭建 前往官网下载并安装 Python  再在VSCode中安装 Python 的扩展   如果你从未使用过VScode，请安装中文插件和CodeRunner，参考这篇  新建文件，就可以开始 Python 学习了，将下面的代码复制进去，按下Ctrl + Alt +  N运行 1print(&quot;HelloWorld&quot;)  看，你已经成功运行了第一个 Python 程序了！ 当然，作为一门解释性语言，除了写完一整个程序然后运行（脚本式），还可以一句话一句话地与编译器对话来运行（交互式）  你也可以直接运行 Python 来在命令行中进行交互式编程  </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/02/Gin-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E5%88%B6%E5%99%A8%E5%92%8C%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E7%BB%A7%E6%89%BF/" title="Gin 入门笔记（六）自定义控制器和控制器的继承">Gin 入门笔记（六）自定义控制器和控制器的继承</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-02T07:55:24.000Z" title="发表于 2022-03-02 15:55:24">2022-03-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">自定义控制器 在对路由分组后，我们对控制器也可以进行分组 首先新建controllers文件夹，然后在其中按业务逻辑创建控制器 12345678910111213141516171819TEST│  go.mod│  go.sum│  main.go│├─controllers│  ├─admin│  │      adminController.go│  ││  ├─api│  │      apiController.go│  ││  └─homePage│          homePageController.go //因为default是关键字│└─routers        adminRouters.go        apiRouters.go        defaultRouters.go 以/controllers/admin/adminController.go为例，编辑控制器 123456789101112131415161718package adminimport &quot;github.com/gin-gonic/gin&quot;type AdminController struct &#123;&#125;func (c AdminController) Index(con *gin.Context) &#123;	con.String(200, &quot;后台首页&quot;)&#125;func (c AdminController) User(con *gin.Context) &#123;	con.String(200, &...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/15/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/#content-inner">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/#content-inner">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/#content-inner">19</a><a class="extend next" rel="next" href="/page/17/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Nick Xu</div><div class="author-info-description">这家伙真勤奋，什么都留下了</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
             <i class="fas fa-folder-open"></i>
             <span>分类</span>
             
-            </div>
-            <ul class="card-category-list" id="aside-cat-list">
+          </div>
+          <ul class="card-category-list expandBtn" id="aside-cat-list">
             <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C-C/"><span class="card-category-list-name">C / C++</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/Golang/"><span class="card-category-list-name">Golang</span><span class="card-category-list-count">48</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/Flamego-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">Flamego 框架</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/GORM-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">GORM 框架</span><span class="card-category-list-count">13</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">Gin 框架</span><span class="card-category-list-count">10</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/go-zero-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">go-zero 框架</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/%E8%AF%AD%E6%B3%95%E9%80%9F%E9%80%9A/"><span class="card-category-list-name">语法速通</span><span class="card-category-list-count">11</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/"><span class="card-category-list-name">Hexo + Butterfly 建站指南</span><span class="card-category-list-count">11</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/OSPP/"><span class="card-category-list-name">OSPP</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Others/"><span class="card-category-list-name">Others</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/Python/"><span class="card-category-list-name">Python</span><span class="card-category-list-count">14</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/"><span class="card-category-list-name">Python3 入门</span><span class="card-category-list-count">13</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/QQ-Bot/"><span class="card-category-list-name">QQ Bot</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/macOS/"><span class="card-category-list-name">macOS</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/"><span class="card-category-list-name">基础课复习</span><span class="card-category-list-count">15</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86/"><span class="card-category-list-name">大学物理</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/"><span class="card-category-list-name">离散数学</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/"><span class="card-category-list-name">高等数学</span><span class="card-category-list-count">4</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="card-category-list-name">微信小程序</span><span class="card-category-list-count">8</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"><span class="card-category-list-name">开发基础</span><span class="card-category-list-count">8</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"><span class="card-category-list-name">数据库</span><span class="card-category-list-count">23</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/"><span class="card-category-list-name">MySQL</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/SQL-%E5%85%A5%E9%97%A8/"><span class="card-category-list-name">SQL 入门</span><span class="card-category-list-count">19</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"><span class="card-category-list-name">数据结构与算法</span><span class="card-category-list-count">20</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/"><span class="card-category-list-name">算法拾遗</span><span class="card-category-list-count">14</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E6%8E%92%E5%BA%8F/"><span class="card-category-list-name">排序</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E6%90%9C%E7%B4%A2%E6%8A%80%E6%9C%AF/"><span class="card-category-list-name">搜索技术</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E9%93%BE%E8%A1%A8/"><span class="card-category-list-name">链表</span><span class="card-category-list-count">1</span></a></li></ul></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/"><span class="card-category-list-name">新技能 Got</span><span class="card-category-list-count">21</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/"><span class="card-category-list-name">树莓派</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/"><span class="card-category-list-name">运维</span><span class="card-category-list-count">6</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/CICD/"><span class="card-category-list-name">CICD</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/"><span class="card-category-list-name">日志收集</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9A%8F%E7%AC%94%E4%B8%8E%E6%80%BB%E7%BB%93/"><span class="card-category-list-name">随笔与总结</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/"><span class="card-category-list-name">青训营</span><span class="card-category-list-count">44</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/"><span class="card-category-list-name">字节跳动-3rd-后端</span><span class="card-category-list-count">23</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE/"><span class="card-category-list-name">字节跳动-4th-大数据</span><span class="card-category-list-count">20</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-5th-%E5%90%8E%E7%AB%AF/"><span class="card-category-list-name">字节跳动-5th-后端</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E5%85%AB%E8%82%A1%E6%96%87/"><span class="card-category-list-name">面试八股文</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%A2%98%E8%A7%A3/"><span class="card-category-list-name">题解</span><span class="card-category-list-count">4</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.27em; color: rgb(175, 190, 36)">Linux</a><a href="/tags/SSH/" style="font-size: 1.17em; color: rgb(169, 185, 129)">SSH</a><a href="/tags/GORM/" style="font-size: 1.33em; color: rgb(158, 144, 84)">GORM</a><a href="/tags/Go/" style="font-size: 1.45em; color: rgb(134, 34, 151)">Go</a><a href="/tags/MySQL/" style="font-size: 1.22em; color: rgb(79, 60, 196)">MySQL</a><a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 1.22em; color: rgb(51, 114, 26)">树莓派</a><a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 1.27em; color: rgb(125, 113, 164)">随笔</a><a href="/tags/Gin/" style="font-size: 1.27em; color: rgb(113, 127, 198)">Gin</a><a href="/tags/%E5%BB%BA%E7%AB%99%E6%8A%80%E5%B7%A7/" style="font-size: 1.29em; color: rgb(33, 90, 38)">建站技巧</a><a href="/tags/Minecraft/" style="font-size: 1.17em; color: rgb(77, 175, 40)">Minecraft</a><a href="/tags/Python/" style="font-size: 1.36em; color: rgb(5, 186, 166)">Python</a><a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 1.2em; color: rgb(177, 190, 159)">环境配置</a><a href="/tags/SQL/" style="font-size: 1.38em; color: rgb(164, 74, 197)">SQL</a><a href="/tags/C-C/" style="font-size: 1.4em; color: rgb(14, 78, 155)">C/C++</a><a href="/tags/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" style="font-size: 1.31em; color: rgb(55, 22, 188)">算法竞赛</a><a href="/tags/QQ-bot/" style="font-size: 1.15em; color: rgb(152, 155, 41)">QQ bot</a><a href="/tags/%E9%A2%98%E8%A7%A3/" style="font-size: 1.22em; color: rgb(66, 60, 155)">题解</a><a href="/tags/Makefile/" style="font-size: 1.15em; color: rgb(38, 134, 157)">Makefile</a><a href="/tags/CMake/" style="font-size: 1.15em; color: rgb(171, 182, 7)">CMake</a><a href="/tags/STL/" style="font-size: 1.17em; color: rgb(137, 161, 3)">STL</a><a href="/tags/GitHub-Actions/" style="font-size: 1.2em; color: rgb(128, 133, 2)">GitHub Actions</a><a href="/tags/CICD/" style="font-size: 1.2em; color: rgb(128, 73, 150)">CICD</a><a href="/tags/Webhook/" style="font-size: 1.15em; color: rgb(54, 186, 173)">Webhook</a><a href="/tags/Docker/" style="font-size: 1.17em; color: rgb(121, 189, 125)">Docker</a><a href="/tags/GitHub/" style="font-size: 1.15em; color: rgb(128, 153, 2)">GitHub</a><a href="/tags/Redis/" style="font-size: 1.17em; color: rgb(141, 139, 176)">Redis</a><a href="/tags/go-zero/" style="font-size: 1.17em; color: rgb(27, 30, 63)">go-zero</a><a href="/tags/grpc/" style="font-size: 1.17em; color: rgb(61, 148, 7)">grpc</a><a href="/tags/tus/" style="font-size: 1.15em; color: rgb(145, 130, 162)">tus</a><a href="/tags/Flamego/" style="font-size: 1.15em; color: rgb(174, 90, 4)">Flamego</a><a href="/tags/JWT/" style="font-size: 1.15em; color: rgb(38, 172, 147)">JWT</a><a href="/tags/OSPP/" style="font-size: 1.17em; color: rgb(96, 103, 38)">OSPP</a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.17em; color: rgb(156, 115, 109)">运维</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/" style="font-size: 1.17em; color: rgb(46, 34, 185)">数据备份</a><a href="/tags/Windows/" style="font-size: 1.17em; color: rgb(146, 200, 155)">Windows</a><a href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/" style="font-size: 1.43em; color: rgb(17, 33, 35)">字节青训营</a><a href="/tags/Others/" style="font-size: 1.2em; color: rgb(160, 74, 8)">Others</a><a href="/tags/Twikoo/" style="font-size: 1.15em; color: rgb(3, 79, 126)">Twikoo</a><a href="/tags/WSL/" style="font-size: 1.2em; color: rgb(190, 161, 173)">WSL</a><a href="/tags/Clash/" style="font-size: 1.15em; color: rgb(60, 75, 174)">Clash</a><a href="/tags/hduhelp/" style="font-size: 1.17em; color: rgb(200, 173, 42)">hduhelp</a><a href="/tags/k8s/" style="font-size: 1.15em; color: rgb(29, 83, 163)">k8s</a><a href="/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/" style="font-size: 1.15em; color: rgb(157, 194, 106)">位运算</a><a href="/tags/BFS/" style="font-size: 1.22em; color: rgb(118, 33, 143)">BFS</a><a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.15em; color: rgb(109, 98, 63)">数学</a><a href="/tags/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/" style="font-size: 1.15em; color: rgb(88, 193, 77)">排列组合</a><a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1.15em; color: rgb(182, 85, 135)">链表</a><a href="/tags/DFS/" style="font-size: 1.15em; color: rgb(12, 159, 121)">DFS</a><a href="/tags/IDDFS/" style="font-size: 1.15em; color: rgb(112, 161, 8)">IDDFS</a><a href="/tags/IDA/" style="font-size: 1.15em; color: rgb(160, 95, 161)">IDA*</a><a href="/tags/%E8%88%9E%E8%B9%88%E9%93%BE-DLX/" style="font-size: 1.15em; color: rgb(104, 67, 163)">舞蹈链/DLX</a><a href="/tags/%E9%9D%A2%E8%AF%95%E5%B7%A5%E4%BD%9C/" style="font-size: 1.15em; color: rgb(167, 144, 34)">面试工作</a><a href="/tags/618%E5%A5%BD%E7%89%A9/" style="font-size: 1.15em; color: rgb(61, 41, 156)">618好物</a><a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 1.17em; color: rgb(167, 151, 32)">面试</a><a href="/tags/docker/" style="font-size: 1.15em; color: rgb(199, 175, 155)">docker</a><a href="/tags/%E6%97%85%E6%B8%B8/" style="font-size: 1.15em; color: rgb(85, 46, 175)">旅游</a><a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 1.24em; color: rgb(145, 180, 127)">微信小程序</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">十二月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">十月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/07/"><span class="card-archive-list-date">七月 2024</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">六月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/05/"><span class="card-archive-list-date">五月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/03/"><span class="card-archive-list-date">三月 2024</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/12/"><span class="card-archive-list-date">十二月 2023</span><span class="card-archive-list-count">3</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">300</div></div><div class="webinfo-item"><div class="item-name">已运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2021-11-12T16:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">355.3k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-11-17T19:40:06.926Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: #0d0d0d"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Nick Xu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"></div><div id="rightside-config-show"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><div class="js-pjax"><script>window.typedJSFn = {
-  init: (str) => {
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.27em; color: rgb(50, 50, 50);">Linux</a><a href="/tags/SSH/" style="font-size: 1.17em; color: rgb(135, 69, 165);">SSH</a><a href="/tags/GORM/" style="font-size: 1.33em; color: rgb(50, 119, 63);">GORM</a><a href="/tags/Go/" style="font-size: 1.45em; color: rgb(57, 157, 50);">Go</a><a href="/tags/MySQL/" style="font-size: 1.22em; color: rgb(103, 50, 140);">MySQL</a><a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 1.22em; color: rgb(134, 83, 170);">树莓派</a><a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 1.27em; color: rgb(142, 50, 81);">随笔</a><a href="/tags/Gin/" style="font-size: 1.27em; color: rgb(182, 159, 54);">Gin</a><a href="/tags/%E5%BB%BA%E7%AB%99%E6%8A%80%E5%B7%A7/" style="font-size: 1.29em; color: rgb(140, 88, 77);">建站技巧</a><a href="/tags/Minecraft/" style="font-size: 1.17em; color: rgb(117, 50, 146);">Minecraft</a><a href="/tags/Python/" style="font-size: 1.36em; color: rgb(50, 88, 179);">Python</a><a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 1.2em; color: rgb(50, 50, 51);">环境配置</a><a href="/tags/SQL/" style="font-size: 1.38em; color: rgb(91, 124, 163);">SQL</a><a href="/tags/C-C/" style="font-size: 1.4em; color: rgb(163, 123, 50);">C/C++</a><a href="/tags/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" style="font-size: 1.31em; color: rgb(107, 90, 50);">算法竞赛</a><a href="/tags/QQ-bot/" style="font-size: 1.15em; color: rgb(184, 162, 124);">QQ bot</a><a href="/tags/%E9%A2%98%E8%A7%A3/" style="font-size: 1.22em; color: rgb(197, 137, 70);">题解</a><a href="/tags/Makefile/" style="font-size: 1.15em; color: rgb(112, 131, 155);">Makefile</a><a href="/tags/CMake/" style="font-size: 1.15em; color: rgb(113, 170, 50);">CMake</a><a href="/tags/STL/" style="font-size: 1.17em; color: rgb(139, 199, 56);">STL</a><a href="/tags/GitHub-Actions/" style="font-size: 1.2em; color: rgb(133, 136, 63);">GitHub Actions</a><a href="/tags/CICD/" style="font-size: 1.2em; color: rgb(175, 50, 115);">CICD</a><a href="/tags/Webhook/" style="font-size: 1.15em; color: rgb(65, 50, 168);">Webhook</a><a href="/tags/Docker/" style="font-size: 1.17em; color: rgb(52, 71, 89);">Docker</a><a href="/tags/GitHub/" style="font-size: 1.15em; color: rgb(67, 119, 75);">GitHub</a><a href="/tags/grpc/" style="font-size: 1.17em; color: rgb(52, 50, 165);">grpc</a><a href="/tags/Redis/" style="font-size: 1.17em; color: rgb(50, 121, 200);">Redis</a><a href="/tags/go-zero/" style="font-size: 1.17em; color: rgb(87, 149, 88);">go-zero</a><a href="/tags/tus/" style="font-size: 1.15em; color: rgb(85, 90, 52);">tus</a><a href="/tags/Flamego/" style="font-size: 1.15em; color: rgb(97, 96, 50);">Flamego</a><a href="/tags/JWT/" style="font-size: 1.15em; color: rgb(50, 55, 50);">JWT</a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.17em; color: rgb(120, 50, 176);">运维</a><a href="/tags/OSPP/" style="font-size: 1.17em; color: rgb(97, 50, 50);">OSPP</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/" style="font-size: 1.17em; color: rgb(88, 137, 50);">数据备份</a><a href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/" style="font-size: 1.43em; color: rgb(53, 72, 50);">字节青训营</a><a href="/tags/Others/" style="font-size: 1.2em; color: rgb(50, 56, 53);">Others</a><a href="/tags/Windows/" style="font-size: 1.17em; color: rgb(67, 53, 52);">Windows</a><a href="/tags/Twikoo/" style="font-size: 1.15em; color: rgb(159, 194, 57);">Twikoo</a><a href="/tags/WSL/" style="font-size: 1.2em; color: rgb(56, 50, 136);">WSL</a><a href="/tags/Clash/" style="font-size: 1.15em; color: rgb(70, 169, 129);">Clash</a><a href="/tags/hduhelp/" style="font-size: 1.17em; color: rgb(163, 50, 64);">hduhelp</a><a href="/tags/k8s/" style="font-size: 1.15em; color: rgb(50, 50, 199);">k8s</a><a href="/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/" style="font-size: 1.15em; color: rgb(81, 107, 50);">位运算</a><a href="/tags/BFS/" style="font-size: 1.22em; color: rgb(122, 134, 91);">BFS</a><a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.15em; color: rgb(50, 131, 102);">数学</a><a href="/tags/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/" style="font-size: 1.15em; color: rgb(99, 97, 166);">排列组合</a><a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1.15em; color: rgb(81, 76, 162);">链表</a><a href="/tags/DFS/" style="font-size: 1.15em; color: rgb(175, 96, 50);">DFS</a><a href="/tags/IDDFS/" style="font-size: 1.15em; color: rgb(138, 89, 140);">IDDFS</a><a href="/tags/IDA/" style="font-size: 1.15em; color: rgb(154, 149, 164);">IDA*</a><a href="/tags/%E8%88%9E%E8%B9%88%E9%93%BE-DLX/" style="font-size: 1.15em; color: rgb(50, 119, 196);">舞蹈链/DLX</a><a href="/tags/%E9%9D%A2%E8%AF%95%E5%B7%A5%E4%BD%9C/" style="font-size: 1.15em; color: rgb(69, 50, 158);">面试工作</a><a href="/tags/618%E5%A5%BD%E7%89%A9/" style="font-size: 1.15em; color: rgb(50, 50, 119);">618好物</a><a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 1.17em; color: rgb(162, 73, 144);">面试</a><a href="/tags/docker/" style="font-size: 1.15em; color: rgb(99, 161, 186);">docker</a><a href="/tags/%E6%97%85%E6%B8%B8/" style="font-size: 1.15em; color: rgb(158, 141, 70);">旅游</a><a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 1.24em; color: rgb(50, 73, 158);">微信小程序</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/10/">
+            <span class="card-archive-list-date">
+              十月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/12/">
+            <span class="card-archive-list-date">
+              十二月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/10/">
+            <span class="card-archive-list-date">
+              十月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/07/">
+            <span class="card-archive-list-date">
+              七月 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/06/">
+            <span class="card-archive-list-date">
+              六月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/05/">
+            <span class="card-archive-list-date">
+              五月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/03/">
+            <span class="card-archive-list-date">
+              三月 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/12/">
+            <span class="card-archive-list-date">
+              十二月 2023
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">300</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">355.3k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-12-17T17:20:44.506Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2025 By Nick Xu</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="/js/tw_cn.js?v=5.5.3"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
     window.typed = new Typed('#subtitle', Object.assign({
       strings: str,
       startDelay: 300,
@@ -512,23 +270,40 @@ Python 是一门解释性语言，简单易学，上手容易
       backSpeed: 50,
     }, null))
   },
-  run: (subtitleType) => {
+  run: subtitleType => {
     if (true) {
       if (typeof Typed === 'function') {
         subtitleType()
       } else {
-        getScript('/pluginsSrc/typed.js/dist/typed.umd.js').then(subtitleType)
+        btf.getScript('/pluginsSrc/typed.js/dist/typed.umd.js?v=2.1.0').then(subtitleType)
       }
     } else {
       subtitleType()
     }
+  },
+  processSubtitle: (content, extraContents = []) => {
+    if (true) {
+      const sub = ["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"].slice()
+
+      if (extraContents.length > 0) {
+        sub.unshift(...extraContents)
+      }
+
+      if (typeof content === 'string') {
+        sub.unshift(content)
+      } else if (Array.isArray(content)) {
+        sub.unshift(...content)
+      }
+
+      sub.length > 0 && typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = typeof content === 'string' ? content :
+        (Array.isArray(content) && content.length > 0 ? content[0] : '')
+    }
   }
 }
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
 </script><script>function subtitleType () {
-  if (true) {
-    typedJSFn.init(["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"])
-  } else {
-    document.getElementById("subtitle").textContent = "求知若饥&#44;虚心若愚"
-  }
+  typedJSFn.processSubtitle(["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"])
 }
-typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
+typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js?v=1.1.6" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

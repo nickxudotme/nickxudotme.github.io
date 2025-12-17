@@ -1,31 +1,144 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="这家伙真勤奋，什么都留下了"><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/page/10/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="这家伙真勤奋，什么都留下了"><script type="application/ld+json"></script><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/page/10/index.html"><link rel="preconnect"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css?v=7.1.0"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?3573ab9aac9d53e5c34fea51e076a07d";
-  var s = document.getElementsByTagName("script")[0]; 
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-VBKFEG3YFD');
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-VBKFEG3YFD')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-VBKFEG3YFD', {'page_path': window.location.pathname})
+}, 'google_analytics')
 </script><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  localSearch: undefined,
   translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
-  noticeOutdate: {"limitDay":300,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
   copy: {
     success: '复制成功',
-    error: '复制错误',
+    error: '复制失败',
     noSupport: '浏览器不支持'
   },
   relativeDate: {
     homepage: false,
     post: false
   },
-  runtime: '天',
+  runtime: '',
   dateSuffix: {
     just: '刚刚',
     min: '分钟前',
@@ -34,828 +147,121 @@ gtag('config', 'G-VBKFEG3YFD');
     month: '个月前'
   },
   copyright: undefined,
-  lightbox: 'fancybox',
+  lightbox: 'null',
   Snackbar: undefined,
-  source: {
-    justifiedGallery: {
-      js: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.css'
-    }
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js?v=4.12.0',
+    buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: false,
+  islazyloadPlugin: false,
   isAnchor: false,
   percent: {
     toc: true,
     rightside: false,
   },
-  autoDarkmode: false
+  autoDarkmode: true
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: 'NX の 博客',
-  isPost: false,
-  isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2025-11-18 03:40:07'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
-        }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
-      }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
-      win.activateDarkMode = function () {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      win.activateLightMode = function () {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-      const t = saveToLocal.get('theme')
-    
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        if (asideStatus === 'hide') {
-          document.documentElement.classList.add('hide-aside')
-        } else {
-          document.documentElement.classList.remove('hide-aside')
-        }
-      }
-    
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-    })(window)</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
+  pageType: 'home'
+}</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
 <link rel="alternate" href="/rss2.xml" title="NX の 博客" type="application/rss+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/static/favicon.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/static/202202230023824.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="NX の 博客"><span class="site-name">NX の 博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">NX の 博客</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/18/%E3%80%8E%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6%E3%80%8FP4%EF%BC%9A%E5%B9%82%E7%BA%A7%E6%95%B0/" title="『高等数学』P4：幂级数">『高等数学』P4：幂级数</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-18T08:40:45.000Z" title="发表于 2022-06-18 16:40:45">2022-06-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/">基础课复习</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/">高等数学</a></span></div><div class="content">
-
-
-
-
-
-
-
-
-
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/18/%E3%80%8E%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6%E3%80%8FP3%EF%BC%9A%E5%B8%B8%E6%95%B0%E9%A1%B9%E7%BA%A7%E6%95%B0/" title="『高等数学』P3：常数项级数">『高等数学』P3：常数项级数</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-18T08:01:22.000Z" title="发表于 2022-06-18 16:01:22">2022-06-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/">基础课复习</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/">高等数学</a></span></div><div class="content">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/17/%E3%80%8E%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6%E3%80%8FP2%EF%BC%9A%E5%A4%9A%E5%85%83%E5%87%BD%E6%95%B0%E6%B1%82%E5%AF%BC/" title="『高等数学』P2：多元函数求导">『高等数学』P2：多元函数求导</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-17T13:08:19.000Z" title="发表于 2022-06-17 21:08:19">2022-06-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/">基础课复习</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/">高等数学</a></span></div><div class="content">复合函数链式求导
-
-
-
-
-
-
-
-
-（最后不要忘合并）
-隐函数求导
-
-（例1略）
-
-
-（雅各比行列式）
-
-
-练习题
-
-
-
-
-我圈出来的地方应该是写错了的，应该是 z2−xyz^{2}-xyz2−xy
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/16/%E3%80%8E%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6%E3%80%8FP1%EF%BC%9A%E7%A9%BA%E9%97%B4%E5%87%A0%E4%BD%95%E3%80%81%E5%A4%9A%E5%85%83%E5%87%BD%E6%95%B0%E6%9E%81%E9%99%90%E3%80%81%E5%81%8F%E5%AF%BC/" title="『高等数学』P1：空间几何、多元函数极限、偏导">『高等数学』P1：空间几何、多元函数极限、偏导</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-16T13:07:22.000Z" title="发表于 2022-06-16 21:07:22">2022-06-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/">基础课复习</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/">高等数学</a></span></div><div class="content">平面与空间直线
-平面
-
-
-直线
-
-
-
-表示直线的时候 0 是可以在分母上的
-
-
-
-
-
-
-二元函数的极限
-
-
-
-
-
-
-
-偏导数
-（略）
-全微分
-
-
-
-
-
-
-
-
-
-练习题
-
-
-
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/14/%E3%80%8E%E9%9A%8F%E7%AC%94%E3%80%8F618%E6%A1%8C%E9%9D%A2%E6%94%B9%E9%80%A0%E8%AE%A1%E5%88%92/" title="『随笔』618桌面改造计划">『随笔』618桌面改造计划</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-14T10:56:50.000Z" title="发表于 2022-06-14 18:56:50">2022-06-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9A%8F%E7%AC%94%E4%B8%8E%E6%80%BB%E7%BB%93/">随笔与总结</a></span></div><div class="content">前情提要
-鄙人自开学以来桌面一直是没有放显示器的，毕竟从小到大一直用小屏的笔记本电脑打游戏，上了大学也没有什么感觉。我高考后买的一台屏幕 13 寸的 ROG 幻13，可以 360° 旋转，还支持触控，加上一支微软的 Surface Pen，上课记笔记就变得十分方便，也就一直用到了现在，直到——
-直到我参加了字节跳动的青训营（笑）
-青训营最后有一个小组项目，然后我发现一个小屏就不够我看的了，因为要一边写代码，一边看文档，一边还要关注群里面的最新消息，这是我第一次这么急切地想要一个大屏幕，最好能来个双屏
-并且，我平时桌面是很乱的，一堆乱七八糟的东西，还有一堆充电线，真的看着都影响工作效率，必须要有行之有效的解决方法
-并且还有看书的问题，如果我想看书的话，必须把电脑往里面推，屏幕就隔得很远，不容易看清。而且如果以后要放一个大屏的话，支架肯定会占据很大一块桌面空间，纸质资料很多的话可能顶着支架，很烦（杭电的桌子不大，经我测量约为 100*50*40，长宽高）
-所以，这次改造一共要解决三个痛点：
-
-屏幕不够大
-桌面太乱
-看书体验不够舒适
-
-那么，我最后有没有解决这些问题呢？
-
-成品演示
-
-这应该是我目前能想到的最优解了，那个键盘其实还可以往里推，还是有点深度的
-
-
-看一下全景
-
-其实后面也是有一堆乱七八糟的线的，只是屏幕挡住了，眼不见心不烦
-可以迁一个 USB Hub 出来放桌面上，但其实平时没有很多拔插的需求
-
-分步讲解
-买台子
-首先，综合各方面考虑，我必须为我的屏幕买一个台子
-这样就不会因为它的支架而困扰，台子下面可以放很多东西
-而且不能太高，杭电的桌面高度很低，上面有个大书架
-经过 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/12/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8F%E7%BB%93%E8%90%A5%E6%84%9F%E6%83%B3/" title="『字节青训营-3rd』结营感想（待后续）">『字节青训营-3rd』结营感想（待后续）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-12T01:39:59.000Z" title="发表于 2022-06-12 09:39:59">2022-06-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">福利鄙人平时上课的时候使用 IDM 把视频爬了下来，各位可以使用下面的链接访问！
-
-阿里云：https://www.aliyundrive.com/s/xW4crbwj2f2 （被反馈貌似无法下载）
-提取码: 5m2g
-百度云：https://pan.baidu.com/s/1nAhcW__vhYPQfOGYXUO-Xg
-提取码：89nn
-
-
-
-呼！为期一个多月的课程已经结束了，我们的小组项目也进入了收尾阶段，是时候来写一篇总结了
-课程方面
-总体的课程安排
-
-一个月的时间，从 Golang 的入门开始，到网络，到架构，到存储，真的可以说是收获颇丰
-从5月7日到5月17日，我们学习了Go 语言原理与实践，最后的那一天还做了个小项目
-从5月17日到5月24日，我们学习的是网络与部署的相关内容
-25日上了算法课，讲了一种老师的新排序算法，可以取各种主流算法的长处，并被 Golang 的新版本采用
-从27日到29日，连上三节课，讲的是框架方面的内容，而且很多东西都是学校里学不到的，比如微服务之类的，学校肯定不会给你教这个
-接着，从5月31日到6月2日，开始讲中间件，消息队列的两种主流处理方式的的确确吸引到了我
-最后一部分便是存储与数据库了，从最简单的单机存储，一种讲到分布式对象存储，算是开眼了，了解了很多此前闻所未闻的东西
-我的感受
-总的来说，这门课我能给满分，毕竟讲得是真的好，下面是几个本次课程给我最大的几个点
-讲师资历深厚
-来给我们上课的老师都是字节内部工作了很久的老员工，比如给我们讲对象存储的老师介绍自己说是18年来字节的，是对象存储的早期成员，一路见证了字节对象存储容量的持续爆 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/11/%E3%80%8EGolang%E3%80%8Fimport-%E4%B8%AD%E4%B8%8B%E5%88%92%E7%BA%BF%E7%9A%84%E4%BD%9C%E7%94%A8/" title="『Golang』import 中下划线，点，别名的作用">『Golang』import 中下划线，点，别名的作用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-10T16:00:16.000Z" title="发表于 2022-06-11 00:00:16">2022-06-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a></span></div><div class="content">下划线
-众所周知，在 Golang 中如果 import 了一个包，会自动运行它的 init() 函数，并且如果你不在你的代码中使用该包，就无法编译
-而如果你只需要它的 init() 函数，不需要使用它内部其他组件，就可以加一个下划线
-例如在使用 GORM 时，不仅要引入 GORM 的包，还要引入数据库驱动
-1234import (  _ &quot;example.com/my_mysql_driver&quot;  &quot;gorm.io/gorm&quot;)
-点
-加点后，在调用时可以省略包名前缀
-1234567package main import . &quot;fmt&quot; func main() &#123;    Println(&quot;Hello World!&quot;)&#125;
-别名
-别名就更简单了，就是取别名的意思
-1234567package main import f &quot;fmt&quot; func main() &#123;    f.Println(&quot;Hello World!&quot;)&#125;
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/06/%E3%80%8E%E9%9D%A2%E8%AF%95%E5%85%AB%E8%82%A1%E6%96%87%E3%80%8F1%EF%BC%9A%E5%A6%82%E4%BD%95%E5%9C%A840%E4%BA%BF%E4%B8%AA%E6%95%B4%E6%95%B0%E4%B8%AD%E5%AF%BB%E6%89%BE%E4%B8%80%E4%B8%AA%E6%95%B0%E5%AD%97/" title="『面试八股文』1：如何在40亿个整数中寻找一个数字">『面试八股文』1：如何在40亿个整数中寻找一个数字</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-06T14:42:51.000Z" title="发表于 2022-06-06 22:42:51">2022-06-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%A2%E8%AF%95%E5%85%AB%E8%82%A1%E6%96%87/">面试八股文</a></span></div><div class="content">前情提要：
-
-本篇来源于B站视频：漫画面试系列-如何在40亿个整数中寻找一个数字
-整数是 32 位的 int
-机器只有 2G 内存
-可以使用很多机器
-
-
-
-
-
-
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/05/%E3%80%8E%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86%E3%80%8F%E5%8F%89%E4%B9%98%E7%9A%84%E8%AE%A1%E7%AE%97/" title="『大学物理』叉乘的计算">『大学物理』叉乘的计算</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-05T03:29:35.000Z" title="发表于 2022-06-05 11:29:35">2022-06-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/">基础课复习</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86/">大学物理</a></span></div><div class="content">感谢 B 站视频：叉乘/向量积的右手螺旋法则
-a→×b→\overrightarrow{a}\times \overrightarrow{b}
-a×b
-方向判定
-伸直右手，四指向前，大拇指垂直，将四指指向 a→\overrightarrow{a}a 的方向，然后向 b→\overrightarrow{b}b 的方向弯曲，大拇指的方向就是 a→×b→\overrightarrow{a}\times \overrightarrow{b}a×b 的方向
-大小判定
-∣a→×b→∣=∣a→∣⋅∣b→∣⋅sin⁡θ\left| \overrightarrow{a}\times \overrightarrow{b}\right| =\left| \overrightarrow{a}\right| \cdot \left| \overrightarrow{b}\right| \cdot \sin \theta
-​a×b​=​a​⋅​b​⋅sinθ
-使用行列式计算
-a→×b→=∣ijkaxayazbxbybz∣\overrightarrow{a}\times \overrightarrow{b}=\begin{vmatrix}
-i &amp; j &amp; k \\
-a_{x} &amp; a_{y} &amp; a_{z} \\
-b_{x} &amp; b_{y} &amp; b_{z}
-\end{vmatrix}a×b=​iax​bx​​jay​by​​kaz​bz​​​
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/05/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8FL20%EF%BC%9ATos-%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E5%AE%9E%E6%88%98/" title="『字节青训营-3rd』L20：Tos 对象存储实战">『字节青训营-3rd』L20：Tos 对象存储实战</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-05T02:00:50.000Z" title="发表于 2022-06-05 10:00:50">2022-06-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">抖音背后的存储
-重任来袭
-
-短视频架构初探
-
-存储需求
-
-存储需求量细化
-
-寻找天选存储
-
-为什么对象存储
-前情回顾
-
-存储对比
-
-分布式存储选型
-
-易用性
-接口对比
-
-
-（听上去好像真的很方便）
-适应环境
-
-对象存储怎么用
-
-申请 Bucket
-
-（链接是一个视频，实操如何在字节内部创建 Bucket）
-Restful 接口
-
-
-（也是一个内部视频，你可用看见这个视频本身就是放在 TOS 上的）
-
-MultiUpload 接口
-
-Listprefix 接口
-
-TOS字节内部实践
-（这是讲师18年来到字节后积累的经验）
-开发一个对象存储
-
-
-可扩展性之 Partition
-
-
-持久度之 Replication
-
-
-成本之 EC
-
-（任何一块坏了，可以从其他块推导出这一块的内容）
-成本之温热转换
-
-架构细化
-
-存储需求量细化
-
-高可用之拆分
-
-高可用之粤核酸的启发
-
-高可用之镜像灾备
-
-
-未来展望
-
-课后总结
-
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/04/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8FL19%EF%BC%9A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-RDBMS/" title="『字节青训营-3rd』L19：深入理解 RDBMS">『字节青训营-3rd』L19：深入理解 RDBMS</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-04T02:09:37.000Z" title="发表于 2022-06-04 10:09:37">2022-06-04</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">经典案例
-从一场红包雨说起
-
-RDBMS 事务 ACID
-
-红包雨 与 ACID
-原子性
-
-一致性
-
-隔离性
-
-持久性
-
-红包雨 与 高并发
-
-红包雨 与 高可靠
-
-发展历史
-前DBMS时代
-人工管理
-
-文件系统
-
-（打开记事本记录）
-DMBS时代
-
-网状模型
-
-层次模型
-
-关系模型
-
-DBMS数据模型
-
-SQL语言
-
-历史回顾
-
-关键技术
-一条SQL的一生
-
-SQL引擎
-Parser
-
-Optimizer
-
-
-
-Executor
-
-
-
-存储引擎
-InnoDB
-
-Buffer Pool
-
-
-Page
-
-B+ Tree
-
-B+树是真的太妙了
-事务引擎
-
-Atomicity 与 Undo Log
-
-Isolation 与 锁
-
-Isolation 与 MVCC
-
-Durability 与 Redo Log
-
-企业实践
-红包雨挑战
-
-大流量
-Sharding
-
-流量突增
-扩容
-
-代理连接池
-
-高可用&amp;高可靠
-
-3AZ高可用
-
-HA管理
-
-课程总结
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/03/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8FL18%EF%BC%9A%E5%B8%A6%E4%BD%A0%E8%AE%A4%E8%AF%86%E5%AD%98%E5%82%A8-%E6%95%B0%E6%8D%AE%E5%BA%93/" title="『字节青训营-3rd』L18：带你认识存储 &amp; 数据库">『字节青训营-3rd』L18：带你认识存储 &amp; 数据库</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-03T07:52:28.000Z" title="发表于 2022-06-03 15:52:28">2022-06-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">经典案例
-数据的产生
-
-数据的流动
-
-数据的持久化
-
-潜在的问题
-
-存储 &amp; 数据库简介
-存储系统
-系统概览
-
-系统特点
-
-
-简单：业务逻辑
-复杂：错误处理
-
-存储器层级结构
-
-越往上，容量越小，性能越好，越贵
-数据怎么从应用到存储介质
-
-RAID 技术
-
-数据库
-
-概览
-
-
-DSL：领域专用语言（人说人话，狗说狗话）
-
-关系型数据库特点
-
-非关系型数据库特点
-
-数据库 VS 经典存储
-结构化数据管理
-
-事务能力
-
-复杂查询能力
-
-数据库的使用方式
-
-主流产品刨析
-
-单机存储
-概览
-
-本地文件系统
-
-key-value 存储
-
-分布式存储
-
-HDFS
-
-Ceph
-
-单机数据库
-
-关系型数据库
-
-
-非关系型数据库
-
-
-
-分布式数据库
-
-解决容量问题
-
-解决弹性问题
-
-解决性价比问题
-
-More to Do
-
-新技术演进
-概览
-
-SPDK
-
-AI &amp; Storage
-
-高性能硬件
-
-总结
-
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/02/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8FL17%EF%BC%9A%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" title="『字节青训营-3rd』L17：分布式定时任务那些事儿">『字节青训营-3rd』L17：分布式定时任务那些事儿</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-02T11:47:54.000Z" title="发表于 2022-06-02 19:47:54">2022-06-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">前言
-春节集卡瓜分20亿
-
-
-
-发展历程
-Windows 批处理
-
-Windows 任务计划程序
-
-Linux命令-CronJob
-
-单机定时任务
-Timer、Ticker
-
-ScheduledExecutorService
-
-任务调度
-Quartz
-
-分布式定时任务
-
-定义
-
-特点
-
-执行方式
-
-
-业内定时任务框架
-
-Xxl-job
-
-SchedulerX
-
-TCT
-
-知识面扩充
-
-02小结
-
-实现原理
-核心架构（重要）
-
-数据流
-
-功能架构
-
-控制台
-基本概念
-
-
-
-为什么 1 个任务对应 n 个任务实例：
-因为一个任务可以执行多次
-
-
-为什么 1 个任务结构对应 n 个任务结果：
-因为每次调度都可能会失败，这时就要重试，每试一次都有结果
-
-
-任务元数据
-
-任务实例
-
-触发器
-核心指责
-
-方案1
-
-方案2
-
-
-
-
-（鄙人感觉是非常巧妙的操作）
-
-高可用
-
-问题引出
-
-数据库行锁模式
-
-分布式锁模式
-
-调度器
-
-资源来源
-
-资源调度
-节点选择
-
-任务分片
-
-高级特性
-任务编排
-
-故障转移
-
-高可用
-
-执行器
-
-03小结
-
-业务应用
-
-
-
-课程回顾
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/01/%E3%80%8EGo%E3%80%8F%E5%8C%BA%E5%88%86-GoLand-%E4%BB%A3%E7%90%86%E5%92%8C-go-proxy/" title="『Go』区分 GoLand 代理和 go proxy">『Go』区分 GoLand 代理和 go proxy</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-01T11:55:53.000Z" title="发表于 2022-06-01 19:55:53">2022-06-01</time></span></div><div class="content">先说结论，这两个完全不是一个东西
-GoLand 代理
-
-指的是在 GoLand 进行通信时的代理（如 copilot，更新，登录，集成的 Git 或其他操作）
-
-（如这种操作）
-但请注意集成终端可能不使用这个代理，这时就需要通过重新指定代理
-
-（建议将这条命令直接加到终端启动时执行）
-Go proxy
-这是 Go 在下载依赖时的优先顺序，可以使用 go env 来查看
-
-详细内容可以看这篇
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/05/31/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8FL16%EF%BC%9A%E8%B5%B0%E8%BF%9B%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" title="『字节青训营-3rd』L16：走进消息队列">『字节青训营-3rd』L16：走进消息队列</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-05-31T07:34:43.000Z" title="发表于 2022-05-31 15:34:43">2022-05-31</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">引子
-四个案例
-
-
-
-
-
-
-
-
-本地日志丢掉了，怎么办？
-
-解决方案
-
-
-
-
-
-前世今生
-发展历程
-
-业界对比
-
-消息队列-Kafka
-使用场景
-
-如何使用 Kafka
-
-基本概念
-
-Offset
-
-每个消息都有编号
-Replica
-
-复制多份副本，如果 Leader 所在的机器挂了，就在 ISR 中的副本重新选一个 Leader
-数据复制
-
-由 Controller 分配复制
-Kafka 架构
-
-一条消息的自述
-
-思考
-
-不能一个一个发，应该要一起发送
-Producer
-批量发送
-
-数据压缩
-
-最好的是 ZSTD
-Broker
-数据的存储
-
-消息文件结构
-
-磁盘结构
-
-顺序写
-
-如何找到消息
-
-偏移量索引文件
-
-
-时间戳索引文件
-
-传统数据拷贝
-
-零拷贝
-
-Consumer
-消息的接收端
-
-Low Level 手动分配
-
-优点：方便快捷
-问题：
-
-如果某个 Consumer 挂掉了，那它负责的那些 Partition 直接阻塞
-如果某个 Consumer 能力不够，想其他 Consumer 来接替，必会出现机器的启停
-
-High Level 自动分配
-
-Consumer Rebalance
-
-（这个流程有点复杂，可以去查找更多资料学习）
-
-
-下面是一些缺点
-数据复制问题
-
-重启操作
-
-（重启一个节点要很久，重启所有节点要数天甚是数周）
-不能并发重启，可能一个片放在两个机器上
-替换、扩容、缩容
-
-（只要有节点的变动，就有复制的成本）
-负载不均衡
-
-
-（想解决 IO 问题，引入了新的 IO 问题）
-问题总结
-
-消息队列-BMQ
-BMQ 简介
-
-
-读写分离
-运维操作对比
-
-HDFS ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/05/31/%E3%80%8ERedis%E3%80%8F%E7%BC%93%E5%AD%98%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/" title="『Redis』缓存与数据库的一致性问题">『Redis』缓存与数据库的一致性问题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-05-31T07:27:52.000Z" title="发表于 2022-05-31 15:27:52">2022-05-31</time></span></div><div class="content">今天在 B 站上刷到了这个问题，但是没有时间总结，先把视频放这
-
-面试官：缓存和数据库如何保证一致性
-你们项目中如何保证 Redis 与 MySQL 的数据一致性？
-MySQL和Redis的双写一致性
-
-
-结论
-先更新数据库，再删除缓存
-并且结合延时双删或者消息队列
-</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/9/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#content-inner">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/#content-inner">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/#content-inner">19</a><a class="extend next" rel="next" href="/page/11/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Nick Xu</div><div class="author-info__description">这家伙真勤奋，什么都留下了</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/static/202202230023824.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">NX の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">NX の 博客</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/18/%E3%80%8E%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6%E3%80%8FP4%EF%BC%9A%E5%B9%82%E7%BA%A7%E6%95%B0/" title="『高等数学』P4：幂级数">『高等数学』P4：幂级数</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-18T08:40:45.000Z" title="发表于 2022-06-18 16:40:45">2022-06-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/">基础课复习</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/">高等数学</a></span></div><div class="content">           </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/18/%E3%80%8E%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6%E3%80%8FP3%EF%BC%9A%E5%B8%B8%E6%95%B0%E9%A1%B9%E7%BA%A7%E6%95%B0/" title="『高等数学』P3：常数项级数">『高等数学』P3：常数项级数</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-18T08:01:22.000Z" title="发表于 2022-06-18 16:01:22">2022-06-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/">基础课复习</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/">高等数学</a></span></div><div class="content">                </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/17/%E3%80%8E%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6%E3%80%8FP2%EF%BC%9A%E5%A4%9A%E5%85%83%E5%87%BD%E6%95%B0%E6%B1%82%E5%AF%BC/" title="『高等数学』P2：多元函数求导">『高等数学』P2：多元函数求导</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-17T13:08:19.000Z" title="发表于 2022-06-17 21:08:19">2022-06-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/">基础课复习</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/">高等数学</a></span></div><div class="content">复合函数链式求导         （最后不要忘合并） 隐函数求导  （例1略）   （雅各比行列式）   练习题     我圈出来的地方应该是写错了的，应该是 z2−xyz^{2}-xyz2−xy </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/16/%E3%80%8E%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6%E3%80%8FP1%EF%BC%9A%E7%A9%BA%E9%97%B4%E5%87%A0%E4%BD%95%E3%80%81%E5%A4%9A%E5%85%83%E5%87%BD%E6%95%B0%E6%9E%81%E9%99%90%E3%80%81%E5%81%8F%E5%AF%BC/" title="『高等数学』P1：空间几何、多元函数极限、偏导">『高等数学』P1：空间几何、多元函数极限、偏导</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-16T13:07:22.000Z" title="发表于 2022-06-16 21:07:22">2022-06-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/">基础课复习</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/">高等数学</a></span></div><div class="content">平面与空间直线 平面   直线    表示直线的时候 0 是可以在分母上的       二元函数的极限        偏导数 （略） 全微分          练习题     </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/14/%E3%80%8E%E9%9A%8F%E7%AC%94%E3%80%8F618%E6%A1%8C%E9%9D%A2%E6%94%B9%E9%80%A0%E8%AE%A1%E5%88%92/" title="『随笔』618桌面改造计划">『随笔』618桌面改造计划</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-14T10:56:50.000Z" title="发表于 2022-06-14 18:56:50">2022-06-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9A%8F%E7%AC%94%E4%B8%8E%E6%80%BB%E7%BB%93/">随笔与总结</a></span></div><div class="content">前情提要 鄙人自开学以来桌面一直是没有放显示器的，毕竟从小到大一直用小屏的笔记本电脑打游戏，上了大学也没有什么感觉。我高考后买的一台屏幕 13 寸的 ROG 幻13，可以 360° 旋转，还支持触控，加上一支微软的 Surface Pen，上课记笔记就变得十分方便，也就一直用到了现在，直到—— 直到我参加了字节跳动的青训营（笑） 青训营最后有一个小组项目，然后我发现一个小屏就不够我看的了，因为要一边写代码，一边看文档，一边还要关注群里面的最新消息，这是我第一次这么急切地想要一个大屏幕，最好能来个双屏 并且，我平时桌面是很乱的，一堆乱七八糟的东西，还有一堆充电线，真的看着都影响工作效率，必须要有行之有效的解决方法 并且还有看书的问题，如果我想看书的话，必须把电脑往里面推，屏幕就隔得很远，不容易看清。而且如果以后要放一个大屏的话，支架肯定会占据很大一块桌面空间，纸质资料很多的话可能顶着支架，很烦（杭电的桌子不大，经我测量约为 100*50*40，长宽高） 所以，这次改造一共要解决三个痛点：  屏幕不够大 桌面太乱 看书体验不够舒适  那么，我最后有没有解决这些问题呢？  成品演示  这应该是我目前能想到的最优解了，那个键盘其实还可以往里推，还是有点深度的   看一下全景  其实后面也是有一堆乱七八糟的线的，只是屏幕挡住了，眼不见心不烦 可以迁一个 USB Hub 出来放桌面上，但其实平时没有很多拔插的需求  分步讲解 买台子 首先，综合各方面考虑，我必须为我的屏幕买一个台子 这样就不会因为它的支架而困扰，台子下面可以放很多东西 而且不能太高，杭电的桌面高度很低，上面有个大书架...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/12/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8F%E7%BB%93%E8%90%A5%E6%84%9F%E6%83%B3/" title="『字节青训营-3rd』结营感想（待后续）">『字节青训营-3rd』结营感想（待后续）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-12T01:39:59.000Z" title="发表于 2022-06-12 09:39:59">2022-06-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">福利鄙人平时上课的时候使用 IDM 把视频爬了下来，各位可以使用下面的链接访问！  阿里云：https://www.aliyundrive.com/s/xW4crbwj2f2 （被反馈貌似无法下载） 提取码: 5m2g 百度云：https://pan.baidu.com/s/1nAhcW__vhYPQfOGYXUO-Xg 提取码：89nn    呼！为期一个多月的课程已经结束了，我们的小组项目也进入了收尾阶段，是时候来写一篇总结了 课程方面 总体的课程安排  一个月的时间，从 Golang 的入门开始，到网络，到架构，到存储，真的可以说是收获颇丰 从5月7日到5月17日，我们学习了Go 语言原理与实践，最后的那一天还做了个小项目 从5月17日到5月24日，我们学习的是网络与部署的相关内容 25日上了算法课，讲了一种老师的新排序算法，可以取各种主流算法的长处，并被 Golang 的新版本采用 从27日到29日，连上三节课，讲的是框架方面的内容，而且很多东西都是学校里学不到的，比如微服务之类的，学校肯定不会给你教这个 接着，从5月31日到6月2日，开始讲中间件，消息队列的两种主流处理方式的的确确吸引到了我 最后一部分便是存储与数据库了，从最简单的单机存储，一种讲到分布式对象存储，算是开眼了，了解了很多此前闻所未闻的东西 我的感受 总的来说，这门课我能给满分，毕竟讲得是真的好，下面是几个本次课程给我最大的几个点 讲师资历深厚 来给我们上课的老师都是字节内部工作了很久的老员工，比如给我们讲对象存储的老师介绍自己说是18年来字节的，是对象存储的早期成员，一路见证了字节对象存储容量的...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/11/%E3%80%8EGolang%E3%80%8Fimport-%E4%B8%AD%E4%B8%8B%E5%88%92%E7%BA%BF%E7%9A%84%E4%BD%9C%E7%94%A8/" title="『Golang』import 中下划线，点，别名的作用">『Golang』import 中下划线，点，别名的作用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-10T16:00:16.000Z" title="发表于 2022-06-11 00:00:16">2022-06-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a></span></div><div class="content">下划线 众所周知，在 Golang 中如果 import 了一个包，会自动运行它的 init() 函数，并且如果你不在你的代码中使用该包，就无法编译 而如果你只需要它的 init() 函数，不需要使用它内部其他组件，就可以加一个下划线 例如在使用 GORM 时，不仅要引入 GORM 的包，还要引入数据库驱动 1234import (  _ &quot;example.com/my_mysql_driver&quot;  &quot;gorm.io/gorm&quot;) 点 加点后，在调用时可以省略包名前缀 1234567package main import . &quot;fmt&quot; func main() &#123;    Println(&quot;Hello World!&quot;)&#125; 别名 别名就更简单了，就是取别名的意思 1234567package main import f &quot;fmt&quot; func main() &#123;    f.Println(&quot;Hello World!&quot;)&#125; </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/06/%E3%80%8E%E9%9D%A2%E8%AF%95%E5%85%AB%E8%82%A1%E6%96%87%E3%80%8F1%EF%BC%9A%E5%A6%82%E4%BD%95%E5%9C%A840%E4%BA%BF%E4%B8%AA%E6%95%B4%E6%95%B0%E4%B8%AD%E5%AF%BB%E6%89%BE%E4%B8%80%E4%B8%AA%E6%95%B0%E5%AD%97/" title="『面试八股文』1：如何在40亿个整数中寻找一个数字">『面试八股文』1：如何在40亿个整数中寻找一个数字</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-06T14:42:51.000Z" title="发表于 2022-06-06 22:42:51">2022-06-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%A2%E8%AF%95%E5%85%AB%E8%82%A1%E6%96%87/">面试八股文</a></span></div><div class="content">前情提要：  本篇来源于B站视频：漫画面试系列-如何在40亿个整数中寻找一个数字 整数是 32 位的 int 机器只有 2G 内存 可以使用很多机器        </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/05/%E3%80%8E%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86%E3%80%8F%E5%8F%89%E4%B9%98%E7%9A%84%E8%AE%A1%E7%AE%97/" title="『大学物理』叉乘的计算">『大学物理』叉乘的计算</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-05T03:29:35.000Z" title="发表于 2022-06-05 11:29:35">2022-06-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/">基础课复习</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86/">大学物理</a></span></div><div class="content">感谢 B 站视频：叉乘/向量积的右手螺旋法则 a→×b→\overrightarrow{a}\times \overrightarrow{b} a×b 方向判定 伸直右手，四指向前，大拇指垂直，将四指指向 a→\overrightarrow{a}a 的方向，然后向 b→\overrightarrow{b}b 的方向弯曲，大拇指的方向就是 a→×b→\overrightarrow{a}\times \overrightarrow{b}a×b 的方向 大小判定 ∣a→×b→∣=∣a→∣⋅∣b→∣⋅sin⁡θ\left| \overrightarrow{a}\times \overrightarrow{b}\right| =\left| \overrightarrow{a}\right| \cdot \left| \overrightarrow{b}\right| \cdot \sin \theta ​a×b​=​a​⋅​b​⋅sinθ 使用行列式计算 a→×b→=∣ijkaxayazbxbybz∣\overrightarrow{a}\times \overrightarrow{b}=\begin{vmatrix} i &amp; j &amp; k \\ a_{x} &amp; a_{y} &amp; a_{z} \\ b_{x} &amp; b_{y} &amp; b_{z} \end{vmatrix}a×b=​iax​bx​​jay​by​​kaz​bz​​​ </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/05/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8FL20%EF%BC%9ATos-%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E5%AE%9E%E6%88%98/" title="『字节青训营-3rd』L20：Tos 对象存储实战">『字节青训营-3rd』L20：Tos 对象存储实战</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-05T02:00:50.000Z" title="发表于 2022-06-05 10:00:50">2022-06-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">抖音背后的存储 重任来袭  短视频架构初探  存储需求  存储需求量细化  寻找天选存储  为什么对象存储 前情回顾  存储对比  分布式存储选型  易用性 接口对比   （听上去好像真的很方便） 适应环境  对象存储怎么用  申请 Bucket  （链接是一个视频，实操如何在字节内部创建 Bucket） Restful 接口   （也是一个内部视频，你可用看见这个视频本身就是放在 TOS 上的）  MultiUpload 接口  Listprefix 接口  TOS字节内部实践 （这是讲师18年来到字节后积累的经验） 开发一个对象存储   可扩展性之 Partition   持久度之 Replication   成本之 EC  （任何一块坏了，可以从其他块推导出这一块的内容） 成本之温热转换  架构细化  存储需求量细化  高可用之拆分  高可用之粤核酸的启发  高可用之镜像灾备   未来展望  课后总结   </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/04/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8FL19%EF%BC%9A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-RDBMS/" title="『字节青训营-3rd』L19：深入理解 RDBMS">『字节青训营-3rd』L19：深入理解 RDBMS</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-04T02:09:37.000Z" title="发表于 2022-06-04 10:09:37">2022-06-04</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">经典案例 从一场红包雨说起  RDBMS 事务 ACID  红包雨 与 ACID 原子性  一致性  隔离性  持久性  红包雨 与 高并发  红包雨 与 高可靠  发展历史 前DBMS时代 人工管理  文件系统  （打开记事本记录） DMBS时代  网状模型  层次模型  关系模型  DBMS数据模型  SQL语言  历史回顾  关键技术 一条SQL的一生  SQL引擎 Parser  Optimizer    Executor    存储引擎 InnoDB  Buffer Pool   Page  B+ Tree  B+树是真的太妙了 事务引擎  Atomicity 与 Undo Log  Isolation 与 锁  Isolation 与 MVCC  Durability 与 Redo Log  企业实践 红包雨挑战  大流量 Sharding  流量突增 扩容  代理连接池  高可用&amp;高可靠  3AZ高可用  HA管理  课程总结  </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/03/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8FL18%EF%BC%9A%E5%B8%A6%E4%BD%A0%E8%AE%A4%E8%AF%86%E5%AD%98%E5%82%A8-%E6%95%B0%E6%8D%AE%E5%BA%93/" title="『字节青训营-3rd』L18：带你认识存储 &amp; 数据库">『字节青训营-3rd』L18：带你认识存储 &amp; 数据库</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-03T07:52:28.000Z" title="发表于 2022-06-03 15:52:28">2022-06-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">经典案例 数据的产生  数据的流动  数据的持久化  潜在的问题  存储 &amp; 数据库简介 存储系统 系统概览  系统特点   简单：业务逻辑 复杂：错误处理  存储器层级结构  越往上，容量越小，性能越好，越贵 数据怎么从应用到存储介质  RAID 技术  数据库  概览   DSL：领域专用语言（人说人话，狗说狗话）  关系型数据库特点  非关系型数据库特点  数据库 VS 经典存储 结构化数据管理  事务能力  复杂查询能力  数据库的使用方式  主流产品刨析  单机存储 概览  本地文件系统  key-value 存储  分布式存储  HDFS  Ceph  单机数据库  关系型数据库   非关系型数据库    分布式数据库  解决容量问题  解决弹性问题  解决性价比问题  More to Do  新技术演进 概览  SPDK  AI &amp; Storage  高性能硬件  总结   </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/02/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8FL17%EF%BC%9A%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" title="『字节青训营-3rd』L17：分布式定时任务那些事儿">『字节青训营-3rd』L17：分布式定时任务那些事儿</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-02T11:47:54.000Z" title="发表于 2022-06-02 19:47:54">2022-06-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">前言 春节集卡瓜分20亿    发展历程 Windows 批处理  Windows 任务计划程序  Linux命令-CronJob  单机定时任务 Timer、Ticker  ScheduledExecutorService  任务调度 Quartz  分布式定时任务  定义  特点  执行方式   业内定时任务框架  Xxl-job  SchedulerX  TCT  知识面扩充  02小结  实现原理 核心架构（重要）  数据流  功能架构  控制台 基本概念    为什么 1 个任务对应 n 个任务实例： 因为一个任务可以执行多次   为什么 1 个任务结构对应 n 个任务结果： 因为每次调度都可能会失败，这时就要重试，每试一次都有结果   任务元数据  任务实例  触发器 核心指责  方案1  方案2     （鄙人感觉是非常巧妙的操作）  高可用  问题引出  数据库行锁模式  分布式锁模式  调度器  资源来源  资源调度 节点选择  任务分片  高级特性 任务编排  故障转移  高可用  执行器  03小结  业务应用    课程回顾  </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/06/01/%E3%80%8EGo%E3%80%8F%E5%8C%BA%E5%88%86-GoLand-%E4%BB%A3%E7%90%86%E5%92%8C-go-proxy/" title="『Go』区分 GoLand 代理和 go proxy">『Go』区分 GoLand 代理和 go proxy</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-06-01T11:55:53.000Z" title="发表于 2022-06-01 19:55:53">2022-06-01</time></span></div><div class="content">先说结论，这两个完全不是一个东西 GoLand 代理  指的是在 GoLand 进行通信时的代理（如 copilot，更新，登录，集成的 Git 或其他操作）  （如这种操作） 但请注意集成终端可能不使用这个代理，这时就需要通过重新指定代理  （建议将这条命令直接加到终端启动时执行） Go proxy 这是 Go 在下载依赖时的优先顺序，可以使用 go env 来查看  详细内容可以看这篇 </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/05/31/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5%E3%80%8FL16%EF%BC%9A%E8%B5%B0%E8%BF%9B%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" title="『字节青训营-3rd』L16：走进消息队列">『字节青训营-3rd』L16：走进消息队列</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-05-31T07:34:43.000Z" title="发表于 2022-05-31 15:34:43">2022-05-31</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/">字节跳动-3rd-后端</a></span></div><div class="content">引子 四个案例         本地日志丢掉了，怎么办？  解决方案      前世今生 发展历程  业界对比  消息队列-Kafka 使用场景  如何使用 Kafka  基本概念  Offset  每个消息都有编号 Replica  复制多份副本，如果 Leader 所在的机器挂了，就在 ISR 中的副本重新选一个 Leader 数据复制  由 Controller 分配复制 Kafka 架构  一条消息的自述  思考  不能一个一个发，应该要一起发送 Producer 批量发送  数据压缩  最好的是 ZSTD Broker 数据的存储  消息文件结构  磁盘结构  顺序写  如何找到消息  偏移量索引文件   时间戳索引文件  传统数据拷贝  零拷贝  Consumer 消息的接收端  Low Level 手动分配  优点：方便快捷 问题：  如果某个 Consumer 挂掉了，那它负责的那些 Partition 直接阻塞 如果某个 Consumer 能力不够，想其他 Consumer 来接替，必会出现机器的启停  High Level 自动分配  Consumer Rebalance  （这个流程有点复杂，可以去查找更多资料学习）   下面是一些缺点 数据复制问题  重启操作  （重启一个节点要很久，重启所有节点要数天甚是数周） 不能并发重启，可能一个片放在两个机器上 替换、扩容、缩容  （只要有节点的变动，就有复制的成本） 负载不均衡   （想解决 IO 问题，引入了新的 IO 问题） 问题总结  消息队列-BMQ BMQ 简介   读写分离 运维操作对比  H...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/05/31/%E3%80%8ERedis%E3%80%8F%E7%BC%93%E5%AD%98%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/" title="『Redis』缓存与数据库的一致性问题">『Redis』缓存与数据库的一致性问题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-05-31T07:27:52.000Z" title="发表于 2022-05-31 15:27:52">2022-05-31</time></span></div><div class="content">今天在 B 站上刷到了这个问题，但是没有时间总结，先把视频放这  面试官：缓存和数据库如何保证一致性 你们项目中如何保证 Redis 与 MySQL 的数据一致性？ MySQL和Redis的双写一致性   结论 先更新数据库，再删除缓存 并且结合延时双删或者消息队列 </div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/9/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#content-inner">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/#content-inner">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/#content-inner">19</a><a class="extend next" rel="next" href="/page/11/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Nick Xu</div><div class="author-info-description">这家伙真勤奋，什么都留下了</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
             <i class="fas fa-folder-open"></i>
             <span>分类</span>
             
-            </div>
-            <ul class="card-category-list" id="aside-cat-list">
+          </div>
+          <ul class="card-category-list expandBtn" id="aside-cat-list">
             <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C-C/"><span class="card-category-list-name">C / C++</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/Golang/"><span class="card-category-list-name">Golang</span><span class="card-category-list-count">48</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/Flamego-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">Flamego 框架</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/GORM-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">GORM 框架</span><span class="card-category-list-count">13</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">Gin 框架</span><span class="card-category-list-count">10</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/go-zero-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">go-zero 框架</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/%E8%AF%AD%E6%B3%95%E9%80%9F%E9%80%9A/"><span class="card-category-list-name">语法速通</span><span class="card-category-list-count">11</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/"><span class="card-category-list-name">Hexo + Butterfly 建站指南</span><span class="card-category-list-count">11</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/OSPP/"><span class="card-category-list-name">OSPP</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Others/"><span class="card-category-list-name">Others</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/Python/"><span class="card-category-list-name">Python</span><span class="card-category-list-count">14</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/"><span class="card-category-list-name">Python3 入门</span><span class="card-category-list-count">13</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/QQ-Bot/"><span class="card-category-list-name">QQ Bot</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/macOS/"><span class="card-category-list-name">macOS</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/"><span class="card-category-list-name">基础课复习</span><span class="card-category-list-count">15</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86/"><span class="card-category-list-name">大学物理</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/"><span class="card-category-list-name">离散数学</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/"><span class="card-category-list-name">高等数学</span><span class="card-category-list-count">4</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="card-category-list-name">微信小程序</span><span class="card-category-list-count">8</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"><span class="card-category-list-name">开发基础</span><span class="card-category-list-count">8</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"><span class="card-category-list-name">数据库</span><span class="card-category-list-count">23</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/"><span class="card-category-list-name">MySQL</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/SQL-%E5%85%A5%E9%97%A8/"><span class="card-category-list-name">SQL 入门</span><span class="card-category-list-count">19</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"><span class="card-category-list-name">数据结构与算法</span><span class="card-category-list-count">20</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/"><span class="card-category-list-name">算法拾遗</span><span class="card-category-list-count">14</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E6%8E%92%E5%BA%8F/"><span class="card-category-list-name">排序</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E6%90%9C%E7%B4%A2%E6%8A%80%E6%9C%AF/"><span class="card-category-list-name">搜索技术</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E9%93%BE%E8%A1%A8/"><span class="card-category-list-name">链表</span><span class="card-category-list-count">1</span></a></li></ul></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/"><span class="card-category-list-name">新技能 Got</span><span class="card-category-list-count">21</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/"><span class="card-category-list-name">树莓派</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/"><span class="card-category-list-name">运维</span><span class="card-category-list-count">6</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/CICD/"><span class="card-category-list-name">CICD</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/"><span class="card-category-list-name">日志收集</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9A%8F%E7%AC%94%E4%B8%8E%E6%80%BB%E7%BB%93/"><span class="card-category-list-name">随笔与总结</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/"><span class="card-category-list-name">青训营</span><span class="card-category-list-count">44</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/"><span class="card-category-list-name">字节跳动-3rd-后端</span><span class="card-category-list-count">23</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE/"><span class="card-category-list-name">字节跳动-4th-大数据</span><span class="card-category-list-count">20</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-5th-%E5%90%8E%E7%AB%AF/"><span class="card-category-list-name">字节跳动-5th-后端</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E5%85%AB%E8%82%A1%E6%96%87/"><span class="card-category-list-name">面试八股文</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%A2%98%E8%A7%A3/"><span class="card-category-list-name">题解</span><span class="card-category-list-count">4</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.27em; color: rgb(175, 190, 36)">Linux</a><a href="/tags/SSH/" style="font-size: 1.17em; color: rgb(169, 185, 129)">SSH</a><a href="/tags/GORM/" style="font-size: 1.33em; color: rgb(158, 144, 84)">GORM</a><a href="/tags/Go/" style="font-size: 1.45em; color: rgb(134, 34, 151)">Go</a><a href="/tags/MySQL/" style="font-size: 1.22em; color: rgb(79, 60, 196)">MySQL</a><a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 1.22em; color: rgb(51, 114, 26)">树莓派</a><a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 1.27em; color: rgb(125, 113, 164)">随笔</a><a href="/tags/Gin/" style="font-size: 1.27em; color: rgb(113, 127, 198)">Gin</a><a href="/tags/%E5%BB%BA%E7%AB%99%E6%8A%80%E5%B7%A7/" style="font-size: 1.29em; color: rgb(33, 90, 38)">建站技巧</a><a href="/tags/Minecraft/" style="font-size: 1.17em; color: rgb(77, 175, 40)">Minecraft</a><a href="/tags/Python/" style="font-size: 1.36em; color: rgb(5, 186, 166)">Python</a><a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 1.2em; color: rgb(177, 190, 159)">环境配置</a><a href="/tags/SQL/" style="font-size: 1.38em; color: rgb(164, 74, 197)">SQL</a><a href="/tags/C-C/" style="font-size: 1.4em; color: rgb(14, 78, 155)">C/C++</a><a href="/tags/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" style="font-size: 1.31em; color: rgb(55, 22, 188)">算法竞赛</a><a href="/tags/QQ-bot/" style="font-size: 1.15em; color: rgb(152, 155, 41)">QQ bot</a><a href="/tags/%E9%A2%98%E8%A7%A3/" style="font-size: 1.22em; color: rgb(66, 60, 155)">题解</a><a href="/tags/Makefile/" style="font-size: 1.15em; color: rgb(38, 134, 157)">Makefile</a><a href="/tags/CMake/" style="font-size: 1.15em; color: rgb(171, 182, 7)">CMake</a><a href="/tags/STL/" style="font-size: 1.17em; color: rgb(137, 161, 3)">STL</a><a href="/tags/GitHub-Actions/" style="font-size: 1.2em; color: rgb(128, 133, 2)">GitHub Actions</a><a href="/tags/CICD/" style="font-size: 1.2em; color: rgb(128, 73, 150)">CICD</a><a href="/tags/Webhook/" style="font-size: 1.15em; color: rgb(54, 186, 173)">Webhook</a><a href="/tags/Docker/" style="font-size: 1.17em; color: rgb(121, 189, 125)">Docker</a><a href="/tags/GitHub/" style="font-size: 1.15em; color: rgb(128, 153, 2)">GitHub</a><a href="/tags/Redis/" style="font-size: 1.17em; color: rgb(141, 139, 176)">Redis</a><a href="/tags/go-zero/" style="font-size: 1.17em; color: rgb(27, 30, 63)">go-zero</a><a href="/tags/grpc/" style="font-size: 1.17em; color: rgb(61, 148, 7)">grpc</a><a href="/tags/tus/" style="font-size: 1.15em; color: rgb(145, 130, 162)">tus</a><a href="/tags/Flamego/" style="font-size: 1.15em; color: rgb(174, 90, 4)">Flamego</a><a href="/tags/JWT/" style="font-size: 1.15em; color: rgb(38, 172, 147)">JWT</a><a href="/tags/OSPP/" style="font-size: 1.17em; color: rgb(96, 103, 38)">OSPP</a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.17em; color: rgb(156, 115, 109)">运维</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/" style="font-size: 1.17em; color: rgb(46, 34, 185)">数据备份</a><a href="/tags/Windows/" style="font-size: 1.17em; color: rgb(146, 200, 155)">Windows</a><a href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/" style="font-size: 1.43em; color: rgb(17, 33, 35)">字节青训营</a><a href="/tags/Others/" style="font-size: 1.2em; color: rgb(160, 74, 8)">Others</a><a href="/tags/Twikoo/" style="font-size: 1.15em; color: rgb(3, 79, 126)">Twikoo</a><a href="/tags/WSL/" style="font-size: 1.2em; color: rgb(190, 161, 173)">WSL</a><a href="/tags/Clash/" style="font-size: 1.15em; color: rgb(60, 75, 174)">Clash</a><a href="/tags/hduhelp/" style="font-size: 1.17em; color: rgb(200, 173, 42)">hduhelp</a><a href="/tags/k8s/" style="font-size: 1.15em; color: rgb(29, 83, 163)">k8s</a><a href="/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/" style="font-size: 1.15em; color: rgb(157, 194, 106)">位运算</a><a href="/tags/BFS/" style="font-size: 1.22em; color: rgb(118, 33, 143)">BFS</a><a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.15em; color: rgb(109, 98, 63)">数学</a><a href="/tags/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/" style="font-size: 1.15em; color: rgb(88, 193, 77)">排列组合</a><a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1.15em; color: rgb(182, 85, 135)">链表</a><a href="/tags/DFS/" style="font-size: 1.15em; color: rgb(12, 159, 121)">DFS</a><a href="/tags/IDDFS/" style="font-size: 1.15em; color: rgb(112, 161, 8)">IDDFS</a><a href="/tags/IDA/" style="font-size: 1.15em; color: rgb(160, 95, 161)">IDA*</a><a href="/tags/%E8%88%9E%E8%B9%88%E9%93%BE-DLX/" style="font-size: 1.15em; color: rgb(104, 67, 163)">舞蹈链/DLX</a><a href="/tags/%E9%9D%A2%E8%AF%95%E5%B7%A5%E4%BD%9C/" style="font-size: 1.15em; color: rgb(167, 144, 34)">面试工作</a><a href="/tags/618%E5%A5%BD%E7%89%A9/" style="font-size: 1.15em; color: rgb(61, 41, 156)">618好物</a><a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 1.17em; color: rgb(167, 151, 32)">面试</a><a href="/tags/docker/" style="font-size: 1.15em; color: rgb(199, 175, 155)">docker</a><a href="/tags/%E6%97%85%E6%B8%B8/" style="font-size: 1.15em; color: rgb(85, 46, 175)">旅游</a><a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 1.24em; color: rgb(145, 180, 127)">微信小程序</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">十二月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">十月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/07/"><span class="card-archive-list-date">七月 2024</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">六月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/05/"><span class="card-archive-list-date">五月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/03/"><span class="card-archive-list-date">三月 2024</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/12/"><span class="card-archive-list-date">十二月 2023</span><span class="card-archive-list-count">3</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">300</div></div><div class="webinfo-item"><div class="item-name">已运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2021-11-12T16:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">355.3k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-11-17T19:40:06.926Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: #0d0d0d"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Nick Xu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"></div><div id="rightside-config-show"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><div class="js-pjax"><script>window.typedJSFn = {
-  init: (str) => {
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.27em; color: rgb(50, 50, 50);">Linux</a><a href="/tags/SSH/" style="font-size: 1.17em; color: rgb(135, 69, 165);">SSH</a><a href="/tags/GORM/" style="font-size: 1.33em; color: rgb(50, 119, 63);">GORM</a><a href="/tags/Go/" style="font-size: 1.45em; color: rgb(57, 157, 50);">Go</a><a href="/tags/MySQL/" style="font-size: 1.22em; color: rgb(103, 50, 140);">MySQL</a><a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 1.22em; color: rgb(134, 83, 170);">树莓派</a><a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 1.27em; color: rgb(142, 50, 81);">随笔</a><a href="/tags/Gin/" style="font-size: 1.27em; color: rgb(182, 159, 54);">Gin</a><a href="/tags/%E5%BB%BA%E7%AB%99%E6%8A%80%E5%B7%A7/" style="font-size: 1.29em; color: rgb(140, 88, 77);">建站技巧</a><a href="/tags/Minecraft/" style="font-size: 1.17em; color: rgb(117, 50, 146);">Minecraft</a><a href="/tags/Python/" style="font-size: 1.36em; color: rgb(50, 88, 179);">Python</a><a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 1.2em; color: rgb(50, 50, 51);">环境配置</a><a href="/tags/SQL/" style="font-size: 1.38em; color: rgb(91, 124, 163);">SQL</a><a href="/tags/C-C/" style="font-size: 1.4em; color: rgb(163, 123, 50);">C/C++</a><a href="/tags/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" style="font-size: 1.31em; color: rgb(107, 90, 50);">算法竞赛</a><a href="/tags/QQ-bot/" style="font-size: 1.15em; color: rgb(184, 162, 124);">QQ bot</a><a href="/tags/%E9%A2%98%E8%A7%A3/" style="font-size: 1.22em; color: rgb(197, 137, 70);">题解</a><a href="/tags/Makefile/" style="font-size: 1.15em; color: rgb(112, 131, 155);">Makefile</a><a href="/tags/CMake/" style="font-size: 1.15em; color: rgb(113, 170, 50);">CMake</a><a href="/tags/STL/" style="font-size: 1.17em; color: rgb(139, 199, 56);">STL</a><a href="/tags/GitHub-Actions/" style="font-size: 1.2em; color: rgb(133, 136, 63);">GitHub Actions</a><a href="/tags/CICD/" style="font-size: 1.2em; color: rgb(175, 50, 115);">CICD</a><a href="/tags/Webhook/" style="font-size: 1.15em; color: rgb(65, 50, 168);">Webhook</a><a href="/tags/Docker/" style="font-size: 1.17em; color: rgb(52, 71, 89);">Docker</a><a href="/tags/GitHub/" style="font-size: 1.15em; color: rgb(67, 119, 75);">GitHub</a><a href="/tags/grpc/" style="font-size: 1.17em; color: rgb(52, 50, 165);">grpc</a><a href="/tags/Redis/" style="font-size: 1.17em; color: rgb(50, 121, 200);">Redis</a><a href="/tags/go-zero/" style="font-size: 1.17em; color: rgb(87, 149, 88);">go-zero</a><a href="/tags/tus/" style="font-size: 1.15em; color: rgb(85, 90, 52);">tus</a><a href="/tags/Flamego/" style="font-size: 1.15em; color: rgb(97, 96, 50);">Flamego</a><a href="/tags/JWT/" style="font-size: 1.15em; color: rgb(50, 55, 50);">JWT</a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.17em; color: rgb(120, 50, 176);">运维</a><a href="/tags/OSPP/" style="font-size: 1.17em; color: rgb(97, 50, 50);">OSPP</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/" style="font-size: 1.17em; color: rgb(88, 137, 50);">数据备份</a><a href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/" style="font-size: 1.43em; color: rgb(53, 72, 50);">字节青训营</a><a href="/tags/Others/" style="font-size: 1.2em; color: rgb(50, 56, 53);">Others</a><a href="/tags/Windows/" style="font-size: 1.17em; color: rgb(67, 53, 52);">Windows</a><a href="/tags/Twikoo/" style="font-size: 1.15em; color: rgb(159, 194, 57);">Twikoo</a><a href="/tags/WSL/" style="font-size: 1.2em; color: rgb(56, 50, 136);">WSL</a><a href="/tags/Clash/" style="font-size: 1.15em; color: rgb(70, 169, 129);">Clash</a><a href="/tags/hduhelp/" style="font-size: 1.17em; color: rgb(163, 50, 64);">hduhelp</a><a href="/tags/k8s/" style="font-size: 1.15em; color: rgb(50, 50, 199);">k8s</a><a href="/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/" style="font-size: 1.15em; color: rgb(81, 107, 50);">位运算</a><a href="/tags/BFS/" style="font-size: 1.22em; color: rgb(122, 134, 91);">BFS</a><a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.15em; color: rgb(50, 131, 102);">数学</a><a href="/tags/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/" style="font-size: 1.15em; color: rgb(99, 97, 166);">排列组合</a><a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1.15em; color: rgb(81, 76, 162);">链表</a><a href="/tags/DFS/" style="font-size: 1.15em; color: rgb(175, 96, 50);">DFS</a><a href="/tags/IDDFS/" style="font-size: 1.15em; color: rgb(138, 89, 140);">IDDFS</a><a href="/tags/IDA/" style="font-size: 1.15em; color: rgb(154, 149, 164);">IDA*</a><a href="/tags/%E8%88%9E%E8%B9%88%E9%93%BE-DLX/" style="font-size: 1.15em; color: rgb(50, 119, 196);">舞蹈链/DLX</a><a href="/tags/%E9%9D%A2%E8%AF%95%E5%B7%A5%E4%BD%9C/" style="font-size: 1.15em; color: rgb(69, 50, 158);">面试工作</a><a href="/tags/618%E5%A5%BD%E7%89%A9/" style="font-size: 1.15em; color: rgb(50, 50, 119);">618好物</a><a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 1.17em; color: rgb(162, 73, 144);">面试</a><a href="/tags/docker/" style="font-size: 1.15em; color: rgb(99, 161, 186);">docker</a><a href="/tags/%E6%97%85%E6%B8%B8/" style="font-size: 1.15em; color: rgb(158, 141, 70);">旅游</a><a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 1.24em; color: rgb(50, 73, 158);">微信小程序</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/10/">
+            <span class="card-archive-list-date">
+              十月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/12/">
+            <span class="card-archive-list-date">
+              十二月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/10/">
+            <span class="card-archive-list-date">
+              十月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/07/">
+            <span class="card-archive-list-date">
+              七月 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/06/">
+            <span class="card-archive-list-date">
+              六月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/05/">
+            <span class="card-archive-list-date">
+              五月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/03/">
+            <span class="card-archive-list-date">
+              三月 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/12/">
+            <span class="card-archive-list-date">
+              十二月 2023
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">300</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">355.3k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-12-17T17:20:44.506Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2025 By Nick Xu</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="/js/tw_cn.js?v=5.5.3"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
     window.typed = new Typed('#subtitle', Object.assign({
       strings: str,
       startDelay: 300,
@@ -864,23 +270,40 @@ MySQL和Redis的双写一致性
       backSpeed: 50,
     }, null))
   },
-  run: (subtitleType) => {
+  run: subtitleType => {
     if (true) {
       if (typeof Typed === 'function') {
         subtitleType()
       } else {
-        getScript('/pluginsSrc/typed.js/dist/typed.umd.js').then(subtitleType)
+        btf.getScript('/pluginsSrc/typed.js/dist/typed.umd.js?v=2.1.0').then(subtitleType)
       }
     } else {
       subtitleType()
     }
+  },
+  processSubtitle: (content, extraContents = []) => {
+    if (true) {
+      const sub = ["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"].slice()
+
+      if (extraContents.length > 0) {
+        sub.unshift(...extraContents)
+      }
+
+      if (typeof content === 'string') {
+        sub.unshift(content)
+      } else if (Array.isArray(content)) {
+        sub.unshift(...content)
+      }
+
+      sub.length > 0 && typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = typeof content === 'string' ? content :
+        (Array.isArray(content) && content.length > 0 ? content[0] : '')
+    }
   }
 }
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
 </script><script>function subtitleType () {
-  if (true) {
-    typedJSFn.init(["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"])
-  } else {
-    document.getElementById("subtitle").textContent = "求知若饥&#44;虚心若愚"
-  }
+  typedJSFn.processSubtitle(["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"])
 }
-typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
+typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js?v=1.1.6" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

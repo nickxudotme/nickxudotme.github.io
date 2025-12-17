@@ -1,31 +1,159 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>腾讯六月：未曾拥有过的美好时光😘 | NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="✨ 本文谨以纪念我此刻 21 岁的青春（图：深圳南山公园祝寿亭夜景）  今年（2024），鄙人有幸在腾讯 CSIG 作为 Golang 后端开发实习了六个月 我只能说，我在深圳腾讯的这六个月，是我目前人生中最美好的时光 过去从没有过，将来也可有能不会再有 我在此记录下这六个月中的点点滴滴，作为将"><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/post/six-months-in-Tencent.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>腾讯六月：未曾拥有过的美好时光😘 | NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="  ✨ 本文谨以纪念我此刻 21 岁的青春（图：深圳南山公园祝寿亭夜景）  今年（2024），鄙人有幸在腾讯 CSIG 作为 Golang 后端开发实习了六个月 我只能说，我在深圳腾讯的这六个月，是我目前人生中最美好的时光 过去从没有过，将来也可有能不会再有 我在此记录下这六个月中的点点滴滴，..."><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "腾讯六月：未曾拥有过的美好时光😘",
+  "url": "https://nickxu.me/post/six-months-in-Tencent.html",
+  "image": "https://nickxu.me/static/202202230023069.jpg",
+  "datePublished": "2024-12-07T08:24:50.000Z",
+  "dateModified": "2025-08-16T08:20:03.704Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Nick Xu",
+      "url": "https://nickxu.me"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/post/six-months-in-Tencent.html"><link rel="preconnect"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css?v=7.1.0"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?3573ab9aac9d53e5c34fea51e076a07d";
-  var s = document.getElementsByTagName("script")[0]; 
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-VBKFEG3YFD');
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-VBKFEG3YFD')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-VBKFEG3YFD', {'page_path': window.location.pathname})
+}, 'google_analytics')
 </script><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  localSearch: undefined,
   translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
-  noticeOutdate: {"limitDay":300,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
   copy: {
     success: '复制成功',
-    error: '复制错误',
+    error: '复制失败',
     noSupport: '浏览器不支持'
   },
   relativeDate: {
     homepage: false,
     post: false
   },
-  runtime: '天',
+  runtime: '',
   dateSuffix: {
     just: '刚刚',
     min: '分钟前',
@@ -34,135 +162,28 @@ gtag('config', 'G-VBKFEG3YFD');
     month: '个月前'
   },
   copyright: undefined,
-  lightbox: 'fancybox',
+  lightbox: 'null',
   Snackbar: undefined,
-  source: {
-    justifiedGallery: {
-      js: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.css'
-    }
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js?v=4.12.0',
+    buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: false,
+  islazyloadPlugin: false,
   isAnchor: false,
   percent: {
     toc: true,
     rightside: false,
   },
-  autoDarkmode: false
+  autoDarkmode: true
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '腾讯六月：未曾拥有过的美好时光😘',
-  isPost: true,
-  isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2025-08-16 16:20:03'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
-        }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
-      }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
-      win.activateDarkMode = function () {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      win.activateLightMode = function () {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-      const t = saveToLocal.get('theme')
-    
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        if (asideStatus === 'hide') {
-          document.documentElement.classList.add('hide-aside')
-        } else {
-          document.documentElement.classList.remove('hide-aside')
-        }
-      }
-    
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-    })(window)</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
 <link rel="alternate" href="/rss2.xml" title="NX の 博客" type="application/rss+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/static/favicon.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/static/202202230023069.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="NX の 博客"><span class="site-name">NX の 博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">腾讯六月：未曾拥有过的美好时光😘</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-16T08:20:03.704Z" title="更新于 2025-08-16 16:20:03">2025-08-16</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">7.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>22分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src="https://image.nickxu.me/20241207174432122.jpeg" alt="IMG_6448"></p>
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/static/202202230023069.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">NX の 博客</span></a><a class="nav-page-title" href="/"><span class="site-name">腾讯六月：未曾拥有过的美好时光😘</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">腾讯六月：未曾拥有过的美好时光😘</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-16T08:20:03.704Z" title="更新于 2025-08-16 16:20:03">2025-08-16</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>23分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:300,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2025-08-16 16:20:03&quot;}" hidden></div><p><img src="https://image.nickxu.me/20241207174432122.jpeg" alt="IMG_6448"></p>
 <blockquote>
 <p>✨ 本文谨以纪念我此刻 21 岁的青春（图：深圳南山公园祝寿亭夜景）</p>
 </blockquote>
@@ -189,7 +210,7 @@ gtag('config', 'G-VBKFEG3YFD');
 <p>电话里确认我的各种薪资福利，包括基本薪资，异地住房补贴，一次性通勤补贴，还有免费的 7 天中转住宿</p>
 <p>那种激动，是真的无以言表，至少以我的语文能力是没法表达出来的</p>
 <p>没有体验过的人，真的是想象不出来，在压抑了那么长时间过后，久旱逢甘霖的感觉</p>
-<p>挂断电话，我瘫在椅子上，<mark class="hl-label green">新的生活终于要开始了吗</mark> </p>
+<p>挂断电话，我瘫在椅子上，<mark class="hl-label green">新的生活终于要开始了吗</mark></p>
 <p>接着我把这个消息告诉了她，她也很开心，她说如果她能去腾讯工作的话，可能开心得晚上在床上睡不着觉吧</p>
 <p>最后她说，那好哇，正好可以玩一天庆祝一下</p>
 <p>真打一整天吗？</p>
@@ -210,12 +231,9 @@ gtag('config', 'G-VBKFEG3YFD');
 <p><s>真的是牛社出牛子</s> ，你甚至能在影视飓风里看见穿杭助社服的成员（左一，这件是卫衣款）</p>
 </blockquote>
 <p>另外的就是银行卡，还有提前学习各种规章制度</p>
-<div class="gallery">
-    <div class="fj-gallery  data" data-rowHeight="220" data-limit="10">
-    <span class="gallery-data">[{"url":"https://image.nickxu.me/20241207202852495.png","alt":"51d7769877316eff70d22532b588b1da"},{"url":"https://image.nickxu.me/20241207200559539.png","alt":"c0d3a870345e2aa9514fd39d96d8d3ea"},{"url":"https://image.nickxu.me/20241207200537590.png","alt":"3b2f480e8455ac12697f30a5b5d2355e"},{"url":"https://image.nickxu.me/20241207200546850.png","alt":"c8418f28fcab677901b2ccc64cb98dcc"},{"url":"https://image.nickxu.me/20241207200702596.png","alt":"e984d049edd74de6b1d8d58a8fdf5097"},{"url":"https://image.nickxu.me/20241207202705995.png","alt":"e125e9fa2fc68e4574b6956540bb04dc_720"},{"url":"https://image.nickxu.me/20241207195911721.jpeg","alt":"e65140554d0f49d1bd0245b9c290623f"},{"url":"https://image.nickxu.me/20241207201145438.png","alt":"4e9ccefaf7bf97a661a17ff3b351c4e0"},{"url":"https://image.nickxu.me/20241207195935881.png","alt":"3308ecdea3bfc74d92316f6b8bc88bd8_720"},{"url":"https://image.nickxu.me/20241207200510732.png","alt":"image-2024120780510671 PM"}]</span>
-    </div>
-    <button class="gallery-load-more"><span>加载更多</span><i class="fa-solid fa-arrow-down"></i></button>
-    </div>
+<div class="gallery-container" data-type="data" data-button="" data-limit="10" data-first="10">
+    <div class="gallery-items">[{"url":"https://image.nickxu.me/20241207202852495.png","alt":"51d7769877316eff70d22532b588b1da","title":""},{"url":"https://image.nickxu.me/20241207200559539.png","alt":"c0d3a870345e2aa9514fd39d96d8d3ea","title":""},{"url":"https://image.nickxu.me/20241207200537590.png","alt":"3b2f480e8455ac12697f30a5b5d2355e","title":""},{"url":"https://image.nickxu.me/20241207200546850.png","alt":"c8418f28fcab677901b2ccc64cb98dcc","title":""},{"url":"https://image.nickxu.me/20241207200702596.png","alt":"e984d049edd74de6b1d8d58a8fdf5097","title":""},{"url":"https://image.nickxu.me/20241207202705995.png","alt":"e125e9fa2fc68e4574b6956540bb04dc_720","title":""},{"url":"https://image.nickxu.me/20241207195911721.jpeg","alt":"e65140554d0f49d1bd0245b9c290623f","title":""},{"url":"https://image.nickxu.me/20241207201145438.png","alt":"4e9ccefaf7bf97a661a17ff3b351c4e0","title":""},{"url":"https://image.nickxu.me/20241207195935881.png","alt":"3308ecdea3bfc74d92316f6b8bc88bd8_720","title":""},{"url":"https://image.nickxu.me/20241207200510732.png","alt":"image-2024120780510671 PM","title":""}]</div>
+  </div>
 <blockquote>
 <p>回看留下的照片，还能体会到当时的激动</p>
 </blockquote>
@@ -250,12 +268,9 @@ gtag('config', 'G-VBKFEG3YFD');
 <hr>
 <h1 id="初来乍到">初来乍到</h1>
 <h2 id="新生活">新生活</h2>
-<div class="gallery">
-    <div class="fj-gallery  data" data-rowHeight="220" data-limit="10">
-    <span class="gallery-data">[{"url":"https://image.nickxu.me/20241208140404979.jpeg","alt":"D139F3BE-BAE1-4DCB-BCF1-4352CF5D9DE9_1_105_c"},{"url":"https://image.nickxu.me/20241208142050028.jpeg","alt":"8DB7F7DA-9EF7-457C-87BB-28757E8FFEE8_1_105_c"},{"url":"https://image.nickxu.me/20241208142057586.jpeg","alt":"DA7FA19F-E0FD-45A2-8E08-5A926815D694_1_105_c"}]</span>
-    </div>
-    <button class="gallery-load-more"><span>加载更多</span><i class="fa-solid fa-arrow-down"></i></button>
-    </div>
+<div class="gallery-container" data-type="data" data-button="" data-limit="10" data-first="10">
+    <div class="gallery-items">[{"url":"https://image.nickxu.me/20241208140404979.jpeg","alt":"D139F3BE-BAE1-4DCB-BCF1-4352CF5D9DE9_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208142050028.jpeg","alt":"8DB7F7DA-9EF7-457C-87BB-28757E8FFEE8_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208142057586.jpeg","alt":"DA7FA19F-E0FD-45A2-8E08-5A926815D694_1_105_c","title":""}]</div>
+  </div>
 <blockquote>
 <p>坐了一天的高铁到了深圳，上地铁，再赶到酒店，已近晚上 9 点</p>
 </blockquote>
@@ -365,12 +380,9 @@ gtag('config', 'G-VBKFEG3YFD');
 <p>包括医疗，住房，我记得正式员工还有更多人生长远方向的福利</p>
 <p>公司内各种活动也很多 <s>，包括我 mentor 还去打了内部的王者荣耀比赛</s></p>
 <p>整体的氛围是非常欣欣向荣的，同事互称同学，而且都很有礼貌</p>
-<div class="gallery">
-    <div class="fj-gallery  data" data-rowHeight="220" data-limit="10">
-    <span class="gallery-data">[{"url":"https://image.nickxu.me/20241208233100678.jpeg","alt":"75349756-11AF-45ED-BF9A-1F41046205E5_1_105_c"},{"url":"https://image.nickxu.me/20241208233446110.jpeg","alt":"B3452794-8213-4025-B544-FAC7AD99D98A_1_105_c"},{"url":"https://image.nickxu.me/20241208233519701.jpeg","alt":"IMG_6339"},{"url":"https://image.nickxu.me/20241208233544164.jpeg","alt":"154B69F7-E172-46BC-8E84-859F73BCF205_1_105_c"},{"url":"https://image.nickxu.me/20241208233626342.jpeg","alt":"IMG_6414"},{"url":"https://image.nickxu.me/20241208233601235.jpeg","alt":"5844F489-AF51-4E74-A7E1-12405867A6C9_1_105_c"},{"url":"https://image.nickxu.me/20241208233643363.jpeg","alt":"779B7935-450A-4009-B403-43590CDD3647_1_105_c"},{"url":"https://image.nickxu.me/20241208233651930.jpeg","alt":"21138E40-0061-4331-B1BB-0734E950A7AB_1_105_c"},{"url":"https://image.nickxu.me/20241208233701872.jpeg","alt":"2F8F688B-133E-4291-9982-23522B440598_1_105_c"},{"url":"https://image.nickxu.me/20241208235024963.jpeg","alt":"C70CEE44-BFE4-460E-9E8D-A11B94D24F2D_1_105_c"},{"url":"https://image.nickxu.me/20241208235012215.jpeg","alt":"A4F535FC-6C9D-4884-855C-1347F38C2030_1_105_c"},{"url":"https://image.nickxu.me/20241208235114098.jpeg","alt":"5A8F20CE-A4AF-4F0E-B3E2-78ADBD3173B9_1_105_c"},{"url":"https://image.nickxu.me/20241208235148771.jpeg","alt":"4DB557D7-1AEE-465C-89A2-646BED193F85_1_105_c"},{"url":"https://image.nickxu.me/20241208235432181.jpeg","alt":"E73DEA53-7A1E-4D9E-A442-AAEB7375C1F0_1_105_c"},{"url":"https://image.nickxu.me/20241208235522934.jpeg","alt":"2D106779-46E4-4818-A97B-1FF1CE05C9D5_1_105_c"},{"url":"https://image.nickxu.me/20241208235607859.jpeg","alt":"9CFF043E-1878-4917-B75A-23EB8E63D552_1_105_c"},{"url":"https://image.nickxu.me/20241209000327429.jpeg","alt":"E8B6B717-90B0-426D-91F7-EBBBA9A3FDB0_1_105_c"},{"url":"https://image.nickxu.me/20241208235934820.jpeg","alt":"1C4F01CF-1BBE-486C-856F-491119978385_1_105_c"},{"url":"https://image.nickxu.me/20241209000043344.jpeg","alt":"ED3BE8C2-1736-4957-96E3-1C3861F46451_1_105_c"},{"url":"https://image.nickxu.me/20241208235132529.jpeg","alt":"DA2E2C2A-67A5-422C-AE8B-A1E560355130_1_105_c"},{"url":"https://image.nickxu.me/20241208235214124.jpeg","alt":"7BA3E5DE-55BB-4C1F-8492-2324C7A04283_1_105_c"},{"url":"https://image.nickxu.me/20241209000437248.jpeg","alt":"352A41FA-D7BD-475C-BE40-815EF164EA58_1_105_c"},{"url":"https://image.nickxu.me/20241209000454096.jpeg","alt":"ECFD12DB-DDE3-4072-BDE8-9FCA5FB7C16E_1_105_c"},{"url":"https://image.nickxu.me/20241209000239681.jpeg","alt":"E0F883CA-D27F-420B-91AB-7629DA909C66_1_105_c"},{"url":"https://image.nickxu.me/20241208233237667.jpeg","alt":"8EC18AD7-C625-4EF7-87AD-A689FEBB735E_1_105_c"},{"url":"https://image.nickxu.me/20241208235048254.jpeg","alt":"97D7CBC3-4F3D-481E-82FA-6856EE211BF8_1_105_c"}]</span>
-    </div>
-    <button class="gallery-load-more"><span>加载更多</span><i class="fa-solid fa-arrow-down"></i></button>
-    </div>
+<div class="gallery-container" data-type="data" data-button="" data-limit="10" data-first="10">
+    <div class="gallery-items">[{"url":"https://image.nickxu.me/20241208233100678.jpeg","alt":"75349756-11AF-45ED-BF9A-1F41046205E5_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208233446110.jpeg","alt":"B3452794-8213-4025-B544-FAC7AD99D98A_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208233519701.jpeg","alt":"IMG_6339","title":""},{"url":"https://image.nickxu.me/20241208233544164.jpeg","alt":"154B69F7-E172-46BC-8E84-859F73BCF205_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208233626342.jpeg","alt":"IMG_6414","title":""},{"url":"https://image.nickxu.me/20241208233601235.jpeg","alt":"5844F489-AF51-4E74-A7E1-12405867A6C9_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208233643363.jpeg","alt":"779B7935-450A-4009-B403-43590CDD3647_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208233651930.jpeg","alt":"21138E40-0061-4331-B1BB-0734E950A7AB_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208233701872.jpeg","alt":"2F8F688B-133E-4291-9982-23522B440598_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208235024963.jpeg","alt":"C70CEE44-BFE4-460E-9E8D-A11B94D24F2D_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208235012215.jpeg","alt":"A4F535FC-6C9D-4884-855C-1347F38C2030_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208235114098.jpeg","alt":"5A8F20CE-A4AF-4F0E-B3E2-78ADBD3173B9_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208235148771.jpeg","alt":"4DB557D7-1AEE-465C-89A2-646BED193F85_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208235432181.jpeg","alt":"E73DEA53-7A1E-4D9E-A442-AAEB7375C1F0_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208235522934.jpeg","alt":"2D106779-46E4-4818-A97B-1FF1CE05C9D5_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208235607859.jpeg","alt":"9CFF043E-1878-4917-B75A-23EB8E63D552_1_105_c","title":""},{"url":"https://image.nickxu.me/20241209000327429.jpeg","alt":"E8B6B717-90B0-426D-91F7-EBBBA9A3FDB0_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208235934820.jpeg","alt":"1C4F01CF-1BBE-486C-856F-491119978385_1_105_c","title":""},{"url":"https://image.nickxu.me/20241209000043344.jpeg","alt":"ED3BE8C2-1736-4957-96E3-1C3861F46451_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208235132529.jpeg","alt":"DA2E2C2A-67A5-422C-AE8B-A1E560355130_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208235214124.jpeg","alt":"7BA3E5DE-55BB-4C1F-8492-2324C7A04283_1_105_c","title":""},{"url":"https://image.nickxu.me/20241209000437248.jpeg","alt":"352A41FA-D7BD-475C-BE40-815EF164EA58_1_105_c","title":""},{"url":"https://image.nickxu.me/20241209000454096.jpeg","alt":"ECFD12DB-DDE3-4072-BDE8-9FCA5FB7C16E_1_105_c","title":""},{"url":"https://image.nickxu.me/20241209000239681.jpeg","alt":"E0F883CA-D27F-420B-91AB-7629DA909C66_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208233237667.jpeg","alt":"8EC18AD7-C625-4EF7-87AD-A689FEBB735E_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208235048254.jpeg","alt":"97D7CBC3-4F3D-481E-82FA-6856EE211BF8_1_105_c","title":""}]</div>
+  </div>
 <blockquote>
 <p>这真不算差吧</p>
 </blockquote>
@@ -382,12 +394,9 @@ gtag('config', 'G-VBKFEG3YFD');
 <blockquote>
 <p>茶水间，紧挨着旁边的工位</p>
 </blockquote>
-<div class="gallery">
-    <div class="fj-gallery  data" data-rowHeight="220" data-limit="10">
-    <span class="gallery-data">[{"url":"https://image.nickxu.me/20241208141641286.jpeg","alt":"5A33BE96-DB89-4550-BD35-BE185BAD328D_1_105_c"},{"url":"https://image.nickxu.me/20241208141627269.jpeg","alt":"15A0ADB5-2AED-41D8-B7BA-7ACCD45C024E_1_105_c"},{"url":"https://image.nickxu.me/20241208141620077.jpeg","alt":"1393CB9A-1D18-42AB-9BB6-7EC88B2BAA90_1_105_c"},{"url":"https://image.nickxu.me/20241208212602833.jpeg","alt":"EB46D4CA-B518-44D4-A89E-E1A09801C1D9_1_105_c"},{"url":"https://image.nickxu.me/20241209014244490.png","alt":"image-2024120914244441 AM"},{"url":"https://image.nickxu.me/20241209014426516.png","alt":"a0d021cf8999e48b0b98fcae680aef13"},{"url":"https://image.nickxu.me/20241208235905185.jpeg","alt":"3B7D3D6F-B563-4640-8A40-24CA5F3921AD_1_105_c"},{"url":"https://image.nickxu.me/20241209000002315.jpeg","alt":"F14CC358-A997-4459-9614-6087673DEE40_1_105_c"},{"url":"https://image.nickxu.me/20241209000532574.jpeg","alt":"FCBCAAAB-CE93-44D3-A096-DB1787C68F87_1_105_c"}]</span>
-    </div>
-    <button class="gallery-load-more"><span>加载更多</span><i class="fa-solid fa-arrow-down"></i></button>
-    </div>
+<div class="gallery-container" data-type="data" data-button="" data-limit="10" data-first="10">
+    <div class="gallery-items">[{"url":"https://image.nickxu.me/20241208141641286.jpeg","alt":"5A33BE96-DB89-4550-BD35-BE185BAD328D_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208141627269.jpeg","alt":"15A0ADB5-2AED-41D8-B7BA-7ACCD45C024E_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208141620077.jpeg","alt":"1393CB9A-1D18-42AB-9BB6-7EC88B2BAA90_1_105_c","title":""},{"url":"https://image.nickxu.me/20241208212602833.jpeg","alt":"EB46D4CA-B518-44D4-A89E-E1A09801C1D9_1_105_c","title":""},{"url":"https://image.nickxu.me/20241209014244490.png","alt":"image-2024120914244441 AM","title":""},{"url":"https://image.nickxu.me/20241209014426516.png","alt":"a0d021cf8999e48b0b98fcae680aef13","title":""},{"url":"https://image.nickxu.me/20241208235905185.jpeg","alt":"3B7D3D6F-B563-4640-8A40-24CA5F3921AD_1_105_c","title":""},{"url":"https://image.nickxu.me/20241209000002315.jpeg","alt":"F14CC358-A997-4459-9614-6087673DEE40_1_105_c","title":""},{"url":"https://image.nickxu.me/20241209000532574.jpeg","alt":"FCBCAAAB-CE93-44D3-A096-DB1787C68F87_1_105_c","title":""}]</div>
+  </div>
 <blockquote>
 <p>腾讯班车，还有其他的七七八八</p>
 </blockquote>
@@ -468,7 +477,7 @@ gtag('config', 'G-VBKFEG3YFD');
 <p>但很多时候，即使我认为已经做的很完美了，mentor 总是能指出这里或者那里能够改进</p>
 <p>他说了一句很受用的话，大意是：我交给你的都是不是很着急的事情，你不用着急，想想如何做到最好，再交给我</p>
 <p>所以每次我 commit 之前，都要反复问自己，这里能不能有更好写法</p>
-<p>特别提醒，请 <mark class="hl-label green">严格检查</mark>  Copilot 或是其他 AI 提示的代码，导师指出问题的时候，不止一次发现是是 Copilot 写的，虽然大多数时候能很符合心意，但在某些细节会有疏漏</p>
+<p>特别提醒，请 <mark class="hl-label green">严格检查</mark> Copilot 或是其他 AI 提示的代码，导师指出问题的时候，不止一次发现是是 Copilot 写的，虽然大多数时候能很符合心意，但在某些细节会有疏漏</p>
 <hr>
 <h2 id="如何提问">如何提问</h2>
 <p>作为实习生，我是用来为正式员工分担工作量的，导师也有自己的工作要做，不应该频繁地打扰他</p>
@@ -557,71 +566,87 @@ gtag('config', 'G-VBKFEG3YFD');
 <p>他起身送我下楼</p>
 <p>楼下，我与导师相互道别…我真的很感谢他</p>
 <p>他最后说，在深圳遇到什么问题，可以随时打他电话</p>
-<p>我长舒一口气，<mark class="hl-label green">新的生活终于要开始了</mark> </p>
+<p>我长舒一口气，<mark class="hl-label green">新的生活终于要开始了</mark></p>
 <p>无论发生什么事情，生活总是要继续的</p>
 <p>由衷感谢所有陪伴我走到今天的人</p>
-</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/be-your-authentic-self.html" title="做原汁原味的自己"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">做原汁原味的自己</div></div></a></div><div class="next-post pull-right"><a href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">编程十年：那些人，那些事，那些瞬间</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Giscus</span><span class="switch-btn"></span><span class="second-comment">Twikoo</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Nick Xu</div><div class="author-info__description">这家伙真勤奋，什么都留下了</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OC-%E6%97%B6%E5%88%BB"><span class="toc-number">1.</span> <span class="toc-text">OC 时刻</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%99%AB%EF%BC%81%E5%A5%BD%EF%BC%81%E6%88%91%E4%B8%AD%E4%BA%86%EF%BC%81"><span class="toc-number">1.1.</span> <span class="toc-text">噫！好！我中了！</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E5%BC%8F%E9%82%AE%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">正式邮件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%90%AF%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">准备启程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9D%E6%9D%A5%E4%B9%8D%E5%88%B0"><span class="toc-number">2.</span> <span class="toc-text">初来乍到</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E7%94%9F%E6%B4%BB"><span class="toc-number">2.1.</span> <span class="toc-text">新生活</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A7%9F%E6%88%BF"><span class="toc-number">2.2.</span> <span class="toc-text">租房</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A5%E8%81%8C%EF%BD%9CFirst-Day"><span class="toc-number">2.3.</span> <span class="toc-text">入职｜First Day</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%90%E5%85%A5%E4%BD%B3%E5%A2%83"><span class="toc-number">3.</span> <span class="toc-text">渐入佳境</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E9%97%A8%E5%92%8C%E4%B8%9A%E5%8A%A1"><span class="toc-number">3.1.</span> <span class="toc-text">部门和业务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B0%9B%E5%9B%B4%E4%B8%8E%E7%A6%8F%E5%88%A9"><span class="toc-number">3.2.</span> <span class="toc-text">氛围与福利</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A5%E5%B8%B8%E7%94%9F%E6%B4%BB"><span class="toc-number">3.3.</span> <span class="toc-text">日常生活</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E6%9C%89%E6%89%80%E6%88%90"><span class="toc-number">4.</span> <span class="toc-text">学有所成</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E9%87%8F"><span class="toc-number">4.1.</span> <span class="toc-text">代码量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="toc-number">4.2.</span> <span class="toc-text">单元测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E8%A7%84%E8%8C%83%E7%9A%84-Git"><span class="toc-number">4.3.</span> <span class="toc-text">更规范的 Git</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E6%B1%82%E7%B2%BE"><span class="toc-number">4.4.</span> <span class="toc-text">精益求精</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%8F%90%E9%97%AE"><span class="toc-number">4.5.</span> <span class="toc-text">如何提问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%A8%E9%83%A8%E9%97%A8%E6%B2%9F%E9%80%9A"><span class="toc-number">4.6.</span> <span class="toc-text">跨部门沟通</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E5%8E%82%E7%A5%9B%E9%AD%85"><span class="toc-number">5.</span> <span class="toc-text">大厂祛魅</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A5%E5%A4%8D%E4%B8%80%E6%97%A5"><span class="toc-number">5.1.</span> <span class="toc-text">日复一日</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B4%BB%E5%9C%A8%E5%BD%93%E4%B8%8B"><span class="toc-number">5.2.</span> <span class="toc-text">活在当下</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%81%9A%E5%9B%9E%E8%87%AA%E5%B7%B1"><span class="toc-number">6.</span> <span class="toc-text">做回自己</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%B4%BB%E7%9A%84%E6%84%8F%E4%B9%89"><span class="toc-number">6.1.</span> <span class="toc-text">生活的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A6%BB%E8%81%8C%EF%BD%9CLast-Day"><span class="toc-number">6.2.</span> <span class="toc-text">离职｜Last Day</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div></div></div></main><footer id="footer" style="background: #0d0d0d"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Nick Xu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="/pluginsSrc/katex/dist/katex.min.css"><script src="/pluginsSrc/katex/dist/contrib/copy-tex.min.js"></script><script>(() => {
-  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
-    btf.wrap(item, 'div', { class: 'katex-wrap'})
-  })
-})()</script><script>function getGiscusTheme (theme) {
-  return theme === 'dark' ? 'dark' : 'light'
-}
+</article><div class="tag_share"></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/post/be-your-authentic-self.html" title="做原汁原味的自己"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">做原汁原味的自己</div></div><div class="info-2"><div class="info-item-1">是的，我还活着，哈哈哈 实话实话，明天腾讯 lastday 了 之前欠了不少博客没写，实习这 6 个月也精力了不少事情 但目前我要花一段时间搞定我的英语，因为我打算出国留学，但是英语还没考到我想要的分数 所以，等我过段时间吧～我打算做回原汁原味的自己了 </div></div></div></a><a class="pagination-related" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">编程十年：那些人，那些事，那些瞬间</div></div><div class="info-2"><div class="info-item-1"> PS：  此为非常早期版本，很多地方会被修改 暗黑主题可能不适合部分人阅读，可在右下角切换 移动设备未得到最佳排版     一篇回忆录，作于重返腾讯之时 致家人，致她，致朋友 致所有在我生命中留下痕迹的人   天空终于放晴，来的时候一直风雨交加，我正在从环滩岛返回哲斯顿码头的船上，跟随着海浪上下颠簸 疲惫的身体正靠在船壳上休息，只能听见船体不断拍打海浪的声音，船上没有一个人说话，我望向眼前的大海，海岛，天空，双眼惬意地放空——是久违的心流，在这一刻，很难不开始回忆过去 我开始回想起最近几天在马来西亚的旅程，从亚庇的海滩，回到山打根的原始丛林，再回到吉隆坡的繁华都市…但，思绪的跳跃难以控制，很快来到了启程前收到 Offer 的那种激动，五月时决定放弃留学的纠结，到去年结束实习时的那种如释重负…就像在 macOS 中浏览 Time Machine，双指在触控板上疯狂滑动 这个月底又要入职腾讯了，这次应该会待很久，回首从小到大走来的路，仔细一想，从第一个 Hello World 开始到现在，貌似正好是十年 我读过许多人的编程十年，每个人都有他的记忆，而现在，或许该轮到我来写了 趁那些珍贵的瞬间还没有完全褪去 而且正好今年到现在还没有完成一篇博客（真该死哇为什么不写） 那么，开始吧，但我不保证全是编程相关的事情，并且这篇我打算不配任何图了，很多素材都很难找（按我的风格要么全文图文并茂，要么干脆一张图都没有） 总之想到哪写到哪吧，纯意识流了属于是  故事开始之前｜小学 我觉得其实可以再往前追溯一下，到我的小学时代，在这里，有我对计算机最开始的启蒙 我家里算是条件不算差的了，如果没...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div class="comment-switch"><span class="first-comment">Giscus</span><span id="switch-btn"></span><span class="second-comment">Twikoo</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Nick Xu</div><div class="author-info-description">这家伙真勤奋，什么都留下了</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OC-%E6%97%B6%E5%88%BB"><span class="toc-number">1.</span> <span class="toc-text">OC 时刻</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%99%AB%EF%BC%81%E5%A5%BD%EF%BC%81%E6%88%91%E4%B8%AD%E4%BA%86%EF%BC%81"><span class="toc-number">1.1.</span> <span class="toc-text">噫！好！我中了！</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E5%BC%8F%E9%82%AE%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">正式邮件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%90%AF%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">准备启程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9D%E6%9D%A5%E4%B9%8D%E5%88%B0"><span class="toc-number">2.</span> <span class="toc-text">初来乍到</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E7%94%9F%E6%B4%BB"><span class="toc-number">2.1.</span> <span class="toc-text">新生活</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A7%9F%E6%88%BF"><span class="toc-number">2.2.</span> <span class="toc-text">租房</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A5%E8%81%8C%EF%BD%9CFirst-Day"><span class="toc-number">2.3.</span> <span class="toc-text">入职｜First Day</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%90%E5%85%A5%E4%BD%B3%E5%A2%83"><span class="toc-number">3.</span> <span class="toc-text">渐入佳境</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E9%97%A8%E5%92%8C%E4%B8%9A%E5%8A%A1"><span class="toc-number">3.1.</span> <span class="toc-text">部门和业务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B0%9B%E5%9B%B4%E4%B8%8E%E7%A6%8F%E5%88%A9"><span class="toc-number">3.2.</span> <span class="toc-text">氛围与福利</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A5%E5%B8%B8%E7%94%9F%E6%B4%BB"><span class="toc-number">3.3.</span> <span class="toc-text">日常生活</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E6%9C%89%E6%89%80%E6%88%90"><span class="toc-number">4.</span> <span class="toc-text">学有所成</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E9%87%8F"><span class="toc-number">4.1.</span> <span class="toc-text">代码量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="toc-number">4.2.</span> <span class="toc-text">单元测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E8%A7%84%E8%8C%83%E7%9A%84-Git"><span class="toc-number">4.3.</span> <span class="toc-text">更规范的 Git</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B2%BE%E7%9B%8A%E6%B1%82%E7%B2%BE"><span class="toc-number">4.4.</span> <span class="toc-text">精益求精</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%8F%90%E9%97%AE"><span class="toc-number">4.5.</span> <span class="toc-text">如何提问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%A8%E9%83%A8%E9%97%A8%E6%B2%9F%E9%80%9A"><span class="toc-number">4.6.</span> <span class="toc-text">跨部门沟通</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E5%8E%82%E7%A5%9B%E9%AD%85"><span class="toc-number">5.</span> <span class="toc-text">大厂祛魅</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A5%E5%A4%8D%E4%B8%80%E6%97%A5"><span class="toc-number">5.1.</span> <span class="toc-text">日复一日</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B4%BB%E5%9C%A8%E5%BD%93%E4%B8%8B"><span class="toc-number">5.2.</span> <span class="toc-text">活在当下</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%81%9A%E5%9B%9E%E8%87%AA%E5%B7%B1"><span class="toc-number">6.</span> <span class="toc-text">做回自己</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%B4%BB%E7%9A%84%E6%84%8F%E4%B9%89"><span class="toc-number">6.1.</span> <span class="toc-text">生活的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A6%BB%E8%81%8C%EF%BD%9CLast-Day"><span class="toc-number">6.2.</span> <span class="toc-text">离职｜Last Day</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2025 By Nick Xu</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="/js/tw_cn.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
 
-function loadGiscus () {
-  const config = Object.assign({
-    src: 'https://giscus.app/client.js',
-    'data-repo': 'NX-Official/NX-Official.github.io',
-    'data-repo-id': 'R_kgDOGzWHdw',
-    'data-category-id': 'DIC_kwDOGzWHd84CX4Hy',
-    'data-mapping': 'pathname',
-    'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
-    'data-reactions-enabled': '1',
-    crossorigin: 'anonymous',
-    async: true
-  },null)
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
 
-  let ele = document.createElement('script')
-  for (let key in config) {
-    ele.setAttribute(key, config[key])
-  }
-  document.getElementById('giscus-wrap').insertAdjacentElement('afterbegin',ele)
-}
-
-function changeGiscusTheme (theme) {
-  function sendMessage(message) {
-    const iframe = document.querySelector('iframe.giscus-frame')
-    if (!iframe) return
-    iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app')
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
   }
 
-  sendMessage({
-    setConfig: {
-      theme: getGiscusTheme(theme)
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'nickxudotme/nickxudotme.github.io',
+      'data-repo-id': 'R_kgDOGzWHdw',
+      'data-category-id': 'DIC_kwDOGzWHd84CX4Hy',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
     }
-  });
-}
 
-btf.addModeChange('giscus', changeGiscusTheme)
+    const scriptElement = createScriptElement(giscusConfig)
 
-if ('Giscus' === 'Giscus' || !false) {
-  if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
-  else loadGiscus()
-} else {
-  function loadOtherComment () {
-    loadGiscus()
-  }
-}</script><script>(()=>{
-  const init = () => {
-    twikoo.init(Object.assign({
-      el: '#twikoo-wrap',
-      envId: 'https://twikoo.nickxu.top/',
-      region: 'ap-shanghai',
-      onCommentLoaded: function () {
-        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
       }
-    }, null))
+    }
   }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
 
   const getCount = () => {
     const countELement = document.getElementById('twikoo-count')
@@ -631,32 +656,51 @@ if ('Giscus' === 'Giscus' || !false) {
       region: 'ap-shanghai',
       urls: [window.location.pathname],
       includeReply: false
-    }).then(function (res) {
+    }).then(res => {
       countELement.textContent = res[0].count
-    }).catch(function (err) {
-      console.error(err);
-    });
+    }).catch(err => {
+      console.error(err)
+    })
   }
 
-  const runFn = () => {
-    init()
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.nickxu.top/',
+      region: 'ap-shanghai',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
     
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
   }
 
-  const loadTwikoo = () => {
-    if (typeof twikoo === 'object') {
-      setTimeout(runFn,0)
-      return
-    } 
-    getScript('/pluginsSrc/twikoo/dist/twikoo.all.min.js').then(runFn)
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('/pluginsSrc/twikoo/dist/twikoo.all.min.js?v=1.6.44').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Giscus' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
   }
 
   if ('Giscus' === 'Twikoo' || !false) {
     if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
     else loadTwikoo()
   } else {
-    window.loadOtherComment = () => {
-      loadTwikoo()
-    }
+    window.loadOtherComment = loadTwikoo
   }
-})()</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
+})()</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js?v=1.1.6" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

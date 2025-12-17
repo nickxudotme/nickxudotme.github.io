@@ -1,31 +1,159 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『字节青训营-4th』L2：流/批/OLAP 一体的 Flink 引擎介绍 | NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="相关链接🎶 学员手册：【大数据专场 学习资料一】第四届字节跳动青训营 - 掘金  Flink 概述 Apache Flink 的诞生背景 什么是大数据  大数据计算架构发展历史  Hadoop 那里就是谷歌发的 3 篇论文，GFS， Map-Reduce 等 为什么需要流式计算   简单地说，就是"><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/2022/07/26/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL2%EF%BC%9A%E6%B5%81-%E6%89%B9-OLAP-%E4%B8%80%E4%BD%93%E7%9A%84-Flink-%E5%BC%95%E6%93%8E%E4%BB%8B%E7%BB%8D/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『字节青训营-4th』L2：流/批/OLAP 一体的 Flink 引擎介绍 | NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="相关链接🎶 学员手册：【大数据专场 学习资料一】第四届字节跳动青训营 - 掘金  Flink 概述 Apache Flink 的诞生背景 什么是大数据  大数据计算架构发展历史  Hadoop 那里就是谷歌发的 3 篇论文，GFS， Map-Reduce 等 为什么需要流式计算   简单地说..."><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "『字节青训营-4th』L2：流/批/OLAP 一体的 Flink 引擎介绍",
+  "url": "https://nickxu.me/2022/07/26/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL2%EF%BC%9A%E6%B5%81-%E6%89%B9-OLAP-%E4%B8%80%E4%BD%93%E7%9A%84-Flink-%E5%BC%95%E6%93%8E%E4%BB%8B%E7%BB%8D/",
+  "image": "https://nickxu.me/static/202202230023069.jpg",
+  "datePublished": "2022-07-26T09:39:39.000Z",
+  "dateModified": "2023-08-15T05:42:18.229Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Nick Xu",
+      "url": "https://nickxu.me"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/2022/07/26/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL2%EF%BC%9A%E6%B5%81-%E6%89%B9-OLAP-%E4%B8%80%E4%BD%93%E7%9A%84-Flink-%E5%BC%95%E6%93%8E%E4%BB%8B%E7%BB%8D/index.html"><link rel="preconnect"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css?v=7.1.0"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?3573ab9aac9d53e5c34fea51e076a07d";
-  var s = document.getElementsByTagName("script")[0]; 
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-VBKFEG3YFD');
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-VBKFEG3YFD')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-VBKFEG3YFD', {'page_path': window.location.pathname})
+}, 'google_analytics')
 </script><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  localSearch: undefined,
   translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
-  noticeOutdate: {"limitDay":300,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
   copy: {
     success: '复制成功',
-    error: '复制错误',
+    error: '复制失败',
     noSupport: '浏览器不支持'
   },
   relativeDate: {
     homepage: false,
     post: false
   },
-  runtime: '天',
+  runtime: '',
   dateSuffix: {
     just: '刚刚',
     min: '分钟前',
@@ -34,135 +162,28 @@ gtag('config', 'G-VBKFEG3YFD');
     month: '个月前'
   },
   copyright: undefined,
-  lightbox: 'fancybox',
+  lightbox: 'null',
   Snackbar: undefined,
-  source: {
-    justifiedGallery: {
-      js: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.css'
-    }
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js?v=4.12.0',
+    buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: false,
+  islazyloadPlugin: false,
   isAnchor: false,
   percent: {
     toc: true,
     rightside: false,
   },
-  autoDarkmode: false
+  autoDarkmode: true
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '『字节青训营-4th』L2：流/批/OLAP 一体的 Flink 引擎介绍',
-  isPost: true,
-  isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2023-08-15 13:42:18'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
-        }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
-      }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
-      win.activateDarkMode = function () {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      win.activateLightMode = function () {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-      const t = saveToLocal.get('theme')
-    
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        if (asideStatus === 'hide') {
-          document.documentElement.classList.add('hide-aside')
-        } else {
-          document.documentElement.classList.remove('hide-aside')
-        }
-      }
-    
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-    })(window)</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
 <link rel="alternate" href="/rss2.xml" title="NX の 博客" type="application/rss+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/static/favicon.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/static/202202230023069.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="NX の 博客"><span class="site-name">NX の 博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『字节青训营-4th』L2：流/批/OLAP 一体的 Flink 引擎介绍</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-26T09:39:39.000Z" title="发表于 2022-07-26 17:39:39">2022-07-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-15T05:42:18.229Z" title="更新于 2023-08-15 13:42:18">2023-08-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE/">字节跳动-4th-大数据</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">596</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><details class="toggle" ><summary class="toggle-button" style="">相关链接</summary><div class="toggle-content"><p>🎶 学员手册：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7122754431371706404#heading-14">【大数据专场 学习资料一】第四届字节跳动青训营 - 掘金</a></p>
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/static/202202230023069.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">NX の 博客</span></a><a class="nav-page-title" href="/"><span class="site-name">『字节青训营-4th』L2：流/批/OLAP 一体的 Flink 引擎介绍</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">『字节青训营-4th』L2：流/批/OLAP 一体的 Flink 引擎介绍</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-26T09:39:39.000Z" title="发表于 2022-07-26 17:39:39">2022-07-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-15T05:42:18.229Z" title="更新于 2023-08-15 13:42:18">2023-08-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE/">字节跳动-4th-大数据</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">596</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:300,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2023-08-15 13:42:18&quot;}" hidden></div><details class="toggle" ><summary class="toggle-button" style="">相关链接</summary><div class="toggle-content"><p>🎶 学员手册：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7122754431371706404#heading-14">【大数据专场 学习资料一】第四届字节跳动青训营 - 掘金</a></p>
 </div></details>
 <h1 id="Flink-概述">Flink 概述</h1>
 <h2 id="Apache-Flink-的诞生背景">Apache Flink 的诞生背景</h2>
@@ -287,68 +308,84 @@ gtag('config', 'G-VBKFEG3YFD');
 <p><img src="https://image.nickxu.me/202208141202019.png" alt="image-20220814120242890"></p>
 <h1 id="课程总结">课程总结</h1>
 <p><img src="https://image.nickxu.me/202208141204284.png" alt="image-20220814120416153"></p>
-</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/">字节青训营</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/07/24/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL1%EF%BC%9ASQL-Optimizer-%E8%A7%A3%E6%9E%90/" title="『字节青训营-4th』L1：SQL Optimizer 解析"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">『字节青训营-4th』L1：SQL Optimizer 解析</div></div></a></div><div class="next-post pull-right"><a href="/2022/07/27/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL3%EF%BC%9AExactly-Once-%E8%AF%AD%E4%B9%89%E5%9C%A8-Flink-%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0/" title="『字节青训营-4th』L3：Exactly Once 语义在 Flink 中的实现"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">『字节青训营-4th』L3：Exactly Once 语义在 Flink 中的实现</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Giscus</span><span class="switch-btn"></span><span class="second-comment">Twikoo</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Nick Xu</div><div class="author-info__description">这家伙真勤奋，什么都留下了</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Flink-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">Flink 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Apache-Flink-%E7%9A%84%E8%AF%9E%E7%94%9F%E8%83%8C%E6%99%AF"><span class="toc-number">1.1.</span> <span class="toc-text">Apache Flink 的诞生背景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%A7%E6%95%B0%E6%8D%AE"><span class="toc-number">1.1.1.</span> <span class="toc-text">什么是大数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97%E6%9E%B6%E6%9E%84%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2"><span class="toc-number">1.1.2.</span> <span class="toc-text">大数据计算架构发展历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="toc-number">1.1.3.</span> <span class="toc-text">为什么需要流式计算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-Apache-Flink-%E4%BC%9A%E8%84%B1%E9%A2%96%E8%80%8C%E5%87%BA"><span class="toc-number">1.2.</span> <span class="toc-text">为什么 Apache Flink 会脱颖而出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">流式计算引擎发展历程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E%E5%AF%B9%E6%AF%94"><span class="toc-number">1.2.2.</span> <span class="toc-text">流式计算引擎对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Why-Flink"><span class="toc-number">1.2.3.</span> <span class="toc-text">Why Flink</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Apache-Flink-%E5%BC%80%E6%BA%90%E7%94%9F%E6%80%81"><span class="toc-number">1.3.</span> <span class="toc-text">Apache Flink 开源生态</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flink-%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">Flink 整体架构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Flink-%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">Flink 分层架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flink-%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">2.2.</span> <span class="toc-text">Flink 总体架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flink-%E4%BD%9C%E4%B8%9A%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.3.</span> <span class="toc-text">Flink 作业示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flink-%E5%A6%82%E4%BD%95%E5%81%9A%E5%88%B0%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93"><span class="toc-number">2.4.</span> <span class="toc-text">Flink 如何做到流批一体</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93"><span class="toc-number">2.4.1.</span> <span class="toc-text">为什么需要流批一体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-number">2.4.2.</span> <span class="toc-text">流批一体的挑战</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-%E5%A6%82%E4%BD%95%E5%81%9A%E5%88%B0%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93-2"><span class="toc-number">2.4.3.</span> <span class="toc-text">Flink 如何做到流批一体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93%E7%9A%84-Scheduler-%E5%B1%82"><span class="toc-number">2.4.4.</span> <span class="toc-text">流批一体的 Scheduler 层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93%E7%9A%84-Shuffle-Service-%E5%B1%82"><span class="toc-number">2.4.5.</span> <span class="toc-text">流批一体的 Shuffle Service 层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93%E6%80%BB%E7%BB%93"><span class="toc-number">2.4.6.</span> <span class="toc-text">Flink 流批一体总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flink-%E6%9E%B6%E6%9E%84%E4%BC%98%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">Flink 架构优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81-%E6%89%B9-OLAP-%E4%B8%9A%E5%8A%A1%E5%9C%BA%E6%99%AF%E6%A6%82%E8%BF%B0"><span class="toc-number">3.1.</span> <span class="toc-text">流&#x2F;批&#x2F;OLAP 业务场景概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%89%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%B8%80%E5%A5%97%E5%BC%95%E6%93%8E%E8%A7%A3%E5%86%B3"><span class="toc-number">3.2.</span> <span class="toc-text">为什么三种场景可以用一套引擎解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flink-%E5%A6%82%E4%BD%95%E6%94%AF%E6%8C%81-OLAP-%E5%9C%BA%E6%99%AF"><span class="toc-number">3.3.</span> <span class="toc-text">Flink 如何支持 OLAP 场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-%E5%81%9A-OLAP-%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-number">3.3.1.</span> <span class="toc-text">Flink 做 OLAP 的优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-OLAP-%E5%9C%BA%E6%99%AF%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-number">3.3.2.</span> <span class="toc-text">Flink OLAP 场景的挑战</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-OLAP-%E6%9E%B6%E6%9E%84%E7%8E%B0%E7%8A%B6"><span class="toc-number">3.3.3.</span> <span class="toc-text">Flink OLAP 架构现状</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-%E5%9C%A8-OLAP-%E6%9E%B6%E6%9E%84%E7%9A%84%E9%97%AE%E9%A2%98%E5%92%8C%E8%AE%BE%E6%83%B3"><span class="toc-number">3.3.4.</span> <span class="toc-text">Flink 在 OLAP 架构的问题和设想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.3.5.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B2%BE%E9%80%89%E6%A1%88%E4%BE%8B%E8%AE%B2%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">精选案例讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E5%95%86%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.1.</span> <span class="toc-text">电商流批一体实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E8%8A%82-Flink-OLAP-%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.2.</span> <span class="toc-text">字节 Flink OLAP 实践</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">课程总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div></div></div></main><footer id="footer" style="background: #0d0d0d"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Nick Xu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="/pluginsSrc/katex/dist/katex.min.css"><script src="/pluginsSrc/katex/dist/contrib/copy-tex.min.js"></script><script>(() => {
-  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
-    btf.wrap(item, 'div', { class: 'katex-wrap'})
-  })
-})()</script><script>function getGiscusTheme (theme) {
-  return theme === 'dark' ? 'dark' : 'light'
-}
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/">字节青训营</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/07/24/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL1%EF%BC%9ASQL-Optimizer-%E8%A7%A3%E6%9E%90/" title="『字节青训营-4th』L1：SQL Optimizer 解析"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">『字节青训营-4th』L1：SQL Optimizer 解析</div></div><div class="info-2"><div class="info-item-1">相关链接🎶 学员手册：【大数据专场 学习资料一】第四届字节跳动青训营 - 掘金  大数据体系和 SQL 大数据体系  其中消息队列用于解耦存储与计算，本次青训营会从分析引擎开始展开，然后是存储、消息队列与资源调度 那么，为什么要把 SQL 优化器放在第一节课讲呢？   首先，SQL 是非常流行的，而且简单，包括数据分析师和挖掘师都在用，他们可能不会使用 Python之类的通用语言，但是他们可以很方便地使用一条 SQL 去处理数据，得到他们想要的结果 并且，SQL 是很多系统都支持的接口，而且 SQL 已经成为了大数据方面的通用接口。很多分析引擎一开始并不支持 SQL ，但现在都渐渐地提供了 SQL 接口   也就是说， One SQL rules big data all （通过 SQL 处理所有的大数据）  所以 SQL 在大数据中是非常重要的，下面将介绍 SQL 的处理流程 SQL 的处理流程  首先，先通过 Parser 变成抽象语法树（Abstract Syntax Tree，AST），之后通过 Analyzer 变成逻辑计划（Logical Plan），再通过 Optimizer 变成物理计划（Physical Plan），最后交给 Executor 来执行 Parser  死去的编译原理突然开始攻击我（bushi Analyzer  逻辑地：只是说明了要干什么，但是没有确定用什么算法实现（例如排序） Optimizer  Executor  小结  常规的查询优化器 查询优化器分类  两种分类方法  按遍历树的方向分 按优化方法分  RBO（基于规则的优化）...</div></div></div></a><a class="pagination-related" href="/2022/07/27/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL3%EF%BC%9AExactly-Once-%E8%AF%AD%E4%B9%89%E5%9C%A8-Flink-%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0/" title="『字节青训营-4th』L3：Exactly Once 语义在 Flink 中的实现"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">『字节青训营-4th』L3：Exactly Once 语义在 Flink 中的实现</div></div><div class="info-2"><div class="info-item-1">相关链接🎶 学员手册：【大数据专场 学习资料一】第四届字节跳动青训营 - 掘金    数据流和动态表 随处可见的流式数据  传统 SQL 和流处理  数据流和动态图转换  先转换为动态表，再执行 SQL，再转为流  连续查询  查询产生仅追加数据的动态表  两个连续查询对比  Retract 消息的产生  对之前的结果进行回撤 状态  数据流和动态表转换回顾  不同数据处理保证的语义  Exactly-Once 和 Checkpoint 状态快照与恢复  一个源源不断的数字流，分布对奇数和偶数进行累加和 现在要备份，需要记录现在消费的位点（Source 算子）与目前的和（两个 sum 算子） 保存这 3 个状态，发生故障后就可以通过最近的保存点恢复 制作快照的时间点  不能在任意时间点保存，必须等待下游数据全部处理完成 因为恢复时上游不会重复下发数据，而下游可能在快照时还没处理或收到 可见这种方法需要停止业务消费，有没有更好的方法？ Chandy - Lamport 算法  更复杂一点的场景，有两个数据流并行处理 快照制作的开始  Source 收到 JM 发送的 Checkpoint Barrier 标识 Source 算子的处理  Source 短暂地停止处理，保存当前状态，然后继续向下游传递 Checkpoint Barrier 标识，然后就恢复数据的处理，不需要管下游 Barrier Alignment  对于下游节点，两个 Source 的 Checkpoint Barrier 不一定是同时到的（例如对于这里的 Sum even，Source 1 的 Chec...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div class="comment-switch"><span class="first-comment">Giscus</span><span id="switch-btn"></span><span class="second-comment">Twikoo</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Nick Xu</div><div class="author-info-description">这家伙真勤奋，什么都留下了</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Flink-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">Flink 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Apache-Flink-%E7%9A%84%E8%AF%9E%E7%94%9F%E8%83%8C%E6%99%AF"><span class="toc-number">1.1.</span> <span class="toc-text">Apache Flink 的诞生背景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%A7%E6%95%B0%E6%8D%AE"><span class="toc-number">1.1.1.</span> <span class="toc-text">什么是大数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97%E6%9E%B6%E6%9E%84%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2"><span class="toc-number">1.1.2.</span> <span class="toc-text">大数据计算架构发展历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="toc-number">1.1.3.</span> <span class="toc-text">为什么需要流式计算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-Apache-Flink-%E4%BC%9A%E8%84%B1%E9%A2%96%E8%80%8C%E5%87%BA"><span class="toc-number">1.2.</span> <span class="toc-text">为什么 Apache Flink 会脱颖而出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">流式计算引擎发展历程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E%E5%AF%B9%E6%AF%94"><span class="toc-number">1.2.2.</span> <span class="toc-text">流式计算引擎对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Why-Flink"><span class="toc-number">1.2.3.</span> <span class="toc-text">Why Flink</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Apache-Flink-%E5%BC%80%E6%BA%90%E7%94%9F%E6%80%81"><span class="toc-number">1.3.</span> <span class="toc-text">Apache Flink 开源生态</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flink-%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">Flink 整体架构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Flink-%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">Flink 分层架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flink-%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">2.2.</span> <span class="toc-text">Flink 总体架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flink-%E4%BD%9C%E4%B8%9A%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.3.</span> <span class="toc-text">Flink 作业示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flink-%E5%A6%82%E4%BD%95%E5%81%9A%E5%88%B0%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93"><span class="toc-number">2.4.</span> <span class="toc-text">Flink 如何做到流批一体</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93"><span class="toc-number">2.4.1.</span> <span class="toc-text">为什么需要流批一体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-number">2.4.2.</span> <span class="toc-text">流批一体的挑战</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-%E5%A6%82%E4%BD%95%E5%81%9A%E5%88%B0%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93-2"><span class="toc-number">2.4.3.</span> <span class="toc-text">Flink 如何做到流批一体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93%E7%9A%84-Scheduler-%E5%B1%82"><span class="toc-number">2.4.4.</span> <span class="toc-text">流批一体的 Scheduler 层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93%E7%9A%84-Shuffle-Service-%E5%B1%82"><span class="toc-number">2.4.5.</span> <span class="toc-text">流批一体的 Shuffle Service 层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93%E6%80%BB%E7%BB%93"><span class="toc-number">2.4.6.</span> <span class="toc-text">Flink 流批一体总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flink-%E6%9E%B6%E6%9E%84%E4%BC%98%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">Flink 架构优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81-%E6%89%B9-OLAP-%E4%B8%9A%E5%8A%A1%E5%9C%BA%E6%99%AF%E6%A6%82%E8%BF%B0"><span class="toc-number">3.1.</span> <span class="toc-text">流&#x2F;批&#x2F;OLAP 业务场景概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%89%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%B8%80%E5%A5%97%E5%BC%95%E6%93%8E%E8%A7%A3%E5%86%B3"><span class="toc-number">3.2.</span> <span class="toc-text">为什么三种场景可以用一套引擎解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flink-%E5%A6%82%E4%BD%95%E6%94%AF%E6%8C%81-OLAP-%E5%9C%BA%E6%99%AF"><span class="toc-number">3.3.</span> <span class="toc-text">Flink 如何支持 OLAP 场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-%E5%81%9A-OLAP-%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-number">3.3.1.</span> <span class="toc-text">Flink 做 OLAP 的优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-OLAP-%E5%9C%BA%E6%99%AF%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-number">3.3.2.</span> <span class="toc-text">Flink OLAP 场景的挑战</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-OLAP-%E6%9E%B6%E6%9E%84%E7%8E%B0%E7%8A%B6"><span class="toc-number">3.3.3.</span> <span class="toc-text">Flink OLAP 架构现状</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flink-%E5%9C%A8-OLAP-%E6%9E%B6%E6%9E%84%E7%9A%84%E9%97%AE%E9%A2%98%E5%92%8C%E8%AE%BE%E6%83%B3"><span class="toc-number">3.3.4.</span> <span class="toc-text">Flink 在 OLAP 架构的问题和设想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.3.5.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B2%BE%E9%80%89%E6%A1%88%E4%BE%8B%E8%AE%B2%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">精选案例讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E5%95%86%E6%B5%81%E6%89%B9%E4%B8%80%E4%BD%93%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.1.</span> <span class="toc-text">电商流批一体实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E8%8A%82-Flink-OLAP-%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.2.</span> <span class="toc-text">字节 Flink OLAP 实践</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">课程总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2025 By Nick Xu</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="/js/tw_cn.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
 
-function loadGiscus () {
-  const config = Object.assign({
-    src: 'https://giscus.app/client.js',
-    'data-repo': 'NX-Official/NX-Official.github.io',
-    'data-repo-id': 'R_kgDOGzWHdw',
-    'data-category-id': 'DIC_kwDOGzWHd84CX4Hy',
-    'data-mapping': 'pathname',
-    'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
-    'data-reactions-enabled': '1',
-    crossorigin: 'anonymous',
-    async: true
-  },null)
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
 
-  let ele = document.createElement('script')
-  for (let key in config) {
-    ele.setAttribute(key, config[key])
-  }
-  document.getElementById('giscus-wrap').insertAdjacentElement('afterbegin',ele)
-}
-
-function changeGiscusTheme (theme) {
-  function sendMessage(message) {
-    const iframe = document.querySelector('iframe.giscus-frame')
-    if (!iframe) return
-    iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app')
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
   }
 
-  sendMessage({
-    setConfig: {
-      theme: getGiscusTheme(theme)
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'nickxudotme/nickxudotme.github.io',
+      'data-repo-id': 'R_kgDOGzWHdw',
+      'data-category-id': 'DIC_kwDOGzWHd84CX4Hy',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
     }
-  });
-}
 
-btf.addModeChange('giscus', changeGiscusTheme)
+    const scriptElement = createScriptElement(giscusConfig)
 
-if ('Giscus' === 'Giscus' || !false) {
-  if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
-  else loadGiscus()
-} else {
-  function loadOtherComment () {
-    loadGiscus()
-  }
-}</script><script>(()=>{
-  const init = () => {
-    twikoo.init(Object.assign({
-      el: '#twikoo-wrap',
-      envId: 'https://twikoo.nickxu.top/',
-      region: 'ap-shanghai',
-      onCommentLoaded: function () {
-        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
       }
-    }, null))
+    }
   }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
 
   const getCount = () => {
     const countELement = document.getElementById('twikoo-count')
@@ -358,32 +395,51 @@ if ('Giscus' === 'Giscus' || !false) {
       region: 'ap-shanghai',
       urls: [window.location.pathname],
       includeReply: false
-    }).then(function (res) {
+    }).then(res => {
       countELement.textContent = res[0].count
-    }).catch(function (err) {
-      console.error(err);
-    });
+    }).catch(err => {
+      console.error(err)
+    })
   }
 
-  const runFn = () => {
-    init()
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.nickxu.top/',
+      region: 'ap-shanghai',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
     
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
   }
 
-  const loadTwikoo = () => {
-    if (typeof twikoo === 'object') {
-      setTimeout(runFn,0)
-      return
-    } 
-    getScript('/pluginsSrc/twikoo/dist/twikoo.all.min.js').then(runFn)
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('/pluginsSrc/twikoo/dist/twikoo.all.min.js?v=1.6.44').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Giscus' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
   }
 
   if ('Giscus' === 'Twikoo' || !false) {
     if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
     else loadTwikoo()
   } else {
-    window.loadOtherComment = () => {
-      loadTwikoo()
-    }
+    window.loadOtherComment = loadTwikoo
   }
-})()</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
+})()</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js?v=1.1.6" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

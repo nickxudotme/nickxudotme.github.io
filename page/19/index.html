@@ -1,31 +1,144 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="这家伙真勤奋，什么都留下了"><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/page/19/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="这家伙真勤奋，什么都留下了"><script type="application/ld+json"></script><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/page/19/index.html"><link rel="preconnect"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css?v=7.1.0"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?3573ab9aac9d53e5c34fea51e076a07d";
-  var s = document.getElementsByTagName("script")[0]; 
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-VBKFEG3YFD');
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-VBKFEG3YFD')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-VBKFEG3YFD', {'page_path': window.location.pathname})
+}, 'google_analytics')
 </script><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  localSearch: undefined,
   translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
-  noticeOutdate: {"limitDay":300,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
   copy: {
     success: '复制成功',
-    error: '复制错误',
+    error: '复制失败',
     noSupport: '浏览器不支持'
   },
   relativeDate: {
     homepage: false,
     post: false
   },
-  runtime: '天',
+  runtime: '',
   dateSuffix: {
     just: '刚刚',
     min: '分钟前',
@@ -34,302 +147,121 @@ gtag('config', 'G-VBKFEG3YFD');
     month: '个月前'
   },
   copyright: undefined,
-  lightbox: 'fancybox',
+  lightbox: 'null',
   Snackbar: undefined,
-  source: {
-    justifiedGallery: {
-      js: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.css'
-    }
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js?v=4.12.0',
+    buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: false,
+  islazyloadPlugin: false,
   isAnchor: false,
   percent: {
     toc: true,
     rightside: false,
   },
-  autoDarkmode: false
+  autoDarkmode: true
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: 'NX の 博客',
-  isPost: false,
-  isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2025-11-18 03:40:07'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
-        }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
-      }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
-      win.activateDarkMode = function () {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      win.activateLightMode = function () {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-      const t = saveToLocal.get('theme')
-    
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        if (asideStatus === 'hide') {
-          document.documentElement.classList.add('hide-aside')
-        } else {
-          document.documentElement.classList.remove('hide-aside')
-        }
-      }
-    
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-    })(window)</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
+  pageType: 'home'
+}</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
 <link rel="alternate" href="/rss2.xml" title="NX の 博客" type="application/rss+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/static/favicon.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/static/202202230023824.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="NX の 博客"><span class="site-name">NX の 博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">NX の 博客</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/01/26/shu-mei-pai-minecraft-chao-chang-kai-fu-zhe-teng-ji-lu-javaji-yan-with-hong-shi/" title="『树莓派』Minecraft超长开服折腾记录（Java+基岩with红石）">『树莓派』Minecraft超长开服折腾记录（Java+基岩with红石）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-01-26T13:54:52.000Z" title="发表于 2020-01-26 21:54:52">2020-01-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a></span></div><div class="content">【原创】树莓派Minecraft超长开服折腾记录（Java版+基岩版 with 红石）
-更新：现在基岩版服务器最佳方案是Java+Geyser
-我去…这他妈的终于成功了
-折腾时长长达半年啊，从学期初到末再到放寒假再到春节，今天可是大年初二
-本教程制作匆忙，很多东西都是点到为止，而且也没有什么图片（以后可能会配图），也肯定会有纰漏或者错误，请多多包涵
-目录：
-
-
-Java版篇
-
-
-基岩版篇（Nukkit(X)，Pocketmine-MP，官方服务端）
-
-
-好了，废话不多说，开始
-1mkdir minecraft &amp;&amp; cd minecraft
-Java版篇
-Java极其简单，且容易地可跨平台，但与基岩版相比代码效率更低
-1mkdir Java &amp;&amp; cd Java
-1.搭建Java环境
-1sudo apt install default-jdk
-不行就百度，再不行就谷歌，这篇或许有帮助
-2.下载服务器jar
-这里有多种选择，可以官方下载
-也可以通过Paper或者spigot获得对应的版本，基本上是一样的，但据说spigot的效率更高一些
-这里下载目前最新官方jar链接举例
-1wget https://launcher.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar
-3.运行jar
-1java -jar server.jar
-之后提示需要同意EULA协议并自动退出，这时候打开同目录下的eula.txt并把false改成true就可以了，此处点到为止
-修 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/11/14/cc-2019csp-mo-ban/" title="『C/C++』2019CSP模板">『C/C++』2019CSP模板</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-11-14T12:16:16.000Z" title="发表于 2019-11-14 20:16:16">2019-11-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></span></div><div class="content">思维导图
-
-快读
-12345678inline int read()&#123;   int s=0,w=1;   char ch=getchar();   while(ch&lt;&#x27;0&#x27;||ch&gt;&#x27;9&#x27;)&#123;if(ch==&#x27;-&#x27;)w=-1;ch=getchar();&#125;   while(ch&gt;=&#x27;0&#x27;&amp;&amp;ch&lt;=&#x27;9&#x27;) s=s*10+ch-&#x27;0&#x27;,ch=getchar();   return s*w;&#125;
-逆序对
-12345678910111213141516171819void msort(int s, int t)&#123;	if (s == t) return; //如果只有一个数字则返回，无须排序	int mid=(s+t)/2;	msort(s,mid); //分解左序列	msort(mid+1,t); //分解右序列	int i = s, j = mid + 1, k = s; //接下来合并	while (i &lt;= mid &amp;&amp; j &lt;= t)	&#123;		if (a[i] &lt;= a[j])r[k++] = a[i++];		else		&#123;			r[k++] = a[j++]; ans += mid - i + 1;		&#125;//统计产生逆序对的数量	&#125;	while (i &lt;= mid) r[k++] = a[i+ ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/31/kao-shi-zong-jie-190731/" title="『考试总结』190731">『考试总结』190731</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-31T12:34:15.000Z" title="发表于 2019-07-31 20:34:15">2019-07-31</time></span></div><div class="content">试题：CZYZ2017 夏令营 NOIP 模拟赛（提高组） 2017 年 8 月 4 日
-得分：40/300（不想说话了）
-T1:传送带（10分）
-这题要用三分，但是我们没有学过，我考试的时候也没有想出其他方法，只考虑了特殊情况
-较好的题解
-T2:疯狂的火神（0分）
-这道题用数学推关系，考场直接暴搜但是居然没有拿分，肯定有地方错了
-菜就是菜啊。。。以后考场也要试着去推关系，另外，背包差不多被我忘光了
-T3：火神的鱼(30分）
-线段树
-但是我一开始没有注意鱼只会往x与y的正方向游，所以不会打线段树，只好暴搜，30分
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/23/suan-fa-zong-jie-ou-ji-li-de-suan-fa-ji-tuo-zhan/" title="『算法』总结欧几里得算法及拓展">『算法』总结欧几里得算法及拓展</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-23T03:42:30.000Z" title="发表于 2019-07-23 11:42:30">2019-07-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></span></div><div class="content">真TMD难啊！！！！我真的想*欧几里得
-好吧难还是得学啊。。。9九月就初赛
-①欧几里得算法
-这东西很简单啊。。就记个结论就可以了
-1gcd(a,b)=gcd(b,a%b)
-然后就没有了
-②欧几里得算法的应用
-这东西就是用来求最大公约数的
-1234int gcd(int a,int b)&#123;    return b?gcd(b,a%b):a;&#125;
-接下来的才是难点
-③欧几里得算法拓展
-欧几里得算法拓展用于求
-ax+by=gcd⁡(a,b)\text{ax}{+ by} = \gcd\left( a,b \right)
-ax+by=gcd(a,b)
-的其中一组解
-具体过程如下：
- ax1+by1=gcd⁡(a,b)\text{\ ax}_{1}{+ by}_{1} = \gcd\left( a,b \right)
- ax1​+by1​=gcd(a,b)
-利用欧几里得公式
-=&gt;bx2+(a%b)y2=gcd⁡(b,a%b)= &gt; \text{bx}_{2}{+ (a\% b)y}_{2} = \gcd\left( b,a\% b \right)
-=&gt;bx2​+(a%b)y2​=gcd(b,a%b)
-可以重复利用欧几里得公式，到最后一层b会变成0
-=&gt;(…)xi+(…)yi =gcd⁡(…,0)= &gt; (\ldots)x_{i} + (\ldots)y_{i}\  = \gcd\left( \ldots,0\right)
-=&gt;(…)xi​+(…)yi​ =gcd(…,0)
-最终b变成0时，最后一层的x与y可以求出来
-axi+byi=g ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/17/suan-fa-zong-jie-qu-jian-cao-zuo/" title="『算法』总结区间操作">『算法』总结区间操作</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-17T04:35:01.000Z" title="发表于 2019-07-17 12:35:01">2019-07-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></span></div><div class="content">差分数组例题：P1083 借教室
-12345678910111213141516171819202122232425262728293031323334#include&lt;bits/stdc++.h&gt;using namespace std;const int INF = 0x3f3f3f3f;int a[1000000],b[1000000],c[1000000],d[1000000],x[1000000],y[1000000],n,m;bool check(int k)&#123;	memset(b, 0, sizeof(b));	for (int i = 1; i &lt;= k; i++)	&#123;		b[x[i]] += d[i];		b[y[i]+1] -= d[i];	&#125;	for (int i = 1; i &lt;= n; i++)	&#123;		c[i] = c[i - 1] + b[i];		if (c[i] &gt; a[i])return 0;	&#125;	return 1;&#125;int main()&#123;	scanf(&quot;%d%d&quot;, &amp;n, &amp;m);	for (int i = 1; i &lt;= n; i++)scanf(&quot;%d&quot;, &amp;a[i]);	for (int i = 1; i &lt;= m; i++)scanf(&quot;%d %d %d&quot;, &amp;d[i], &amp;x[i], &amp;y[i]);	int l = 1 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/15/suan-fa-zong-jie-kmp-suan-fa/" title="『算法』总结KMP算法">『算法』总结KMP算法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-15T12:52:08.000Z" title="发表于 2019-07-15 20:52:08">2019-07-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></span></div><div class="content">【字符串】总结KMP算法
-buildtime:2019年7月15日
-KMP算法是一种改进的字符串匹配算法，由D.E.Knuth，J.H.Morris和V.R.Pratt提出的，因此人们称它为克努特—莫里斯—普拉特操作（简称KMP算法）。KMP算法的关键是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。具体实现就是实现一个next()函数，函数本身包含了模式串的局部匹配信息。时间复杂度O(m+n)。
-先放两篇比较好的资料:
-从头到尾彻底理解KMP（2014年8月22日版）
-[KMP算法]NEXT数列手算演示
-KMP的算法流程：
-假设现在文本串S匹配到 i 位置，模式串P匹配到 j 位置
-
-如果j = -1，或者当前字符匹配成功（即S[i] == P[j]），都令i++，j++，继续匹配下一个字符；
-如果j != -1，且当前字符匹配失败（即S[i] != P[j]），则令 i 不变，j = next[j]。此举意味着失配时，模式串P相对于文本串S向右移动了j - next [j] 位。
-
-换言之，当匹配失败时，模式串向右移动的位数为：失配字符所在位置 - 失配字符对应的next 值，即移动的实际位数为：j - next[j]，且此值大于等于1。
-计算NEXT数组流程：
-将前缀后缀相同数组去掉最后一个值，在前面加上-1即可（某些版本还有总体+1）
-代码：
-1234567891011121314151617181920212223242526272829303132333435363738#include&lt;bits/stdc++.h&gt;using  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/10/shu-mei-pai-da-jian-si-you-yun-fu-wu-qi-nextcloud/" title="『树莓派』搭建私有云服务器（Nextcloud）">『树莓派』搭建私有云服务器（Nextcloud）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-10T13:00:26.000Z" title="发表于 2019-07-10 21:00:26">2019-07-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a></span></div><div class="content">【整理】树莓派搭建私有云服务器（Nextcloud）
-buildtime:2019年7月10日
-
-刚刚考完期末考，真的是累死。这个项目其实我去年就做过，现在想重新总结一下。最详细也最正式地\colorbox{purple}{\color{white}{\text{最详细也最正式地}}}最详细也最正式地​ 教授大家如何实现这个项目。
-我的配置
-
-树莓派3A+一块
-聪明的脑子一个
-
-树莓派其实可以使用其他任意版本（zerow也可以，虽然很卡但是仍可以正常使用）
-请事先调试好你的树莓派确保能正常上网和连接，如有异议请点击这里入门
-好的我们开始！
-Step0：基础知识
-首先你需要有一个总体的概念才能一步步完成这个项目
-好的，首先，我们要搭建一个私有云服务器
-私有云服务器说白了就是运行私有云的一个网站服务器
-要搭建一个网站，就不得不提一个词：LAMP\colorbox{purple}{\color{white}{\text{LAMP}}}LAMP​
-何为LAMP\colorbox{purple}{\color{white}{\text{LAMP}}}LAMP​ ？
-这里引用百度百科：
-LAMP是指一组通常一起使用来运行动态网站或者服务器的自由软件名称首字母缩写：\colorbox{brown}{\color{white}{\text{LAMP是指一组通常一起使用来运行动态网站或者服务器的自由软件名称首字母缩写：}}}LAMP是指一组通常一起使用来运行动态网站或者服务器的自由软件名称首字母缩写：​
-
-Linux，操作系统
-Apache，网页服务器
-MariaDB或MySQL，数据库管理系统 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/06/shu-mei-pai-wifi-xin-hao-zhong-ji/" title="『树莓派』WiFi信号中继">『树莓派』WiFi信号中继</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-06T15:09:20.000Z" title="发表于 2019-07-06 23:09:20">2019-07-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a></span></div><div class="content">
-首先要先感谢树莓派实验室创客群-G的大佬：【管理员】辣鸡管理
-话说我家的WiFi信号有些差劲，就想用树莓派中继一下，弄了一晚上之后成功，特此记录。
-
-我的配置：
-
-树莓派3A+一块
-USB无线网卡一个（建议选择大功率的，我做出来网速就很慢）
-
-树莓派其实可以用其他版本，zerow的话就需要MicroUSB转USB的线
-之所以要用USB网卡是因为中继需要两张无线网卡：一张连接网络，一张开AP。
-如果你想用网线开热点的话，就不要理这个，把下面的“连接到网络的网卡”改成eth0即可
-请事先调试好你的树莓派确保能正常上网和连接，如有异议请点击这里入门
-好的我们开始！
-Step1：插上USB网卡
-插上后要检查一下有没有被识别，一般都能够别识别的
-键入命令以查看网络情况：
-1ifconfig
-之后应该有两张无线网卡：wlan0和wlan1，如图：
-
-如果没有找到两张网卡，就是没有被识别，可以自行百度树莓派识别USB网卡
-Step2：安装create_ap
-create_ap是GitHub上一个开源项目，专门用于开热点
-1234567#把这个项目Git下来并安装sudo git clone https://github.com/oblique/create_apcd create_apsudo make install#安装依赖的库sudo apt-get install util-linux procps hostapd iproute2 iw haveged dnsmasq
-这个东西的语法自己用-h去问，大概是这样的：
-12345sudo create_ap 要使用的无线网卡 连接到网 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/05/30/ti-jie-p1403-ahoi2005yue-shu-yan-jiu/" title="『题解』 P1403 【[AHOI2005]约数研究】">『题解』 P1403 【[AHOI2005]约数研究】</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-05-30T10:17:37.000Z" title="发表于 2019-05-30 18:17:37">2019-05-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%A2%98%E8%A7%A3/">题解</a></span></div><div class="content">某有银用DP吗？？？
-其实这道题用来学习DP（动态规划）也挺好的
-先创个数组a[i]用于存储每个数的约数
-1int a[1000000];
-再将i从1枚举到n
-1for(int i=1;i&lt;=n;i++)
-而且，可以从i的枚举i的倍数，且i绝对为i的倍数的约数
-So。。。可设个变量j获得i的j倍
-而且向前填数组的时候要注意i*j&lt;=n即可
-最后，1也算约数，所以a[i]++;
-代码奉上
-12345678910111213141516171819#include&lt;bits/stdc++.h&gt;using namespace std;int a[1000000],n,sum;int main()&#123;	cin&gt;&gt;n;	for(int i=1;i&lt;=n;i++)	&#123;		int j=2;		while(j*i&lt;=n)		&#123;			a[j*i]++;			j++;		&#125;		a[i]++;	&#125;	for(int i=1;i&lt;=n;i++)sum+=a[i];	cout&lt;&lt;sum;&#125;
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/05/26/ti-jie-p1087-fbi-shu/" title="『题解』 P1087 【FBI树】">『题解』 P1087 【FBI树】</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-05-26T08:04:55.000Z" title="发表于 2019-05-26 16:04:55">2019-05-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%A2%98%E8%A7%A3/">题解</a></span></div><div class="content">不用那么麻烦
-做个函数判断类型，再按照“左右根&quot;的顺序分解即可
-直接上代码吧
-12345678910111213141516171819202122#include&lt;bits/stdc++.h&gt;using namespace std;string tree;int n;char get_kind(string x)//获得FBI类型 &#123;	if(x.find(&#x27;0&#x27;)!=x.npos&amp;&amp;x.find(&#x27;1&#x27;)!=x.npos)return &#x27;F&#x27;; //find判断是不包含子串要用!=x.npos的形式（ x.npos即为没有找到） 	else if(x.find(&#x27;0&#x27;)!=x.npos)return &#x27;B&#x27;;	else return &#x27;I&#x27;;&#125;void def(string tree)//“左右根”分解 &#123;	if(tree.length()==1)&#123;cout&lt;&lt;get_kind(tree);return;&#125;	def(tree.substr(0,tree.length()/2));//左 	def(tree.substr(tree.length()/2));//右 	cout&lt;&lt;get_kind(tree);//根 &#125;int main()&#123;	cin&gt;&gt;n&gt;&gt;tree;	def(tree);&#125;
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/04/11/ti-jie-p1781-yu-zhou-zong-tong/" title="『题解』 P1781 【宇宙总统】">『题解』 P1781 【宇宙总统】</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-04-11T10:25:16.000Z" title="发表于 2019-04-11 18:25:16">2019-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%A2%98%E8%A7%A3/">题解</a></span></div><div class="content">标准答案（用sort+string）
-先看长度，再用string的比较
-12345678910111213141516171819202122232425262728#include&lt;bits/stdc++.h&gt;using namespace std;struct president&#123;	string price;	int n;&#125;a[100];int m;bool cmp(president x,president y);int main()&#123;	cin&gt;&gt;m;	for(int i=1;i&lt;=m;i++)	&#123;		cin&gt;&gt;a[i].price;		a[i].n=i;	&#125;	sort(a+1,a+m+1,cmp);	cout&lt;&lt;a[1].n&lt;&lt;endl&lt;&lt;a[1].price;&#125;bool cmp(president x,president y)&#123;	if(x.price.length()!=y.price.length())	return x.price.length()&gt;y.price.length();	else	return x.price&gt;y.price;&#125;
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/11/09/ti-jie-p1579-ge-de-ba-he-cai-xiang-sheng-ji-ban/" title="『题解』 P1579 【哥德巴赫猜想（升级版）】">『题解』 P1579 【哥德巴赫猜想（升级版）】</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2018-11-09T00:28:01.000Z" title="发表于 2018-11-09 08:28:01">2018-11-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%A2%98%E8%A7%A3/">题解</a></span></div><div class="content">好吧。。。感觉挺容易
-关于质数的判断，我用了一种很高端的方法，没有见过的可以看一下
-其他没有什么好说的。。。直接上代码
-123456789101112131415161718192021222324252627282930313233343536373839404142#include&lt;iostream&gt;#include&lt;cmath&gt;using namespace std;int zhi(int);int main()&#123;	int n;	cin&gt;&gt;n;	for(int a=2;a&lt;=n;a++)	&#123;		if(zhi(a))		&#123;				for(int b=2;b&lt;=n;b++)			&#123;				if(zhi(b))				&#123;					int c=n-a-b;					if(zhi(c))					&#123;						cout&lt;&lt;a&lt;&lt;&quot; &quot;&lt;&lt;b&lt;&lt;&quot; &quot;&lt;&lt;c;						goto end;					&#125;				&#125;				&#125;		&#125;		&#125;	end:	return 0;&#125;int zhi(int n)&#123;	if(n==2|n==3)	return 1;	if(n%6!=1&amp;&amp;n%6!=5)	return 0;	int tmp=sqrt(n);	for(int i=5;i&lt;=tmp;i+=6)	if(n ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/18/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/#content-inner">18</a><span class="page-number current">19</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Nick Xu</div><div class="author-info__description">这家伙真勤奋，什么都留下了</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/static/202202230023824.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">NX の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">NX の 博客</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/01/26/shu-mei-pai-minecraft-chao-chang-kai-fu-zhe-teng-ji-lu-javaji-yan-with-hong-shi/" title="『树莓派』Minecraft超长开服折腾记录（Java+基岩with红石）">『树莓派』Minecraft超长开服折腾记录（Java+基岩with红石）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-01-26T13:54:52.000Z" title="发表于 2020-01-26 21:54:52">2020-01-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a></span></div><div class="content">【原创】树莓派Minecraft超长开服折腾记录（Java版+基岩版 with 红石） 更新：现在基岩版服务器最佳方案是Java+Geyser 我去…这他妈的终于成功了 折腾时长长达半年啊，从学期初到末再到放寒假再到春节，今天可是大年初二 本教程制作匆忙，很多东西都是点到为止，而且也没有什么图片（以后可能会配图），也肯定会有纰漏或者错误，请多多包涵 目录：   Java版篇   基岩版篇（Nukkit(X)，Pocketmine-MP，官方服务端）   好了，废话不多说，开始 1mkdir minecraft &amp;&amp; cd minecraft Java版篇 Java极其简单，且容易地可跨平台，但与基岩版相比代码效率更低 1mkdir Java &amp;&amp; cd Java 1.搭建Java环境 1sudo apt install default-jdk 不行就百度，再不行就谷歌，这篇或许有帮助 2.下载服务器jar 这里有多种选择，可以官方下载 也可以通过Paper或者spigot获得对应的版本，基本上是一样的，但据说spigot的效率更高一些 这里下载目前最新官方jar链接举例 1wget https://launcher.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar 3.运行jar 1java -jar server.jar 之后提示需要同意EULA协议并自动退出，这时候打开同目录下的eula.txt并把false改成true就可以了，此处点到为...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/11/14/cc-2019csp-mo-ban/" title="『C/C++』2019CSP模板">『C/C++』2019CSP模板</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-11-14T12:16:16.000Z" title="发表于 2019-11-14 20:16:16">2019-11-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></span></div><div class="content">思维导图  快读 12345678inline int read()&#123;   int s=0,w=1;   char ch=getchar();   while(ch&lt;&#x27;0&#x27;||ch&gt;&#x27;9&#x27;)&#123;if(ch==&#x27;-&#x27;)w=-1;ch=getchar();&#125;   while(ch&gt;=&#x27;0&#x27;&amp;&amp;ch&lt;=&#x27;9&#x27;) s=s*10+ch-&#x27;0&#x27;,ch=getchar();   return s*w;&#125; 逆序对 12345678910111213141516171819void msort(int s, int t)&#123;	if (s == t) return; //如果只有一个数字则返回，无须排序	int mid=(s+t)/2;	msort(s,mid); //分解左序列	msort(mid+1,t); //分解右序列	int i = s, j = mid + 1, k = s; //接下来合并	while (i &lt;= mid &amp;&amp; j &lt;= t)	&#123;		if (a[i] &lt;= a[j])r[k++] = a[i++];		else		&#123;			r[k++] = a[j++]; ans += mid - i + 1;		&#125;//统计产生逆序对的数量	&#125;	while (i &lt;= mid) r[k++] = a...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/31/kao-shi-zong-jie-190731/" title="『考试总结』190731">『考试总结』190731</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-31T12:34:15.000Z" title="发表于 2019-07-31 20:34:15">2019-07-31</time></span></div><div class="content">试题：CZYZ2017 夏令营 NOIP 模拟赛（提高组） 2017 年 8 月 4 日 得分：40/300（不想说话了） T1:传送带（10分） 这题要用三分，但是我们没有学过，我考试的时候也没有想出其他方法，只考虑了特殊情况 较好的题解 T2:疯狂的火神（0分） 这道题用数学推关系，考场直接暴搜但是居然没有拿分，肯定有地方错了 菜就是菜啊。。。以后考场也要试着去推关系，另外，背包差不多被我忘光了 T3：火神的鱼(30分） 线段树 但是我一开始没有注意鱼只会往x与y的正方向游，所以不会打线段树，只好暴搜，30分 </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/23/suan-fa-zong-jie-ou-ji-li-de-suan-fa-ji-tuo-zhan/" title="『算法』总结欧几里得算法及拓展">『算法』总结欧几里得算法及拓展</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-23T03:42:30.000Z" title="发表于 2019-07-23 11:42:30">2019-07-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></span></div><div class="content">真TMD难啊！！！！我真的想*欧几里得 好吧难还是得学啊。。。9九月就初赛 ①欧几里得算法 这东西很简单啊。。就记个结论就可以了 1gcd(a,b)=gcd(b,a%b) 然后就没有了 ②欧几里得算法的应用 这东西就是用来求最大公约数的 1234int gcd(int a,int b)&#123;    return b?gcd(b,a%b):a;&#125; 接下来的才是难点 ③欧几里得算法拓展 欧几里得算法拓展用于求 ax+by=gcd⁡(a,b)\text{ax}{+ by} = \gcd\left( a,b \right) ax+by=gcd(a,b) 的其中一组解 具体过程如下：  ax1+by1=gcd⁡(a,b)\text{\ ax}_{1}{+ by}_{1} = \gcd\left( a,b \right)  ax1​+by1​=gcd(a,b) 利用欧几里得公式 =&gt;bx2+(a%b)y2=gcd⁡(b,a%b)= &gt; \text{bx}_{2}{+ (a\% b)y}_{2} = \gcd\left( b,a\% b \right) =&gt;bx2​+(a%b)y2​=gcd(b,a%b) 可以重复利用欧几里得公式，到最后一层b会变成0 =&gt;(…)xi+(…)yi =gcd⁡(…,0)= &gt; (\ldots)x_{i} + (\ldots)y_{i}\  = \gcd\left( \ldots,0\right) =&gt;(…)xi​+(…)yi​ =gcd(…,0) 最终b变成0时，最后一层的x与y可以求出来 axi+by...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/17/suan-fa-zong-jie-qu-jian-cao-zuo/" title="『算法』总结区间操作">『算法』总结区间操作</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-17T04:35:01.000Z" title="发表于 2019-07-17 12:35:01">2019-07-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></span></div><div class="content">差分数组例题：P1083 借教室 12345678910111213141516171819202122232425262728293031323334#include&lt;bits/stdc++.h&gt;using namespace std;const int INF = 0x3f3f3f3f;int a[1000000],b[1000000],c[1000000],d[1000000],x[1000000],y[1000000],n,m;bool check(int k)&#123;	memset(b, 0, sizeof(b));	for (int i = 1; i &lt;= k; i++)	&#123;		b[x[i]] += d[i];		b[y[i]+1] -= d[i];	&#125;	for (int i = 1; i &lt;= n; i++)	&#123;		c[i] = c[i - 1] + b[i];		if (c[i] &gt; a[i])return 0;	&#125;	return 1;&#125;int main()&#123;	scanf(&quot;%d%d&quot;, &amp;n, &amp;m);	for (int i = 1; i &lt;= n; i++)scanf(&quot;%d&quot;, &amp;a[i]);	for (int i = 1; i &lt;= m; i++)scanf(&quot;%d %d %d&quot;, &amp;d[i], &amp;x[i], &amp;y[i]);	int l ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/15/suan-fa-zong-jie-kmp-suan-fa/" title="『算法』总结KMP算法">『算法』总结KMP算法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-15T12:52:08.000Z" title="发表于 2019-07-15 20:52:08">2019-07-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></span></div><div class="content">【字符串】总结KMP算法 buildtime:2019年7月15日 KMP算法是一种改进的字符串匹配算法，由D.E.Knuth，J.H.Morris和V.R.Pratt提出的，因此人们称它为克努特—莫里斯—普拉特操作（简称KMP算法）。KMP算法的关键是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。具体实现就是实现一个next()函数，函数本身包含了模式串的局部匹配信息。时间复杂度O(m+n)。 先放两篇比较好的资料: 从头到尾彻底理解KMP（2014年8月22日版） [KMP算法]NEXT数列手算演示 KMP的算法流程： 假设现在文本串S匹配到 i 位置，模式串P匹配到 j 位置  如果j = -1，或者当前字符匹配成功（即S[i] == P[j]），都令i++，j++，继续匹配下一个字符； 如果j != -1，且当前字符匹配失败（即S[i] != P[j]），则令 i 不变，j = next[j]。此举意味着失配时，模式串P相对于文本串S向右移动了j - next [j] 位。  换言之，当匹配失败时，模式串向右移动的位数为：失配字符所在位置 - 失配字符对应的next 值，即移动的实际位数为：j - next[j]，且此值大于等于1。 计算NEXT数组流程： 将前缀后缀相同数组去掉最后一个值，在前面加上-1即可（某些版本还有总体+1） 代码： 1234567891011121314151617181920212223242526272829303132333435363738#include&lt;bits/stdc++.h&gt;usi...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/10/shu-mei-pai-da-jian-si-you-yun-fu-wu-qi-nextcloud/" title="『树莓派』搭建私有云服务器（Nextcloud）">『树莓派』搭建私有云服务器（Nextcloud）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-10T13:00:26.000Z" title="发表于 2019-07-10 21:00:26">2019-07-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a></span></div><div class="content">【整理】树莓派搭建私有云服务器（Nextcloud） buildtime:2019年7月10日  刚刚考完期末考，真的是累死。这个项目其实我去年就做过，现在想重新总结一下。最详细也最正式地\colorbox{purple}{\color{white}{\text{最详细也最正式地}}}最详细也最正式地​ 教授大家如何实现这个项目。 我的配置  树莓派3A+一块 聪明的脑子一个  树莓派其实可以使用其他任意版本（zerow也可以，虽然很卡但是仍可以正常使用） 请事先调试好你的树莓派确保能正常上网和连接，如有异议请点击这里入门 好的我们开始！ Step0：基础知识 首先你需要有一个总体的概念才能一步步完成这个项目 好的，首先，我们要搭建一个私有云服务器 私有云服务器说白了就是运行私有云的一个网站服务器 要搭建一个网站，就不得不提一个词：LAMP\colorbox{purple}{\color{white}{\text{LAMP}}}LAMP​ 何为LAMP\colorbox{purple}{\color{white}{\text{LAMP}}}LAMP​ ？ 这里引用百度百科： LAMP是指一组通常一起使用来运行动态网站或者服务器的自由软件名称首字母缩写：\colorbox{brown}{\color{white}{\text{LAMP是指一组通常一起使用来运行动态网站或者服务器的自由软件名称首字母缩写：}}}LAMP是指一组通常一起使用来运行动态网站或者服务器的自由软件名称首字母缩写：​  Linux，操作系统 Apache，网页服务器 MariaDB或MySQL，数据库管...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/06/shu-mei-pai-wifi-xin-hao-zhong-ji/" title="『树莓派』WiFi信号中继">『树莓派』WiFi信号中继</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-06T15:09:20.000Z" title="发表于 2019-07-06 23:09:20">2019-07-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a></span></div><div class="content"> 首先要先感谢树莓派实验室创客群-G的大佬：【管理员】辣鸡管理 话说我家的WiFi信号有些差劲，就想用树莓派中继一下，弄了一晚上之后成功，特此记录。  我的配置：  树莓派3A+一块 USB无线网卡一个（建议选择大功率的，我做出来网速就很慢）  树莓派其实可以用其他版本，zerow的话就需要MicroUSB转USB的线 之所以要用USB网卡是因为中继需要两张无线网卡：一张连接网络，一张开AP。 如果你想用网线开热点的话，就不要理这个，把下面的“连接到网络的网卡”改成eth0即可 请事先调试好你的树莓派确保能正常上网和连接，如有异议请点击这里入门 好的我们开始！ Step1：插上USB网卡 插上后要检查一下有没有被识别，一般都能够别识别的 键入命令以查看网络情况： 1ifconfig 之后应该有两张无线网卡：wlan0和wlan1，如图：  如果没有找到两张网卡，就是没有被识别，可以自行百度树莓派识别USB网卡 Step2：安装create_ap create_ap是GitHub上一个开源项目，专门用于开热点 1234567#把这个项目Git下来并安装sudo git clone https://github.com/oblique/create_apcd create_apsudo make install#安装依赖的库sudo apt-get install util-linux procps hostapd iproute2 iw haveged dnsmasq 这个东西的语法自己用-h去问，大概是这样的： 12345sudo create_ap 要使用的无线网卡 连...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/05/30/ti-jie-p1403-ahoi2005yue-shu-yan-jiu/" title="『题解』 P1403 【[AHOI2005]约数研究】">『题解』 P1403 【[AHOI2005]约数研究】</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-05-30T10:17:37.000Z" title="发表于 2019-05-30 18:17:37">2019-05-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%A2%98%E8%A7%A3/">题解</a></span></div><div class="content">某有银用DP吗？？？ 其实这道题用来学习DP（动态规划）也挺好的 先创个数组a[i]用于存储每个数的约数 1int a[1000000]; 再将i从1枚举到n 1for(int i=1;i&lt;=n;i++) 而且，可以从i的枚举i的倍数，且i绝对为i的倍数的约数 So。。。可设个变量j获得i的j倍 而且向前填数组的时候要注意i*j&lt;=n即可 最后，1也算约数，所以a[i]++; 代码奉上 12345678910111213141516171819#include&lt;bits/stdc++.h&gt;using namespace std;int a[1000000],n,sum;int main()&#123;	cin&gt;&gt;n;	for(int i=1;i&lt;=n;i++)	&#123;		int j=2;		while(j*i&lt;=n)		&#123;			a[j*i]++;			j++;		&#125;		a[i]++;	&#125;	for(int i=1;i&lt;=n;i++)sum+=a[i];	cout&lt;&lt;sum;&#125; </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/05/26/ti-jie-p1087-fbi-shu/" title="『题解』 P1087 【FBI树】">『题解』 P1087 【FBI树】</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-05-26T08:04:55.000Z" title="发表于 2019-05-26 16:04:55">2019-05-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%A2%98%E8%A7%A3/">题解</a></span></div><div class="content">不用那么麻烦 做个函数判断类型，再按照“左右根&quot;的顺序分解即可 直接上代码吧 12345678910111213141516171819202122#include&lt;bits/stdc++.h&gt;using namespace std;string tree;int n;char get_kind(string x)//获得FBI类型 &#123;	if(x.find(&#x27;0&#x27;)!=x.npos&amp;&amp;x.find(&#x27;1&#x27;)!=x.npos)return &#x27;F&#x27;; //find判断是不包含子串要用!=x.npos的形式（ x.npos即为没有找到） 	else if(x.find(&#x27;0&#x27;)!=x.npos)return &#x27;B&#x27;;	else return &#x27;I&#x27;;&#125;void def(string tree)//“左右根”分解 &#123;	if(tree.length()==1)&#123;cout&lt;&lt;get_kind(tree);return;&#125;	def(tree.substr(0,tree.length()/2));//左 	def(tree.substr(tree.length()/2));//右 	cout&lt;&lt;get_kind(tree);//根 &#125;int main()&#123;	cin&gt;&gt;n&gt;&gt;tree;	def(tree);&#125; </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/04/11/ti-jie-p1781-yu-zhou-zong-tong/" title="『题解』 P1781 【宇宙总统】">『题解』 P1781 【宇宙总统】</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-04-11T10:25:16.000Z" title="发表于 2019-04-11 18:25:16">2019-04-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%A2%98%E8%A7%A3/">题解</a></span></div><div class="content">标准答案（用sort+string） 先看长度，再用string的比较 12345678910111213141516171819202122232425262728#include&lt;bits/stdc++.h&gt;using namespace std;struct president&#123;	string price;	int n;&#125;a[100];int m;bool cmp(president x,president y);int main()&#123;	cin&gt;&gt;m;	for(int i=1;i&lt;=m;i++)	&#123;		cin&gt;&gt;a[i].price;		a[i].n=i;	&#125;	sort(a+1,a+m+1,cmp);	cout&lt;&lt;a[1].n&lt;&lt;endl&lt;&lt;a[1].price;&#125;bool cmp(president x,president y)&#123;	if(x.price.length()!=y.price.length())	return x.price.length()&gt;y.price.length();	else	return x.price&gt;y.price;&#125; </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/11/09/ti-jie-p1579-ge-de-ba-he-cai-xiang-sheng-ji-ban/" title="『题解』 P1579 【哥德巴赫猜想（升级版）】">『题解』 P1579 【哥德巴赫猜想（升级版）】</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2018-11-09T00:28:01.000Z" title="发表于 2018-11-09 08:28:01">2018-11-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%A2%98%E8%A7%A3/">题解</a></span></div><div class="content">好吧。。。感觉挺容易 关于质数的判断，我用了一种很高端的方法，没有见过的可以看一下 其他没有什么好说的。。。直接上代码 123456789101112131415161718192021222324252627282930313233343536373839404142#include&lt;iostream&gt;#include&lt;cmath&gt;using namespace std;int zhi(int);int main()&#123;	int n;	cin&gt;&gt;n;	for(int a=2;a&lt;=n;a++)	&#123;		if(zhi(a))		&#123;				for(int b=2;b&lt;=n;b++)			&#123;				if(zhi(b))				&#123;					int c=n-a-b;					if(zhi(c))					&#123;						cout&lt;&lt;a&lt;&lt;&quot; &quot;&lt;&lt;b&lt;&lt;&quot; &quot;&lt;&lt;c;						goto end;					&#125;				&#125;				&#125;		&#125;		&#125;	end:	return 0;&#125;int zhi(int n)&#123;	if(n==2|n==3)	return 1;	if(n%6!=1&amp;&amp;n%6!=5)	return 0;	int tmp=sqrt(n);	for(int i=5;i&lt;=tmp;i+=6)	i...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/18/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/#content-inner">18</a><span class="page-number current">19</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Nick Xu</div><div class="author-info-description">这家伙真勤奋，什么都留下了</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
             <i class="fas fa-folder-open"></i>
             <span>分类</span>
             
-            </div>
-            <ul class="card-category-list" id="aside-cat-list">
+          </div>
+          <ul class="card-category-list expandBtn" id="aside-cat-list">
             <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C-C/"><span class="card-category-list-name">C / C++</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/Golang/"><span class="card-category-list-name">Golang</span><span class="card-category-list-count">48</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/Flamego-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">Flamego 框架</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/GORM-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">GORM 框架</span><span class="card-category-list-count">13</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">Gin 框架</span><span class="card-category-list-count">10</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/go-zero-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">go-zero 框架</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/%E8%AF%AD%E6%B3%95%E9%80%9F%E9%80%9A/"><span class="card-category-list-name">语法速通</span><span class="card-category-list-count">11</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/"><span class="card-category-list-name">Hexo + Butterfly 建站指南</span><span class="card-category-list-count">11</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/OSPP/"><span class="card-category-list-name">OSPP</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Others/"><span class="card-category-list-name">Others</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/Python/"><span class="card-category-list-name">Python</span><span class="card-category-list-count">14</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/"><span class="card-category-list-name">Python3 入门</span><span class="card-category-list-count">13</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/QQ-Bot/"><span class="card-category-list-name">QQ Bot</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/macOS/"><span class="card-category-list-name">macOS</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/"><span class="card-category-list-name">基础课复习</span><span class="card-category-list-count">15</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86/"><span class="card-category-list-name">大学物理</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/"><span class="card-category-list-name">离散数学</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/"><span class="card-category-list-name">高等数学</span><span class="card-category-list-count">4</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="card-category-list-name">微信小程序</span><span class="card-category-list-count">8</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"><span class="card-category-list-name">开发基础</span><span class="card-category-list-count">8</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"><span class="card-category-list-name">数据库</span><span class="card-category-list-count">23</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/"><span class="card-category-list-name">MySQL</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/SQL-%E5%85%A5%E9%97%A8/"><span class="card-category-list-name">SQL 入门</span><span class="card-category-list-count">19</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"><span class="card-category-list-name">数据结构与算法</span><span class="card-category-list-count">20</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/"><span class="card-category-list-name">算法拾遗</span><span class="card-category-list-count">14</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E6%8E%92%E5%BA%8F/"><span class="card-category-list-name">排序</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E6%90%9C%E7%B4%A2%E6%8A%80%E6%9C%AF/"><span class="card-category-list-name">搜索技术</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E9%93%BE%E8%A1%A8/"><span class="card-category-list-name">链表</span><span class="card-category-list-count">1</span></a></li></ul></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/"><span class="card-category-list-name">新技能 Got</span><span class="card-category-list-count">21</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/"><span class="card-category-list-name">树莓派</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/"><span class="card-category-list-name">运维</span><span class="card-category-list-count">6</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/CICD/"><span class="card-category-list-name">CICD</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/"><span class="card-category-list-name">日志收集</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9A%8F%E7%AC%94%E4%B8%8E%E6%80%BB%E7%BB%93/"><span class="card-category-list-name">随笔与总结</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/"><span class="card-category-list-name">青训营</span><span class="card-category-list-count">44</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/"><span class="card-category-list-name">字节跳动-3rd-后端</span><span class="card-category-list-count">23</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE/"><span class="card-category-list-name">字节跳动-4th-大数据</span><span class="card-category-list-count">20</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-5th-%E5%90%8E%E7%AB%AF/"><span class="card-category-list-name">字节跳动-5th-后端</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E5%85%AB%E8%82%A1%E6%96%87/"><span class="card-category-list-name">面试八股文</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%A2%98%E8%A7%A3/"><span class="card-category-list-name">题解</span><span class="card-category-list-count">4</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.27em; color: rgb(175, 190, 36)">Linux</a><a href="/tags/SSH/" style="font-size: 1.17em; color: rgb(169, 185, 129)">SSH</a><a href="/tags/GORM/" style="font-size: 1.33em; color: rgb(158, 144, 84)">GORM</a><a href="/tags/Go/" style="font-size: 1.45em; color: rgb(134, 34, 151)">Go</a><a href="/tags/MySQL/" style="font-size: 1.22em; color: rgb(79, 60, 196)">MySQL</a><a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 1.22em; color: rgb(51, 114, 26)">树莓派</a><a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 1.27em; color: rgb(125, 113, 164)">随笔</a><a href="/tags/Gin/" style="font-size: 1.27em; color: rgb(113, 127, 198)">Gin</a><a href="/tags/%E5%BB%BA%E7%AB%99%E6%8A%80%E5%B7%A7/" style="font-size: 1.29em; color: rgb(33, 90, 38)">建站技巧</a><a href="/tags/Minecraft/" style="font-size: 1.17em; color: rgb(77, 175, 40)">Minecraft</a><a href="/tags/Python/" style="font-size: 1.36em; color: rgb(5, 186, 166)">Python</a><a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 1.2em; color: rgb(177, 190, 159)">环境配置</a><a href="/tags/SQL/" style="font-size: 1.38em; color: rgb(164, 74, 197)">SQL</a><a href="/tags/C-C/" style="font-size: 1.4em; color: rgb(14, 78, 155)">C/C++</a><a href="/tags/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" style="font-size: 1.31em; color: rgb(55, 22, 188)">算法竞赛</a><a href="/tags/QQ-bot/" style="font-size: 1.15em; color: rgb(152, 155, 41)">QQ bot</a><a href="/tags/%E9%A2%98%E8%A7%A3/" style="font-size: 1.22em; color: rgb(66, 60, 155)">题解</a><a href="/tags/Makefile/" style="font-size: 1.15em; color: rgb(38, 134, 157)">Makefile</a><a href="/tags/CMake/" style="font-size: 1.15em; color: rgb(171, 182, 7)">CMake</a><a href="/tags/STL/" style="font-size: 1.17em; color: rgb(137, 161, 3)">STL</a><a href="/tags/GitHub-Actions/" style="font-size: 1.2em; color: rgb(128, 133, 2)">GitHub Actions</a><a href="/tags/CICD/" style="font-size: 1.2em; color: rgb(128, 73, 150)">CICD</a><a href="/tags/Webhook/" style="font-size: 1.15em; color: rgb(54, 186, 173)">Webhook</a><a href="/tags/Docker/" style="font-size: 1.17em; color: rgb(121, 189, 125)">Docker</a><a href="/tags/GitHub/" style="font-size: 1.15em; color: rgb(128, 153, 2)">GitHub</a><a href="/tags/Redis/" style="font-size: 1.17em; color: rgb(141, 139, 176)">Redis</a><a href="/tags/go-zero/" style="font-size: 1.17em; color: rgb(27, 30, 63)">go-zero</a><a href="/tags/grpc/" style="font-size: 1.17em; color: rgb(61, 148, 7)">grpc</a><a href="/tags/tus/" style="font-size: 1.15em; color: rgb(145, 130, 162)">tus</a><a href="/tags/Flamego/" style="font-size: 1.15em; color: rgb(174, 90, 4)">Flamego</a><a href="/tags/JWT/" style="font-size: 1.15em; color: rgb(38, 172, 147)">JWT</a><a href="/tags/OSPP/" style="font-size: 1.17em; color: rgb(96, 103, 38)">OSPP</a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.17em; color: rgb(156, 115, 109)">运维</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/" style="font-size: 1.17em; color: rgb(46, 34, 185)">数据备份</a><a href="/tags/Windows/" style="font-size: 1.17em; color: rgb(146, 200, 155)">Windows</a><a href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/" style="font-size: 1.43em; color: rgb(17, 33, 35)">字节青训营</a><a href="/tags/Others/" style="font-size: 1.2em; color: rgb(160, 74, 8)">Others</a><a href="/tags/Twikoo/" style="font-size: 1.15em; color: rgb(3, 79, 126)">Twikoo</a><a href="/tags/WSL/" style="font-size: 1.2em; color: rgb(190, 161, 173)">WSL</a><a href="/tags/Clash/" style="font-size: 1.15em; color: rgb(60, 75, 174)">Clash</a><a href="/tags/hduhelp/" style="font-size: 1.17em; color: rgb(200, 173, 42)">hduhelp</a><a href="/tags/k8s/" style="font-size: 1.15em; color: rgb(29, 83, 163)">k8s</a><a href="/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/" style="font-size: 1.15em; color: rgb(157, 194, 106)">位运算</a><a href="/tags/BFS/" style="font-size: 1.22em; color: rgb(118, 33, 143)">BFS</a><a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.15em; color: rgb(109, 98, 63)">数学</a><a href="/tags/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/" style="font-size: 1.15em; color: rgb(88, 193, 77)">排列组合</a><a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1.15em; color: rgb(182, 85, 135)">链表</a><a href="/tags/DFS/" style="font-size: 1.15em; color: rgb(12, 159, 121)">DFS</a><a href="/tags/IDDFS/" style="font-size: 1.15em; color: rgb(112, 161, 8)">IDDFS</a><a href="/tags/IDA/" style="font-size: 1.15em; color: rgb(160, 95, 161)">IDA*</a><a href="/tags/%E8%88%9E%E8%B9%88%E9%93%BE-DLX/" style="font-size: 1.15em; color: rgb(104, 67, 163)">舞蹈链/DLX</a><a href="/tags/%E9%9D%A2%E8%AF%95%E5%B7%A5%E4%BD%9C/" style="font-size: 1.15em; color: rgb(167, 144, 34)">面试工作</a><a href="/tags/618%E5%A5%BD%E7%89%A9/" style="font-size: 1.15em; color: rgb(61, 41, 156)">618好物</a><a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 1.17em; color: rgb(167, 151, 32)">面试</a><a href="/tags/docker/" style="font-size: 1.15em; color: rgb(199, 175, 155)">docker</a><a href="/tags/%E6%97%85%E6%B8%B8/" style="font-size: 1.15em; color: rgb(85, 46, 175)">旅游</a><a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 1.24em; color: rgb(145, 180, 127)">微信小程序</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">十二月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">十月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/07/"><span class="card-archive-list-date">七月 2024</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">六月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/05/"><span class="card-archive-list-date">五月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/03/"><span class="card-archive-list-date">三月 2024</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/12/"><span class="card-archive-list-date">十二月 2023</span><span class="card-archive-list-count">3</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">300</div></div><div class="webinfo-item"><div class="item-name">已运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2021-11-12T16:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">355.3k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-11-17T19:40:06.926Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: #0d0d0d"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Nick Xu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"></div><div id="rightside-config-show"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><div class="js-pjax"><script>window.typedJSFn = {
-  init: (str) => {
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.27em; color: rgb(50, 50, 50);">Linux</a><a href="/tags/SSH/" style="font-size: 1.17em; color: rgb(135, 69, 165);">SSH</a><a href="/tags/GORM/" style="font-size: 1.33em; color: rgb(50, 119, 63);">GORM</a><a href="/tags/Go/" style="font-size: 1.45em; color: rgb(57, 157, 50);">Go</a><a href="/tags/MySQL/" style="font-size: 1.22em; color: rgb(103, 50, 140);">MySQL</a><a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 1.22em; color: rgb(134, 83, 170);">树莓派</a><a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 1.27em; color: rgb(142, 50, 81);">随笔</a><a href="/tags/Gin/" style="font-size: 1.27em; color: rgb(182, 159, 54);">Gin</a><a href="/tags/%E5%BB%BA%E7%AB%99%E6%8A%80%E5%B7%A7/" style="font-size: 1.29em; color: rgb(140, 88, 77);">建站技巧</a><a href="/tags/Minecraft/" style="font-size: 1.17em; color: rgb(117, 50, 146);">Minecraft</a><a href="/tags/Python/" style="font-size: 1.36em; color: rgb(50, 88, 179);">Python</a><a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 1.2em; color: rgb(50, 50, 51);">环境配置</a><a href="/tags/SQL/" style="font-size: 1.38em; color: rgb(91, 124, 163);">SQL</a><a href="/tags/C-C/" style="font-size: 1.4em; color: rgb(163, 123, 50);">C/C++</a><a href="/tags/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" style="font-size: 1.31em; color: rgb(107, 90, 50);">算法竞赛</a><a href="/tags/QQ-bot/" style="font-size: 1.15em; color: rgb(184, 162, 124);">QQ bot</a><a href="/tags/%E9%A2%98%E8%A7%A3/" style="font-size: 1.22em; color: rgb(197, 137, 70);">题解</a><a href="/tags/Makefile/" style="font-size: 1.15em; color: rgb(112, 131, 155);">Makefile</a><a href="/tags/CMake/" style="font-size: 1.15em; color: rgb(113, 170, 50);">CMake</a><a href="/tags/STL/" style="font-size: 1.17em; color: rgb(139, 199, 56);">STL</a><a href="/tags/GitHub-Actions/" style="font-size: 1.2em; color: rgb(133, 136, 63);">GitHub Actions</a><a href="/tags/CICD/" style="font-size: 1.2em; color: rgb(175, 50, 115);">CICD</a><a href="/tags/Webhook/" style="font-size: 1.15em; color: rgb(65, 50, 168);">Webhook</a><a href="/tags/Docker/" style="font-size: 1.17em; color: rgb(52, 71, 89);">Docker</a><a href="/tags/GitHub/" style="font-size: 1.15em; color: rgb(67, 119, 75);">GitHub</a><a href="/tags/grpc/" style="font-size: 1.17em; color: rgb(52, 50, 165);">grpc</a><a href="/tags/Redis/" style="font-size: 1.17em; color: rgb(50, 121, 200);">Redis</a><a href="/tags/go-zero/" style="font-size: 1.17em; color: rgb(87, 149, 88);">go-zero</a><a href="/tags/tus/" style="font-size: 1.15em; color: rgb(85, 90, 52);">tus</a><a href="/tags/Flamego/" style="font-size: 1.15em; color: rgb(97, 96, 50);">Flamego</a><a href="/tags/JWT/" style="font-size: 1.15em; color: rgb(50, 55, 50);">JWT</a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.17em; color: rgb(120, 50, 176);">运维</a><a href="/tags/OSPP/" style="font-size: 1.17em; color: rgb(97, 50, 50);">OSPP</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/" style="font-size: 1.17em; color: rgb(88, 137, 50);">数据备份</a><a href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/" style="font-size: 1.43em; color: rgb(53, 72, 50);">字节青训营</a><a href="/tags/Others/" style="font-size: 1.2em; color: rgb(50, 56, 53);">Others</a><a href="/tags/Windows/" style="font-size: 1.17em; color: rgb(67, 53, 52);">Windows</a><a href="/tags/Twikoo/" style="font-size: 1.15em; color: rgb(159, 194, 57);">Twikoo</a><a href="/tags/WSL/" style="font-size: 1.2em; color: rgb(56, 50, 136);">WSL</a><a href="/tags/Clash/" style="font-size: 1.15em; color: rgb(70, 169, 129);">Clash</a><a href="/tags/hduhelp/" style="font-size: 1.17em; color: rgb(163, 50, 64);">hduhelp</a><a href="/tags/k8s/" style="font-size: 1.15em; color: rgb(50, 50, 199);">k8s</a><a href="/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/" style="font-size: 1.15em; color: rgb(81, 107, 50);">位运算</a><a href="/tags/BFS/" style="font-size: 1.22em; color: rgb(122, 134, 91);">BFS</a><a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.15em; color: rgb(50, 131, 102);">数学</a><a href="/tags/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/" style="font-size: 1.15em; color: rgb(99, 97, 166);">排列组合</a><a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1.15em; color: rgb(81, 76, 162);">链表</a><a href="/tags/DFS/" style="font-size: 1.15em; color: rgb(175, 96, 50);">DFS</a><a href="/tags/IDDFS/" style="font-size: 1.15em; color: rgb(138, 89, 140);">IDDFS</a><a href="/tags/IDA/" style="font-size: 1.15em; color: rgb(154, 149, 164);">IDA*</a><a href="/tags/%E8%88%9E%E8%B9%88%E9%93%BE-DLX/" style="font-size: 1.15em; color: rgb(50, 119, 196);">舞蹈链/DLX</a><a href="/tags/%E9%9D%A2%E8%AF%95%E5%B7%A5%E4%BD%9C/" style="font-size: 1.15em; color: rgb(69, 50, 158);">面试工作</a><a href="/tags/618%E5%A5%BD%E7%89%A9/" style="font-size: 1.15em; color: rgb(50, 50, 119);">618好物</a><a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 1.17em; color: rgb(162, 73, 144);">面试</a><a href="/tags/docker/" style="font-size: 1.15em; color: rgb(99, 161, 186);">docker</a><a href="/tags/%E6%97%85%E6%B8%B8/" style="font-size: 1.15em; color: rgb(158, 141, 70);">旅游</a><a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 1.24em; color: rgb(50, 73, 158);">微信小程序</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/10/">
+            <span class="card-archive-list-date">
+              十月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/12/">
+            <span class="card-archive-list-date">
+              十二月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/10/">
+            <span class="card-archive-list-date">
+              十月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/07/">
+            <span class="card-archive-list-date">
+              七月 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/06/">
+            <span class="card-archive-list-date">
+              六月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/05/">
+            <span class="card-archive-list-date">
+              五月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/03/">
+            <span class="card-archive-list-date">
+              三月 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/12/">
+            <span class="card-archive-list-date">
+              十二月 2023
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">300</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">355.3k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-12-17T17:20:44.506Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2025 By Nick Xu</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="/js/tw_cn.js?v=5.5.3"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
     window.typed = new Typed('#subtitle', Object.assign({
       strings: str,
       startDelay: 300,
@@ -338,23 +270,40 @@ So。。。可设个变量j获得i的j倍
       backSpeed: 50,
     }, null))
   },
-  run: (subtitleType) => {
+  run: subtitleType => {
     if (true) {
       if (typeof Typed === 'function') {
         subtitleType()
       } else {
-        getScript('/pluginsSrc/typed.js/dist/typed.umd.js').then(subtitleType)
+        btf.getScript('/pluginsSrc/typed.js/dist/typed.umd.js?v=2.1.0').then(subtitleType)
       }
     } else {
       subtitleType()
     }
+  },
+  processSubtitle: (content, extraContents = []) => {
+    if (true) {
+      const sub = ["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"].slice()
+
+      if (extraContents.length > 0) {
+        sub.unshift(...extraContents)
+      }
+
+      if (typeof content === 'string') {
+        sub.unshift(content)
+      } else if (Array.isArray(content)) {
+        sub.unshift(...content)
+      }
+
+      sub.length > 0 && typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = typeof content === 'string' ? content :
+        (Array.isArray(content) && content.length > 0 ? content[0] : '')
+    }
   }
 }
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
 </script><script>function subtitleType () {
-  if (true) {
-    typedJSFn.init(["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"])
-  } else {
-    document.getElementById("subtitle").textContent = "求知若饥&#44;虚心若愚"
-  }
+  typedJSFn.processSubtitle(["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"])
 }
-typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
+typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js?v=1.1.6" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

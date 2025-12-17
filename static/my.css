@@ -110,3 +110,8 @@ figure.highlight pre .addition {
     filter: blur(0px);
   }
 }
+
+/* Custom Footer Background */
+#footer {
+  background: #0d0d0d !important;
+}

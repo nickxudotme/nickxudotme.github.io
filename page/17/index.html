@@ -1,31 +1,144 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="这家伙真勤奋，什么都留下了"><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/page/17/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="这家伙真勤奋，什么都留下了"><script type="application/ld+json"></script><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/page/17/index.html"><link rel="preconnect"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css?v=7.1.0"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?3573ab9aac9d53e5c34fea51e076a07d";
-  var s = document.getElementsByTagName("script")[0]; 
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-VBKFEG3YFD');
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-VBKFEG3YFD')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-VBKFEG3YFD', {'page_path': window.location.pathname})
+}, 'google_analytics')
 </script><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  localSearch: undefined,
   translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
-  noticeOutdate: {"limitDay":300,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
   copy: {
     success: '复制成功',
-    error: '复制错误',
+    error: '复制失败',
     noSupport: '浏览器不支持'
   },
   relativeDate: {
     homepage: false,
     post: false
   },
-  runtime: '天',
+  runtime: '',
   dateSuffix: {
     just: '刚刚',
     min: '分钟前',
@@ -34,614 +147,121 @@ gtag('config', 'G-VBKFEG3YFD');
     month: '个月前'
   },
   copyright: undefined,
-  lightbox: 'fancybox',
+  lightbox: 'null',
   Snackbar: undefined,
-  source: {
-    justifiedGallery: {
-      js: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.css'
-    }
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js?v=4.12.0',
+    buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: false,
+  islazyloadPlugin: false,
   isAnchor: false,
   percent: {
     toc: true,
     rightside: false,
   },
-  autoDarkmode: false
+  autoDarkmode: true
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: 'NX の 博客',
-  isPost: false,
-  isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2025-11-18 03:40:07'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
-        }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
-      }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
-      win.activateDarkMode = function () {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      win.activateLightMode = function () {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-      const t = saveToLocal.get('theme')
-    
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        if (asideStatus === 'hide') {
-          document.documentElement.classList.add('hide-aside')
-        } else {
-          document.documentElement.classList.remove('hide-aside')
-        }
-      }
-    
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-    })(window)</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
+  pageType: 'home'
+}</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
 <link rel="alternate" href="/rss2.xml" title="NX の 博客" type="application/rss+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/static/favicon.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/static/202202230023824.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="NX の 博客"><span class="site-name">NX の 博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">NX の 博客</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/01/Java-%E7%89%88-Minecraft-%E5%8A%A0%E6%A8%A1%E7%BB%84%E5%BC%80%E6%9C%8D%E6%95%99%E7%A8%8B/" title="Java 版 Minecraft 加模组开服教程">Java 版 Minecraft 加模组开服教程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-01T12:30:17.000Z" title="发表于 2022-03-01 20:30:17">2022-03-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/">新技能 Got</a></span></div><div class="content">
-
-❤️这几天宿舍4个人一起联机玩 MC 打暮色森林 Mod，特记录本次开服记录，
-
-（因为暮色森林的新版本变化不大，最终 Boss 还没有出，还多了一堆 bug，所以决定使用1.12.2版本）
-客户端准备
-安装 Java 环境
-前往Java官网下载并安装，或者点击此链接
-客户端统一使用HMCL启动器
-
-首先先将下载源改成官方
-
-在游戏列表中下载安装1.12.2版本和Forge（因为我的 Java 一直没更新，所以就安了个比较旧的 Forge ）
-
-下载并安装 Mod
-打开mc百科官网寻找 Mod，这里收录了大量 Mod，真的墙裂推荐
-
-打开Mod页面，以暮色森林为例，点击Mod下载，找到需要的版本并下载，同时记一下运行环境里服务器是不是也需要装
-
-
-点击文件夹图标，打开mod文件夹，复制进去即可
-
-
-（另外推荐几个辅助性Mod，可以点击此链接下载）
-至此，客户端配置完成，你可以点击导出整合包分享给你的小伙伴了
-
-服务端准备
-
-本人环境：Debian 9.9，Java 1.8.0_322
-
-安装 Java 环境
-这里图方便，建议直接apt
-12sudo apt updatesudo apt install default-jdk
-如果后面你发现 java 报错什么的，大概率是版本的问题，那就要去官网下了
-下载 Forge
-
-因Java的跨平台性，我选择先在本地配置好，再打包用FileZilla发送到服务器上，本步骤需保持网络通畅
-
-前往Forge官网下载所需的版本，版本应与客户端的版本相同，页面加载不出来请看这篇
-
-下载后，在命令行中运行，选择安装服务端，并指定安装路径（如果你 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/28/%E3%80%8ELinux%E3%80%8FNginx-%E9%85%8D%E7%BD%AE-SSL-%E8%AF%81%E4%B9%A6/" title="『Linux』Nginx 配置 SSL 证书">『Linux』Nginx 配置 SSL 证书</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-28T13:54:27.000Z" title="发表于 2022-02-28 21:54:27">2022-02-28</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/">新技能 Got</a></span></div><div class="content">申请并下载证书
-首先，前往https://freessl.cn/注册账号，根据指示填写域名，点击创建免费的SSL证书
-
-CSR生成选择离线生成
-
-点击生成后，会提示先安装KeyManager，根据指示安装即可
-
-根据指示一直走，可以看见证书已经出现在了KeyManager里，点击导出证书
-
-选择Nginx并导出
-
-打开压缩包，可以看见有两个格式的文件：.crt和.key
-
-配置服务器
-现在需要将证书上传至服务器，位置任意，例如我这里放在了/root/ssl
-
-接下来编辑Nginx的配置文件
-1sudo nano /etc/nginx/sites-available/default
-
-在server把80端口的那部分改成下面几行
-12345#监听 443 端口 （HTTPS用的是443）listen 443 ssl;#添加证书ssl_certificate     /root/ssl/www-nickxu-top-0223222924_chain.crt;ssl_certificate_key /root/ssl/www-nickxu-top-0223222924_key.key;
-然后再开一个server来处理80端口
-123456server &#123;        listen 80 default_server;        listen [::]:80 default_server;        server_name www.nickxu.top;        rewrite ^(.*) https://$server_name$1 permanent;   ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/23/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E5%85%AD%EF%BC%89PicGO-+-Gitee-%E5%9B%BE%E5%BA%8A/" title="Hexo + Butterfly 建站指南（六）PicGO + Gitee 图床（已废弃）">Hexo + Butterfly 建站指南（六）PicGO + Gitee 图床（已废弃）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-23T08:12:38.000Z" title="发表于 2022-02-23 16:12:38">2022-02-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content">
-从2022年3月25日开始，Gitee静止了图片外链访问，所以此方法已废弃，搭建图床请看下一篇
-
-写文章免不了要涉及到图片的问题，本人推荐使用PicGO+Gitee来实现一个免费图床，是真的好用
-准备 Gitee 储存库
-Gitee可以看作是国内的GitHub，前往官网注册账号
-
-注册完，点击右上角的加号新建仓库，名称任意
-
-记得设置readme文件，并创建master分支
-
-成功创建后，进入你的仓库，在选项卡中找到最右边的管理，再到最底下将其设置为开源
-
-在右上角的头像处找到设置，再在左侧找到私人令牌
-
-起个名字之后，点击提交
-
-记住你的令牌，并好好保管
-
-至此，云端储存库准备完毕
-下载和安装 PicGo
-首先前往PicGo官网下载
-
-它会导到到GitHub上的该项目的releases页面，在最新版打开Assets列表挑选你的系统下载即可
-
-安装后启动，在插件设置中搜索并安装gitee-uploader
-
-再到图床设置里找到gitee，填入路径，分支和令牌即可
-
-现在，图床准备完毕，每上传一张图片都能自动将链接复制到剪贴板里，直接在typora里粘贴即可
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/20/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%94%EF%BC%89%E6%97%A5%E5%B8%B8%E5%86%99%E4%BD%9C/" title="Hexo + Butterfly 建站指南（五）日常写作">Hexo + Butterfly 建站指南（五）日常写作</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-20T07:35:59.000Z" title="发表于 2022-02-20 15:35:59">2022-02-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content">前面的内容主要讲了如何搭建这个环境，后面两篇讲解平时是怎么写文章的
-文章一律使用markdown文档，后缀名为.md
-使用hexo new &quot;文章名称&quot;在source\_posts中创建文件后，就能直接打开开始写作了
-但是默认貌似会自动创建一个同名文件夹，那个文件夹没什么用，可以在配置文件中关掉自动创建
-
-Front-matter
-每篇文章的开头都有一个Front-matter，用于保存这篇文章的信息，详情请看Butterfly 安裝文檔(二) 主題頁面
-一般情况下，我们只需要关注title、date、tags、categories这4个参数
-
-title：文章标题
-date：写作时间，还有一个相关参数是updated，但不需要加，编译器会把md文件的修改时间作为更新时间
-tags：文章标签，语法为tags: [A,B]，这样就为这个文章添加了A，B2个标签
-categories：文章分类，语法为categories: [A,B]，这表示本文属于A分类下的B子类
-
-另外还有一个参数 sticky ，语法为 sticky: n ，它可以设定置顶文章，而且优先级为 n
-
-
-在目前的Typora中有bug，在普通模式下书写正文开头几个字会卡到Front-matter里，所以正文的开头只能在源代码模式下写
-
-Markdown 语法
-Markdown是一种轻量化标记语言，语法简单，并且上手容易
-
-Markdown编辑器我首推Typora，网上也有很多在线编辑器，可供练习使用
-考虑Markdown的语法已经广为人知，所以我折叠此部分以节省空间
-Markdown 基本语法 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/19/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E5%9B%9B%EF%BC%89Twikoo-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Hexo + Butterfly 建站指南（四）Twikoo 评论系统">Hexo + Butterfly 建站指南（四）Twikoo 评论系统</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-19T11:16:55.000Z" title="发表于 2022-02-19 19:16:55">2022-02-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content">
-本篇内容主要源于：
-
-Twikoo 官方文档
-Butterfly 安裝文檔(四) 主題配置-2
-
-
-更新记录2022-04-09
-更正了一个小错误，增加了图片上传功能教程与更新教程
-2022-08-11
-根据官网更新了 Vercel 的部署链接，很抱歉今天才发现链接从 dev 分支变成了 main 分支
-2022-09-11
-因为 Vercel.app 在国内被墙，所以可能需要手动添加一个自己域名，请见『Twikoo』解决 Vercel.app 在国内被墙导致无法使用的问题
-
-
-毫不夸张地说，Twikoo 是我用过最好的静态博客评论系统
-预览效果
-
-除了评论功能，还可以记录文章阅读量
-搭建过程包括准备数据库和云函数，还有修改主题配置文件
-配置数据库和云函数
-
-墙裂建议观看官方视频教程，我也是看了这个视频才成功的
-
-MongoDB
-使用MongoDB数据库来存储数据，先注册 MongoDB 账号
-
-创建免费数据库，类型选择Shared，区域选择 AWS / N. Virginia (us-east-1)
-
-
-（因为我已经创建过一个了，所以图中显示要付费）
-点击Connect按钮
-
-键入 0.0.0.0/0 以允许所有 IP 地址的连接，并创建数据库用户（我这里是已经完成了的）
-
-连接方式选择中间的Connect your application
-
-记录下连接字符串，等下使用时记得将其中的 &lt;password&gt; 修改为刚刚设置的用户密码
-
-Vercel
-使用Vercel来运行云函数，先注册 vercel 账号，可以选择从GitHub之类的登录，也可以选择通过邮箱注册
- ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/17/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%89%EF%BC%89Butterfly-%E4%B8%BB%E9%A2%98/" title="Hexo + Butterfly 建站指南（三）Butterfly 主题">Hexo + Butterfly 建站指南（三）Butterfly 主题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-17T13:45:02.000Z" title="发表于 2022-02-17 21:45:02">2022-02-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content">
-本篇内容主要源于：
-
-Butterfly 官方安装文档
-Hexo+Butterfly主题美化 | 唐先森の博客
-
-
-安装
-在你的博客根目录下载主题并安装依赖：
-12git clone -b master https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterflynpm install hexo-renderer-pug hexo-renderer-stylus --save
-然后在theme目录可以找到新的butterfly主题（默认主题landscape其实可以删掉了）
-
-在_config.yml中更改主题为butterfly
-1theme: butterfly
-
-测试，可以看见新主题已安装
-
-官方配置
-在\themes\butterfly中找到主题配置文件_config.yml，复制一个副本出来，重命名为_config.butterfly.yml
-
-在把它剪贴到博客根目录，就跟_config.landscape.yml的格式一样
-
-Hexo 中，根目录下的_config.butterfly.yml会比\themes\butterfly\_config.yml的优先级更高，这样做是为了避免在将来更新主题时，把已经配置好的配置文件一并覆盖了
-
-注意，不要弄混博客配置文件（_config.yml）和主题配置文件（_config.butterfly.yml）
-
-打开_config.butterfly.yml
-
-这个主题很强大，所以配置文件也很长，接近1000行（所以请善用搜索功能）
-但不用担心，作者 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/15/%E3%80%8ELinux%E3%80%8Fscreen-%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95/" title="『Linux』screen 命令用法">『Linux』screen 命令用法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-15T09:53:32.000Z" title="发表于 2022-02-15 17:53:32">2022-02-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/">新技能 Got</a></span></div><div class="content">Why
-也许你遇到过使用telnet或SSH远程登录linux,运行一些程序。如果这些程序需要运行很长时间(几个小时)，而程序运行过程中出现网络故障，或者客户机故障，这时候客户机与远程服务器的链接将终端，并且远程服务器没有正常结束的命令将被迫终止。
-又比如你SSH到主机上后，开始批量的scp命令，如果这个ssh线程断线了，scp进程就中断了。在远程服务器上正在运行某些耗时的作业，但是工作还没做完快要下班了，退出的话就会中断操作了，如何才好呢？
-
-What
-GNU Screen是一款由GNU计划开发的用于命令行终端切换的自由软件。用户可以通过该软件同时连接多个本地或远程的命令行会话，并在其间自由切换。
-GNU Screen可以看作是窗口管理器的命令行界面版本。它提供了统一的管理多个会话的界面和相应的功能。
-
-
-会话恢复
-只要Screen本身没有终止，在其内部运行的会话都可以恢复。这一点对于远程登录的用户特别有用——即使网络连接中断，用户也不会失去对已经打开的命令行会话的控制。只要再次登录到主机上执行screen -r就可以恢复会话的运行。同样在暂时离开的时候，也可以执行分离命令detach，在保证里面的程序正常运行的情况下让Screen挂起（切换到后台）。这一点和图形界面下的VNC很相似。
-
-
-多窗口
-在Screen环境下，所有的会话都独立的运行，并拥有各自的编号、输入、输出和窗口缓存。用户可以通过快捷键在不同的窗口下切换，并可以自由的重定向各个窗口的输入和输出。Screen实现了基本的文本操作，如复制粘贴等；还提供了类似滚动条的功能，可以查看窗口状况的历史记录。窗口还可以被分区 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/14/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89%E9%83%A8%E7%BD%B2%E8%87%B3%E4%B8%AA%E4%BA%BA%E7%AB%99%E7%82%B9%E6%88%96-GithubPages/" title="Hexo + Butterfly 建站指南（二）部署至个人站点或 GitHub Pages">Hexo + Butterfly 建站指南（二）部署至个人站点或 GitHub Pages</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-14T02:39:40.000Z" title="发表于 2022-02-14 10:39:40">2022-02-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content">现在我们需要把静态文件上传到公网上，让所有人都能访问
-打开_config.yml，拉到最底下，找到# Deployment那一块，现在我们需要配置这里
-
-按照官方文档有很多种方法，一般情况下只用得着两种：SFTP和Git
-SFTP推送至个人服务器是付费方案，Git推送至GitHub是免费方案
-法一：SFTP
-租过个人服务器的都是有Linux经验的，这里我就简单点说
-安装Web服务器
-一般用Nginx或者Apache就行，这里以Nginx为例
-12sudo apt updatesudo apt install nginx
-配置本地文件
-先安装hexo-deployer-sftp依赖
-1npm install hexo-deployer-sftp --save
-查阅官方文档来配置：
-12345678910deploy:  type: sftp  host: &lt;host&gt;  user: &lt;user&gt;  pass: &lt;password&gt;  remotePath: [remote path]  port: [port]  privateKey: [path/to/privateKey]  passphrase: [passphrase]  agent: [path/to/agent/socket]
-
-
-
-参数
-描述
-默认值
-
-
-
-
-host
-远程主机的地址
-
-
-
-user
-使用者名称
-
-
-
-pass
-密码
-
-
-
-remotePath
-远程主机的根目录
-/
-
-
-port
-端口
-22
-
-
-privateKey
-ssh私钥的目录地址
-
-
-
-passphras ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/13/Hexo%20+%20Butterfly%20%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89Hexo-%E6%A1%86%E6%9E%B6/" title="Hexo + Butterfly 建站指南（一）Hexo 框架">Hexo + Butterfly 建站指南（一）Hexo 框架</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-13T12:10:05.000Z" title="发表于 2022-02-13 20:10:05">2022-02-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content">先安装 Node.js
-因为Hexo依赖于Node.js运行，所以我们需要先安装Node.js
-前往官网下载安装长期维护版即可，如果使用最新版本的软件时出现问题，可以尝试我使用的版本
-
-安装完成后，按下 Windows + R 打开运行，输入CMD并回车，打开命令提示符
-依次输入下面的命令查询版本号，如果能查询到版本号，那么就算安装成功
-12node -vnpm -v
-
-安装 Hexo
-现在可以安装Hexo了，使用下面的命令来安装
-1npm install -g hexo-cli
-可能会出现几个报错，可以忽略
-老规矩，查一下版本号
-1hexo -v
-
-这样Hexo就算是安装完了
-初始化博客目录
-现在需要准备一个目录来存放你的博客文件，例如我使用D:\Hexo，然后需要在命令行中使用cd移动至这个目录，如果不在C盘，则还需要加上/d参数
-1cd /d D:/Hexo
-在这个目录下使用hexo init 你的博客名字初始化你的博客目录
-1hexo init MyBlog
-在我的例子中，现在D:/Hexo/MyBlog就是博客目录了，此后执行Hexo命令时默认在此目录中执行，现在切进去安装依赖，并初始public目录
-123cd ./MyBlognpm installhexo g
-打开这个目录，可以看见已经初始化了一些文件，挑几个重点的说
-
-
-source：页面与文章目录，内部的_posts文件夹里存放着你的文章（你会发现里面已经有了一个hello-world.md）
-themes：主题目录
-public：存放生成的静态网页，部署就是把里面的内容复制到云端
-_config.yml：此 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/13/Hexo%20+%20Butterfly%20%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E3%80%87%EF%BC%89%E5%89%8D%E8%A8%80/" title="Hexo + Butterfly 建站指南（〇）前言">Hexo + Butterfly 建站指南（〇）前言</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-13T03:17:17.000Z" title="发表于 2022-02-13 11:17:17">2022-02-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content">
-
-恭喜你发现了宝藏！🎉🎉🎉
-
-本系列是这个博客网站的搭建教程，个人的踩坑经历也会一并记录
-因为需要面向小白，所以很多地方会讲的比较细碎
-这个博客系统的运作流程是：在本地安装配置 Hexo框架 + Butterfly主题 ，然后根据 Markdown文档 生成静态文件，再推送至云端，公网上只需要一个网页服务器就行
-目录
-正文
-
-Hexo + Butterfly 建站指南（〇）前言
-Hexo + Butterfly 建站指南（一）Hexo 框架
-Hexo + Butterfly 建站指南（二）部署至个人站点或 GitHub Pages
-Hexo + Butterfly 建站指南（三）Butterfly 主题
-Hexo + Butterfly 建站指南（四）Twikoo 评论系统
-Hexo + Butterfly 建站指南（五）日常写作
-Hexo + Butterfly 建站指南（六）PicGO + Gitee 图床（已废弃）
-Hexo + Butterfly 建站指南（七）阿里云 OSS 图床
-Hexo + Butterfly 建站指南（八）使用 KaTeX 数学公式
-
-附录
-
-『Twikoo』解决 Vercel.app 在国内被墙导致无法使用的问题
-Hexo 首页添加 Gitcalendar 提交日历
-阿里云OSS被刷，我交了1000RMB学费！
-
-鸣谢
-
-Hexo 官网
-Butterfly 主题官方文档
-Hexo+Butterfly主题美化 | 唐先森の博客（这位是真大佬）
-PicGo+码云（gitee）图床环境搭建
-
-懒人包
-因为整个过程还是比较繁琐的，记忆里我连着折 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/12/%E4%BD%BF%E7%94%A8ffmpeg%E4%B8%8B%E8%BD%BDm3u8%E8%A7%86%E9%A2%91/" title="『Linux』使用 ffmpeg 下载 m3u8 视频">『Linux』使用 ffmpeg 下载 m3u8 视频</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-12T15:50:00.000Z" title="发表于 2022-02-12 23:50:00">2022-02-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/">新技能 Got</a></span></div><div class="content">众所周知，很多视频都是m3u8格式的，我一般会用 M3U8批量下载器 下载，但有时候资源是外网的，梯子网速又有点慢，这时候就可以挂到外网的服务器上下载
-这里我建议用ffmpeg，毕竟很多M3U8的下载工具都是用它封装的
-安装
-可以选择去官网下载安装，但是我比较懒，直接用apt算了
-12sudo apt updatesudo apt install ffmpeg
-老规矩，如果能查到版本号那就是安装成功了
-1ffmpeg -version
-
-使用
-套下面这个模板即可
-1ffmpeg -i &lt;你的m3u8的URL&gt; -c copy &lt;保存的文件位置&gt;
-例：
-1ffmpeg -i https://www.example.com/example.m3u8 -c copy ~/example.mp4
-缺点
-
-下载时间可能很长，如果关掉窗口就结束了进程，建议配合 screen 使用
-下载是单线程的，效率比较低
-
-</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/07/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/" title="『C/C++』可变参数">『C/C++』可变参数</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-07T02:32:00.000Z" title="发表于 2022-02-07 10:32:00">2022-02-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-C/">C / C++</a></span></div><div class="content">从 scanf() 和 printf() 讲起
-在使用 scanf() 和 printf() 时，你会发现一个奇怪的现象，它的参数个数是不确定的，格式化字符串中有多少个%，后面就要跟多少个参数
-1234printf(&quot;%d&quot;,a);printf(&quot;%d %d&quot;,a,b);printf(&quot;%d %d %d&quot;,a,b,c);......
-但在我们一般的印象中，一个函数在被声明时，它的参数个数就固定了，不能改变
-让我们在 stdio.h 中找到 scanf() 的定义：
-12345678int scanf(const char *__format, ...)&#123;  int __retval;  __builtin_va_list __local_argv; __builtin_va_start( __local_argv, __format );  __retval = __mingw_vfscanf( stdin, __format, __local_argv );  __builtin_va_end( __local_argv );  return __retval;&#125;
-接受参数怎么有个省略号？还可以这样写吗？
-这便牵扯到可变参数
-可变参数的头文件
-我们在使用可变参数时，需要引入 stdarg.h 头文件
-在 stdarg.h 中，有一个数据类型，四个宏
-
-
-
-类型
-描述
-
-
-
-
-va_list
-用来保存宏 va_arg 与宏 va_end 所需信息
-
-
-
-
-
-
-宏
-描述
-
-
-
-
-va_start(va ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/03/jie-gou-ti-nei-cun-dui-qi-wen-ti/" title="『C/C++』结构体内存对齐问题">『C/C++』结构体内存对齐问题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-03T04:51:22.000Z" title="发表于 2022-02-03 12:51:22">2022-02-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-C/">C / C++</a></span></div><div class="content">初始的问题
-先来看一个问题，对于下面这两个结构体，它们的大小是一样的吗？
-1234567struct x&#123;char c;double d;int i;&#125; a;printf(&quot;%d\n&quot;, sizeof(a));
-1234567struct y&#123;	char c;	int i;	double d;&#125; b;printf(&quot;%d\n&quot;, sizeof(b));
-你可能认为它们是一样的，但实际上是不一样的，一个是24，另一个是16
-
-也据说是：结构体的大小并不是简单地将每个结构体成员的大小相加就能得到
-如何计算结构体大小
-首先我们要了解各种基本类型的大小
-
-
-
-Type
-sizeof(Type)
-
-
-
-
-char
-1
-
-
-short
-2
-
-
-float
-4
-
-
-int
-4
-
-
-long
-4
-
-
-long long
-8
-
-
-double
-8
-
-
-long double
-16
-
-
-
-一般情况
-
-
-后声明的类型永远认为结构体是按照自己的类型来的（找当前类型大小的最小倍数位置存放）
-
-
-整个结构体补全到最大类型的整数倍
-
-
-在第一个例子中
-先声明了char类型，占用了1字节
-然后声明int类型，他发现前4个字节有部分被占用了（无法使用），就跳过4个字节声明了自己，占用4字节
-然后声明double类型，前8个字节有被占用，跳过8个字节声明自己，占用8字节
-总计16字节，是8的倍数，所以结果为16
-在第二个例子中
-先声明char占用1字节
-然后声明double，前8字节被占用，跳过前8字节声明自己，占用8字节
-最后int ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/24/gin-ru-men-bi-ji-wu-lu-you-fen-zu-he-lu-you-wen-jian-chou-chi/" title="Gin 入门笔记（五）路由分组和路由文件抽离">Gin 入门笔记（五）路由分组和路由文件抽离</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-24T14:05:39.000Z" title="发表于 2022-01-24 22:05:39">2022-01-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">在之前的方法中，配置路由、处理数据都在 main.go 文件中进行，当遇到稍大的项目时维护就会十分吃力，也难以团队协作，所以我们现在需要进行路由分组和文件抽离
-12345678910111213141516171819202122232425262728293031323334353637383940414243package mainimport (	&quot;github.com/gin-gonic/gin&quot;)func main() &#123;	r := gin.Default()	//前台路由	r.GET(&quot;/&quot;, func(c *gin.Context) &#123;		c.String(200, &quot;首页&quot;)	&#125;)	r.GET(&quot;/news&quot;, func(c *gin.Context) &#123;		c.String(200, &quot;新闻&quot;)	&#125;)	//后台路由	r.GET(&quot;/admin&quot;, func(c *gin.Context) &#123;		c.String(200, &quot;后台首页&quot;)	&#125;)	r.GET(&quot;/admin/user&quot;, func(c *gin.Context) &#123;		c.String(200, &quot;设置用户&quot;)	&#125;)	r.GET(&quot;/admin/article&quot;, func(c *gin.Context) &#1 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/24/go-qie-pian-slice/" title="Go 切片（Slice）">Go 切片（Slice）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-24T13:15:01.000Z" title="发表于 2022-01-24 21:15:01">2022-01-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a></span></div><div class="content">Go 数组的长度不可改变，在特定场景中这样的集合就不太适用，Go 中提供了一种灵活，功能强悍的内置类型切片(“动态数组”)，与数组相比切片的长度是不固定的，可以追加元素，容量（cap）不够时会自动扩容
-切片为引用类型，从数组中得到的切片修改元素值时，原数组也会发生变化，修改原数组时，切片也会变化
-创建切片的四种方法
-
-var
-
-1var s []uint32
-2.切片字面量，这样创建的切片长度和容量都等于初始元素个数
-1s := []uint32&#123;1, 2, 3&#125;
-3.make
-使用make创建，可以指定长度和容量。格式为make([]type, len[, cap])，可以只指定长度，也可以长度容量同时指定
-123s1 := make([]uint32)s2 := make([]uint32, 1)s3 := make([]uint32, 1, 10)
-4，截取符，可以从现成的数组或切片创建
-12345var arr [10]uint32s1 := arr[0:5]s2 := arr[:5]s3 := arr[5:]s4 := arr[:]
-
-二、添加元素
-使用append()函数向切片中添加元素，可以一次添加 0 个或多个元素，如果容量不够会自动扩容
-1234567s := make([]uint32, 0, 4)s = append(s, 1, 2, 3)fmt.Println(len(s), cap(s)) // 3 4s = append(s, 4, 5, 6)fmt.Println(len(s), cap(s)) // 6 8
-使用copy()将 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/24/go-zhong-de-andtnewtmaket-de-qu-bie/" title="Go 中的 &amp;T{...}、new(T)、make(T) 的区别">Go 中的 &amp;T{...}、new(T)、make(T) 的区别</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-24T10:55:46.000Z" title="发表于 2022-01-24 18:55:46">2022-01-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a></span></div><div class="content">一、&amp;T{…}
-&amp;T&#123;...&#125; 可以返回一个 T 类型指针，并且在括号指定初值，只能用于结构体
-二、new(T)
-new(T)与&amp;T&#123;...&#125;基本相同，但不能指定初值（所以一般还是用new(T)），不过除了结构体还可以用于基本类型（如 int ）
-三、make(T)
-make(T)用于创建 3 种内建的引用类型：切片、map 和 channel，如：
-1v := make([]int, 10, 50)
-这样分配一个有 50 个 int 值的数组，并且创建了一个长度为 10，容量为 50 的 切片 v，该 切片 指向数组的前 10 个元素
-换言之，new 函数分配内存，make 函数初始化；下图给出了区别：
-
-又或者，我们来看 buildin.go 中的注释：
-
-</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/16/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/#content-inner">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/#content-inner">18</a><a class="page-number" href="/page/19/#content-inner">19</a><a class="extend next" rel="next" href="/page/18/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Nick Xu</div><div class="author-info__description">这家伙真勤奋，什么都留下了</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/static/202202230023824.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">NX の 博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">NX の 博客</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/03/01/Java-%E7%89%88-Minecraft-%E5%8A%A0%E6%A8%A1%E7%BB%84%E5%BC%80%E6%9C%8D%E6%95%99%E7%A8%8B/" title="Java 版 Minecraft 加模组开服教程">Java 版 Minecraft 加模组开服教程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-03-01T12:30:17.000Z" title="发表于 2022-03-01 20:30:17">2022-03-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/">新技能 Got</a></span></div><div class="content">  ❤️这几天宿舍4个人一起联机玩 MC 打暮色森林 Mod，特记录本次开服记录，  （因为暮色森林的新版本变化不大，最终 Boss 还没有出，还多了一堆 bug，所以决定使用1.12.2版本） 客户端准备 安装 Java 环境 前往Java官网下载并安装，或者点击此链接 客户端统一使用HMCL启动器  首先先将下载源改成官方  在游戏列表中下载安装1.12.2版本和Forge（因为我的 Java 一直没更新，所以就安了个比较旧的 Forge ）  下载并安装 Mod 打开mc百科官网寻找 Mod，这里收录了大量 Mod，真的墙裂推荐  打开Mod页面，以暮色森林为例，点击Mod下载，找到需要的版本并下载，同时记一下运行环境里服务器是不是也需要装   点击文件夹图标，打开mod文件夹，复制进去即可   （另外推荐几个辅助性Mod，可以点击此链接下载） 至此，客户端配置完成，你可以点击导出整合包分享给你的小伙伴了  服务端准备  本人环境：Debian 9.9，Java 1.8.0_322  安装 Java 环境 这里图方便，建议直接apt 12sudo apt updatesudo apt install default-jdk 如果后面你发现 java 报错什么的，大概率是版本的问题，那就要去官网下了 下载 Forge  因Java的跨平台性，我选择先在本地配置好，再打包用FileZilla发送到服务器上，本步骤需保持网络通畅  前往Forge官网下载所需的版本，版本应与客户端的版本相同，页面加载不出来请看这篇  下载后，在命令行中运行，选择安装服务端，并指定安装路径（...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/28/%E3%80%8ELinux%E3%80%8FNginx-%E9%85%8D%E7%BD%AE-SSL-%E8%AF%81%E4%B9%A6/" title="『Linux』Nginx 配置 SSL 证书">『Linux』Nginx 配置 SSL 证书</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-28T13:54:27.000Z" title="发表于 2022-02-28 21:54:27">2022-02-28</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/">新技能 Got</a></span></div><div class="content">申请并下载证书 首先，前往https://freessl.cn/注册账号，根据指示填写域名，点击创建免费的SSL证书  CSR生成选择离线生成  点击生成后，会提示先安装KeyManager，根据指示安装即可  根据指示一直走，可以看见证书已经出现在了KeyManager里，点击导出证书  选择Nginx并导出  打开压缩包，可以看见有两个格式的文件：.crt和.key  配置服务器 现在需要将证书上传至服务器，位置任意，例如我这里放在了/root/ssl  接下来编辑Nginx的配置文件 1sudo nano /etc/nginx/sites-available/default  在server把80端口的那部分改成下面几行 12345#监听 443 端口 （HTTPS用的是443）listen 443 ssl;#添加证书ssl_certificate     /root/ssl/www-nickxu-top-0223222924_chain.crt;ssl_certificate_key /root/ssl/www-nickxu-top-0223222924_key.key; 然后再开一个server来处理80端口 123456server &#123;        listen 80 default_server;        listen [::]:80 default_server;        server_name www.nickxu.top;        rewrite ^(.*) https://$server_name$1 permanent...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/23/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E5%85%AD%EF%BC%89PicGO-+-Gitee-%E5%9B%BE%E5%BA%8A/" title="Hexo + Butterfly 建站指南（六）PicGO + Gitee 图床（已废弃）">Hexo + Butterfly 建站指南（六）PicGO + Gitee 图床（已废弃）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-23T08:12:38.000Z" title="发表于 2022-02-23 16:12:38">2022-02-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content"> 从2022年3月25日开始，Gitee静止了图片外链访问，所以此方法已废弃，搭建图床请看下一篇  写文章免不了要涉及到图片的问题，本人推荐使用PicGO+Gitee来实现一个免费图床，是真的好用 准备 Gitee 储存库 Gitee可以看作是国内的GitHub，前往官网注册账号  注册完，点击右上角的加号新建仓库，名称任意  记得设置readme文件，并创建master分支  成功创建后，进入你的仓库，在选项卡中找到最右边的管理，再到最底下将其设置为开源  在右上角的头像处找到设置，再在左侧找到私人令牌  起个名字之后，点击提交  记住你的令牌，并好好保管  至此，云端储存库准备完毕 下载和安装 PicGo 首先前往PicGo官网下载  它会导到到GitHub上的该项目的releases页面，在最新版打开Assets列表挑选你的系统下载即可  安装后启动，在插件设置中搜索并安装gitee-uploader  再到图床设置里找到gitee，填入路径，分支和令牌即可  现在，图床准备完毕，每上传一张图片都能自动将链接复制到剪贴板里，直接在typora里粘贴即可  </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/20/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%94%EF%BC%89%E6%97%A5%E5%B8%B8%E5%86%99%E4%BD%9C/" title="Hexo + Butterfly 建站指南（五）日常写作">Hexo + Butterfly 建站指南（五）日常写作</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-20T07:35:59.000Z" title="发表于 2022-02-20 15:35:59">2022-02-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content">前面的内容主要讲了如何搭建这个环境，后面两篇讲解平时是怎么写文章的 文章一律使用markdown文档，后缀名为.md 使用hexo new &quot;文章名称&quot;在source\_posts中创建文件后，就能直接打开开始写作了 但是默认貌似会自动创建一个同名文件夹，那个文件夹没什么用，可以在配置文件中关掉自动创建  Front-matter 每篇文章的开头都有一个Front-matter，用于保存这篇文章的信息，详情请看Butterfly 安裝文檔(二) 主題頁面 一般情况下，我们只需要关注title、date、tags、categories这4个参数  title：文章标题 date：写作时间，还有一个相关参数是updated，但不需要加，编译器会把md文件的修改时间作为更新时间 tags：文章标签，语法为tags: [A,B]，这样就为这个文章添加了A，B2个标签 categories：文章分类，语法为categories: [A,B]，这表示本文属于A分类下的B子类  另外还有一个参数 sticky ，语法为 sticky: n ，它可以设定置顶文章，而且优先级为 n   在目前的Typora中有bug，在普通模式下书写正文开头几个字会卡到Front-matter里，所以正文的开头只能在源代码模式下写  Markdown 语法 Markdown是一种轻量化标记语言，语法简单，并且上手容易  Markdown编辑器我首推Typora，网上也有很多在线编辑器，可供练习使用 考虑Markdown的语法已经广为人知，所以我折叠此部分以节省空间 Markdown 基...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/19/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E5%9B%9B%EF%BC%89Twikoo-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Hexo + Butterfly 建站指南（四）Twikoo 评论系统">Hexo + Butterfly 建站指南（四）Twikoo 评论系统</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-19T11:16:55.000Z" title="发表于 2022-02-19 19:16:55">2022-02-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content"> 本篇内容主要源于：  Twikoo 官方文档 Butterfly 安裝文檔(四) 主題配置-2   更新记录                    2022-04-09                   更正了一个小错误，增加了图片上传功能教程与更新教程                            2022-08-11                   根据官网更新了 Vercel 的部署链接，很抱歉今天才发现链接从 dev 分支变成了 main 分支                            2022-09-11                   因为 Vercel.app 在国内被墙，所以可能需要手动添加一个自己域名，请见『Twikoo』解决 Vercel.app 在国内被墙导致无法使用的问题          毫不夸张地说，Twikoo 是我用过最好的静态博客评论系统 预览效果  除了评论功能，还可以记录文章阅读量 搭建过程包括准备数据库和云函数，还有修改主题配置文件 配置数据库和云函数  墙裂建议观看官方视频教程，我也是看了这个视频才成功的  MongoDB 使用MongoDB数据库来存储数据，先注册 MongoDB 账号  创建免费数据库，类型选择Shared，区域选择 AWS / N. Virginia (us-east-1)   （因为我已经创建过一个了，所以图中显示要付费） 点击Connect按钮  键入 0.0.0.0/0 以允许所有 IP 地址的连接，并创建数据库用户（我这里是已经完成了的）  连接方式选择中间的Conne...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/17/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%89%EF%BC%89Butterfly-%E4%B8%BB%E9%A2%98/" title="Hexo + Butterfly 建站指南（三）Butterfly 主题">Hexo + Butterfly 建站指南（三）Butterfly 主题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-17T13:45:02.000Z" title="发表于 2022-02-17 21:45:02">2022-02-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content"> 本篇内容主要源于：  Butterfly 官方安装文档 Hexo+Butterfly主题美化 | 唐先森の博客   安装 在你的博客根目录下载主题并安装依赖： 12git clone -b master https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterflynpm install hexo-renderer-pug hexo-renderer-stylus --save 然后在theme目录可以找到新的butterfly主题（默认主题landscape其实可以删掉了）  在_config.yml中更改主题为butterfly 1theme: butterfly  测试，可以看见新主题已安装  官方配置 在\themes\butterfly中找到主题配置文件_config.yml，复制一个副本出来，重命名为_config.butterfly.yml  在把它剪贴到博客根目录，就跟_config.landscape.yml的格式一样  Hexo 中，根目录下的_config.butterfly.yml会比\themes\butterfly\_config.yml的优先级更高，这样做是为了避免在将来更新主题时，把已经配置好的配置文件一并覆盖了  注意，不要弄混博客配置文件（_config.yml）和主题配置文件（_config.butterfly.yml）  打开_config.butterfly.yml  这个主题很强大，所以配置文件也很长，接近1000行（所以请善用搜索功能） 但不用担心...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/15/%E3%80%8ELinux%E3%80%8Fscreen-%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95/" title="『Linux』screen 命令用法">『Linux』screen 命令用法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-15T09:53:32.000Z" title="发表于 2022-02-15 17:53:32">2022-02-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/">新技能 Got</a></span></div><div class="content">Why 也许你遇到过使用telnet或SSH远程登录linux,运行一些程序。如果这些程序需要运行很长时间(几个小时)，而程序运行过程中出现网络故障，或者客户机故障，这时候客户机与远程服务器的链接将终端，并且远程服务器没有正常结束的命令将被迫终止。 又比如你SSH到主机上后，开始批量的scp命令，如果这个ssh线程断线了，scp进程就中断了。在远程服务器上正在运行某些耗时的作业，但是工作还没做完快要下班了，退出的话就会中断操作了，如何才好呢？  What GNU Screen是一款由GNU计划开发的用于命令行终端切换的自由软件。用户可以通过该软件同时连接多个本地或远程的命令行会话，并在其间自由切换。 GNU Screen可以看作是窗口管理器的命令行界面版本。它提供了统一的管理多个会话的界面和相应的功能。   会话恢复 只要Screen本身没有终止，在其内部运行的会话都可以恢复。这一点对于远程登录的用户特别有用——即使网络连接中断，用户也不会失去对已经打开的命令行会话的控制。只要再次登录到主机上执行screen -r就可以恢复会话的运行。同样在暂时离开的时候，也可以执行分离命令detach，在保证里面的程序正常运行的情况下让Screen挂起（切换到后台）。这一点和图形界面下的VNC很相似。   多窗口 在Screen环境下，所有的会话都独立的运行，并拥有各自的编号、输入、输出和窗口缓存。用户可以通过快捷键在不同的窗口下切换，并可以自由的重定向各个窗口的输入和输出。Screen实现了基本的文本操作，如复制粘贴等；还提供了类似滚动条的功能，可以查看窗口状况的历史记录。窗口还可以...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/14/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89%E9%83%A8%E7%BD%B2%E8%87%B3%E4%B8%AA%E4%BA%BA%E7%AB%99%E7%82%B9%E6%88%96-GithubPages/" title="Hexo + Butterfly 建站指南（二）部署至个人站点或 GitHub Pages">Hexo + Butterfly 建站指南（二）部署至个人站点或 GitHub Pages</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-14T02:39:40.000Z" title="发表于 2022-02-14 10:39:40">2022-02-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content">现在我们需要把静态文件上传到公网上，让所有人都能访问 打开_config.yml，拉到最底下，找到# Deployment那一块，现在我们需要配置这里  按照官方文档有很多种方法，一般情况下只用得着两种：SFTP和Git SFTP推送至个人服务器是付费方案，Git推送至GitHub是免费方案 法一：SFTP 租过个人服务器的都是有Linux经验的，这里我就简单点说 安装Web服务器 一般用Nginx或者Apache就行，这里以Nginx为例 12sudo apt updatesudo apt install nginx 配置本地文件 先安装hexo-deployer-sftp依赖 1npm install hexo-deployer-sftp --save 查阅官方文档来配置： 12345678910deploy:  type: sftp  host: &lt;host&gt;  user: &lt;user&gt;  pass: &lt;password&gt;  remotePath: [remote path]  port: [port]  privateKey: [path/to/privateKey]  passphrase: [passphrase]  agent: [path/to/agent/socket]    参数 描述 默认值     host 远程主机的地址    user 使用者名称    pass 密码    remotePath 远程主机的根目录 /   port 端口 22   privateKey ssh私钥的目录地址    passph...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/13/Hexo%20+%20Butterfly%20%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89Hexo-%E6%A1%86%E6%9E%B6/" title="Hexo + Butterfly 建站指南（一）Hexo 框架">Hexo + Butterfly 建站指南（一）Hexo 框架</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-13T12:10:05.000Z" title="发表于 2022-02-13 20:10:05">2022-02-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content">先安装 Node.js 因为Hexo依赖于Node.js运行，所以我们需要先安装Node.js 前往官网下载安装长期维护版即可，如果使用最新版本的软件时出现问题，可以尝试我使用的版本  安装完成后，按下 Windows + R 打开运行，输入CMD并回车，打开命令提示符 依次输入下面的命令查询版本号，如果能查询到版本号，那么就算安装成功 12node -vnpm -v  安装 Hexo 现在可以安装Hexo了，使用下面的命令来安装 1npm install -g hexo-cli 可能会出现几个报错，可以忽略 老规矩，查一下版本号 1hexo -v  这样Hexo就算是安装完了 初始化博客目录 现在需要准备一个目录来存放你的博客文件，例如我使用D:\Hexo，然后需要在命令行中使用cd移动至这个目录，如果不在C盘，则还需要加上/d参数 1cd /d D:/Hexo 在这个目录下使用hexo init 你的博客名字初始化你的博客目录 1hexo init MyBlog 在我的例子中，现在D:/Hexo/MyBlog就是博客目录了，此后执行Hexo命令时默认在此目录中执行，现在切进去安装依赖，并初始public目录 123cd ./MyBlognpm installhexo g 打开这个目录，可以看见已经初始化了一些文件，挑几个重点的说   source：页面与文章目录，内部的_posts文件夹里存放着你的文章（你会发现里面已经有了一个hello-world.md） themes：主题目录 public：存放生成的静态网页，部署就是把里面的内容复制到云端 _config.ym...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/13/Hexo%20+%20Butterfly%20%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E3%80%87%EF%BC%89%E5%89%8D%E8%A8%80/" title="Hexo + Butterfly 建站指南（〇）前言">Hexo + Butterfly 建站指南（〇）前言</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-13T03:17:17.000Z" title="发表于 2022-02-13 11:17:17">2022-02-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/">Hexo + Butterfly 建站指南</a></span></div><div class="content">  恭喜你发现了宝藏！🎉🎉🎉  本系列是这个博客网站的搭建教程，个人的踩坑经历也会一并记录 因为需要面向小白，所以很多地方会讲的比较细碎 这个博客系统的运作流程是：在本地安装配置 Hexo框架 + Butterfly主题 ，然后根据 Markdown文档 生成静态文件，再推送至云端，公网上只需要一个网页服务器就行 目录 正文  Hexo + Butterfly 建站指南（〇）前言 Hexo + Butterfly 建站指南（一）Hexo 框架 Hexo + Butterfly 建站指南（二）部署至个人站点或 GitHub Pages Hexo + Butterfly 建站指南（三）Butterfly 主题 Hexo + Butterfly 建站指南（四）Twikoo 评论系统 Hexo + Butterfly 建站指南（五）日常写作 Hexo + Butterfly 建站指南（六）PicGO + Gitee 图床（已废弃） Hexo + Butterfly 建站指南（七）阿里云 OSS 图床 Hexo + Butterfly 建站指南（八）使用 KaTeX 数学公式  附录  『Twikoo』解决 Vercel.app 在国内被墙导致无法使用的问题 Hexo 首页添加 Gitcalendar 提交日历 阿里云OSS被刷，我交了1000RMB学费！  鸣谢  Hexo 官网 Butterfly 主题官方文档 Hexo+Butterfly主题美化 | 唐先森の博客（这位是真大佬） PicGo+码云（gitee）图床环境搭建  懒人包 因为整个过程还是比较繁琐的，记忆里我...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/12/%E4%BD%BF%E7%94%A8ffmpeg%E4%B8%8B%E8%BD%BDm3u8%E8%A7%86%E9%A2%91/" title="『Linux』使用 ffmpeg 下载 m3u8 视频">『Linux』使用 ffmpeg 下载 m3u8 视频</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-12T15:50:00.000Z" title="发表于 2022-02-12 23:50:00">2022-02-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/">新技能 Got</a></span></div><div class="content">众所周知，很多视频都是m3u8格式的，我一般会用 M3U8批量下载器 下载，但有时候资源是外网的，梯子网速又有点慢，这时候就可以挂到外网的服务器上下载 这里我建议用ffmpeg，毕竟很多M3U8的下载工具都是用它封装的 安装 可以选择去官网下载安装，但是我比较懒，直接用apt算了 12sudo apt updatesudo apt install ffmpeg 老规矩，如果能查到版本号那就是安装成功了 1ffmpeg -version  使用 套下面这个模板即可 1ffmpeg -i &lt;你的m3u8的URL&gt; -c copy &lt;保存的文件位置&gt; 例： 1ffmpeg -i https://www.example.com/example.m3u8 -c copy ~/example.mp4 缺点  下载时间可能很长，如果关掉窗口就结束了进程，建议配合 screen 使用 下载是单线程的，效率比较低  </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/07/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/" title="『C/C++』可变参数">『C/C++』可变参数</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-07T02:32:00.000Z" title="发表于 2022-02-07 10:32:00">2022-02-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-C/">C / C++</a></span></div><div class="content">从 scanf() 和 printf() 讲起 在使用 scanf() 和 printf() 时，你会发现一个奇怪的现象，它的参数个数是不确定的，格式化字符串中有多少个%，后面就要跟多少个参数 1234printf(&quot;%d&quot;,a);printf(&quot;%d %d&quot;,a,b);printf(&quot;%d %d %d&quot;,a,b,c);...... 但在我们一般的印象中，一个函数在被声明时，它的参数个数就固定了，不能改变 让我们在 stdio.h 中找到 scanf() 的定义： 12345678int scanf(const char *__format, ...)&#123;  int __retval;  __builtin_va_list __local_argv; __builtin_va_start( __local_argv, __format );  __retval = __mingw_vfscanf( stdin, __format, __local_argv );  __builtin_va_end( __local_argv );  return __retval;&#125; 接受参数怎么有个省略号？还可以这样写吗？ 这便牵扯到可变参数 可变参数的头文件 我们在使用可变参数时，需要引入 stdarg.h 头文件 在 stdarg.h 中，有一个数据类型，四个宏    类型 描述     va_list 用来保存宏 va_arg 与宏 va_end 所需信息       宏 描述     va_start...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/02/03/jie-gou-ti-nei-cun-dui-qi-wen-ti/" title="『C/C++』结构体内存对齐问题">『C/C++』结构体内存对齐问题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-02-03T04:51:22.000Z" title="发表于 2022-02-03 12:51:22">2022-02-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-C/">C / C++</a></span></div><div class="content">初始的问题 先来看一个问题，对于下面这两个结构体，它们的大小是一样的吗？ 1234567struct x&#123;char c;double d;int i;&#125; a;printf(&quot;%d\n&quot;, sizeof(a)); 1234567struct y&#123;	char c;	int i;	double d;&#125; b;printf(&quot;%d\n&quot;, sizeof(b)); 你可能认为它们是一样的，但实际上是不一样的，一个是24，另一个是16  也据说是：结构体的大小并不是简单地将每个结构体成员的大小相加就能得到 如何计算结构体大小 首先我们要了解各种基本类型的大小    Type sizeof(Type)     char 1   short 2   float 4   int 4   long 4   long long 8   double 8   long double 16    一般情况   后声明的类型永远认为结构体是按照自己的类型来的（找当前类型大小的最小倍数位置存放）   整个结构体补全到最大类型的整数倍   在第一个例子中 先声明了char类型，占用了1字节 然后声明int类型，他发现前4个字节有部分被占用了（无法使用），就跳过4个字节声明了自己，占用4字节 然后声明double类型，前8个字节有被占用，跳过8个字节声明自己，占用8字节 总计16字节，是8的倍数，所以结果为16 在第二个例子中 先声明char占用1字节 然后声明double，前8字节被占用，跳过前8字节声明自己，占用8字节 最后...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/24/gin-ru-men-bi-ji-wu-lu-you-fen-zu-he-lu-you-wen-jian-chou-chi/" title="Gin 入门笔记（五）路由分组和路由文件抽离">Gin 入门笔记（五）路由分组和路由文件抽离</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-24T14:05:39.000Z" title="发表于 2022-01-24 22:05:39">2022-01-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/">Gin 框架</a></span></div><div class="content">在之前的方法中，配置路由、处理数据都在 main.go 文件中进行，当遇到稍大的项目时维护就会十分吃力，也难以团队协作，所以我们现在需要进行路由分组和文件抽离 12345678910111213141516171819202122232425262728293031323334353637383940414243package mainimport (	&quot;github.com/gin-gonic/gin&quot;)func main() &#123;	r := gin.Default()	//前台路由	r.GET(&quot;/&quot;, func(c *gin.Context) &#123;		c.String(200, &quot;首页&quot;)	&#125;)	r.GET(&quot;/news&quot;, func(c *gin.Context) &#123;		c.String(200, &quot;新闻&quot;)	&#125;)	//后台路由	r.GET(&quot;/admin&quot;, func(c *gin.Context) &#123;		c.String(200, &quot;后台首页&quot;)	&#125;)	r.GET(&quot;/admin/user&quot;, func(c *gin.Context) &#123;		c.String(200, &quot;设置用户&quot;)	&#125;)	r.GET(&quot;/admin/article&quot;, func(c *gin.Context) ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/24/go-qie-pian-slice/" title="Go 切片（Slice）">Go 切片（Slice）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-24T13:15:01.000Z" title="发表于 2022-01-24 21:15:01">2022-01-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a></span></div><div class="content">Go 数组的长度不可改变，在特定场景中这样的集合就不太适用，Go 中提供了一种灵活，功能强悍的内置类型切片(“动态数组”)，与数组相比切片的长度是不固定的，可以追加元素，容量（cap）不够时会自动扩容 切片为引用类型，从数组中得到的切片修改元素值时，原数组也会发生变化，修改原数组时，切片也会变化 创建切片的四种方法  var  1var s []uint32 2.切片字面量，这样创建的切片长度和容量都等于初始元素个数 1s := []uint32&#123;1, 2, 3&#125; 3.make 使用make创建，可以指定长度和容量。格式为make([]type, len[, cap])，可以只指定长度，也可以长度容量同时指定 123s1 := make([]uint32)s2 := make([]uint32, 1)s3 := make([]uint32, 1, 10) 4，截取符，可以从现成的数组或切片创建 12345var arr [10]uint32s1 := arr[0:5]s2 := arr[:5]s3 := arr[5:]s4 := arr[:]  二、添加元素 使用append()函数向切片中添加元素，可以一次添加 0 个或多个元素，如果容量不够会自动扩容 1234567s := make([]uint32, 0, 4)s = append(s, 1, 2, 3)fmt.Println(len(s), cap(s)) // 3 4s = append(s, 4, 5, 6)fmt.Println(len(s), cap(s)) // 6 8 使用copy...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/01/24/go-zhong-de-andtnewtmaket-de-qu-bie/" title="Go 中的 &amp;T{...}、new(T)、make(T) 的区别">Go 中的 &amp;T{...}、new(T)、make(T) 的区别</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-01-24T10:55:46.000Z" title="发表于 2022-01-24 18:55:46">2022-01-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Golang/">Golang</a></span></div><div class="content">一、&amp;T{…} &amp;T&#123;...&#125; 可以返回一个 T 类型指针，并且在括号指定初值，只能用于结构体 二、new(T) new(T)与&amp;T&#123;...&#125;基本相同，但不能指定初值（所以一般还是用new(T)），不过除了结构体还可以用于基本类型（如 int ） 三、make(T) make(T)用于创建 3 种内建的引用类型：切片、map 和 channel，如： 1v := make([]int, 10, 50) 这样分配一个有 50 个 int 值的数组，并且创建了一个长度为 10，容量为 50 的 切片 v，该 切片 指向数组的前 10 个元素 换言之，new 函数分配内存，make 函数初始化；下图给出了区别：  又或者，我们来看 buildin.go 中的注释：  </div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/16/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/#content-inner">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/#content-inner">18</a><a class="page-number" href="/page/19/#content-inner">19</a><a class="extend next" rel="next" href="/page/18/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Nick Xu</div><div class="author-info-description">这家伙真勤奋，什么都留下了</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
             <i class="fas fa-folder-open"></i>
             <span>分类</span>
             
-            </div>
-            <ul class="card-category-list" id="aside-cat-list">
+          </div>
+          <ul class="card-category-list expandBtn" id="aside-cat-list">
             <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C-C/"><span class="card-category-list-name">C / C++</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/Golang/"><span class="card-category-list-name">Golang</span><span class="card-category-list-count">48</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/Flamego-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">Flamego 框架</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/GORM-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">GORM 框架</span><span class="card-category-list-count">13</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/Gin-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">Gin 框架</span><span class="card-category-list-count">10</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/go-zero-%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">go-zero 框架</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Golang/%E8%AF%AD%E6%B3%95%E9%80%9F%E9%80%9A/"><span class="card-category-list-name">语法速通</span><span class="card-category-list-count">11</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97/"><span class="card-category-list-name">Hexo + Butterfly 建站指南</span><span class="card-category-list-count">11</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/OSPP/"><span class="card-category-list-name">OSPP</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Others/"><span class="card-category-list-name">Others</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/Python/"><span class="card-category-list-name">Python</span><span class="card-category-list-count">14</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Python/Python3-%E5%85%A5%E9%97%A8/"><span class="card-category-list-name">Python3 入门</span><span class="card-category-list-count">13</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/QQ-Bot/"><span class="card-category-list-name">QQ Bot</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/macOS/"><span class="card-category-list-name">macOS</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/"><span class="card-category-list-name">基础课复习</span><span class="card-category-list-count">15</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E5%A4%A7%E5%AD%A6%E7%89%A9%E7%90%86/"><span class="card-category-list-name">大学物理</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/"><span class="card-category-list-name">离散数学</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9F%BA%E7%A1%80%E8%AF%BE%E5%A4%8D%E4%B9%A0/%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6/"><span class="card-category-list-name">高等数学</span><span class="card-category-list-count">4</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="card-category-list-name">微信小程序</span><span class="card-category-list-count">8</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/"><span class="card-category-list-name">开发基础</span><span class="card-category-list-count">8</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"><span class="card-category-list-name">数据库</span><span class="card-category-list-count">23</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/"><span class="card-category-list-name">MySQL</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/SQL-%E5%85%A5%E9%97%A8/"><span class="card-category-list-name">SQL 入门</span><span class="card-category-list-count">19</span></a></li></ul></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"><span class="card-category-list-name">数据结构与算法</span><span class="card-category-list-count">20</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/"><span class="card-category-list-name">算法拾遗</span><span class="card-category-list-count">14</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E6%8E%92%E5%BA%8F/"><span class="card-category-list-name">排序</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E6%90%9C%E7%B4%A2%E6%8A%80%E6%9C%AF/"><span class="card-category-list-name">搜索技术</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E6%8B%BE%E9%81%97/%E9%93%BE%E8%A1%A8/"><span class="card-category-list-name">链表</span><span class="card-category-list-count">1</span></a></li></ul></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%96%B0%E6%8A%80%E8%83%BD-Got/"><span class="card-category-list-name">新技能 Got</span><span class="card-category-list-count">21</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/"><span class="card-category-list-name">树莓派</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/"><span class="card-category-list-name">运维</span><span class="card-category-list-count">6</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/CICD/"><span class="card-category-list-name">CICD</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BF%90%E7%BB%B4/%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/"><span class="card-category-list-name">日志收集</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9A%8F%E7%AC%94%E4%B8%8E%E6%80%BB%E7%BB%93/"><span class="card-category-list-name">随笔与总结</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item parent"><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/"><span class="card-category-list-name">青训营</span><span class="card-category-list-count">44</span><i class="fas fa-caret-left "></i></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-3rd-%E5%90%8E%E7%AB%AF/"><span class="card-category-list-name">字节跳动-3rd-后端</span><span class="card-category-list-count">23</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE/"><span class="card-category-list-name">字节跳动-4th-大数据</span><span class="card-category-list-count">20</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-5th-%E5%90%8E%E7%AB%AF/"><span class="card-category-list-name">字节跳动-5th-后端</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E5%85%AB%E8%82%A1%E6%96%87/"><span class="card-category-list-name">面试八股文</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%A2%98%E8%A7%A3/"><span class="card-category-list-name">题解</span><span class="card-category-list-count">4</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.27em; color: rgb(175, 190, 36)">Linux</a><a href="/tags/SSH/" style="font-size: 1.17em; color: rgb(169, 185, 129)">SSH</a><a href="/tags/GORM/" style="font-size: 1.33em; color: rgb(158, 144, 84)">GORM</a><a href="/tags/Go/" style="font-size: 1.45em; color: rgb(134, 34, 151)">Go</a><a href="/tags/MySQL/" style="font-size: 1.22em; color: rgb(79, 60, 196)">MySQL</a><a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 1.22em; color: rgb(51, 114, 26)">树莓派</a><a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 1.27em; color: rgb(125, 113, 164)">随笔</a><a href="/tags/Gin/" style="font-size: 1.27em; color: rgb(113, 127, 198)">Gin</a><a href="/tags/%E5%BB%BA%E7%AB%99%E6%8A%80%E5%B7%A7/" style="font-size: 1.29em; color: rgb(33, 90, 38)">建站技巧</a><a href="/tags/Minecraft/" style="font-size: 1.17em; color: rgb(77, 175, 40)">Minecraft</a><a href="/tags/Python/" style="font-size: 1.36em; color: rgb(5, 186, 166)">Python</a><a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 1.2em; color: rgb(177, 190, 159)">环境配置</a><a href="/tags/SQL/" style="font-size: 1.38em; color: rgb(164, 74, 197)">SQL</a><a href="/tags/C-C/" style="font-size: 1.4em; color: rgb(14, 78, 155)">C/C++</a><a href="/tags/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" style="font-size: 1.31em; color: rgb(55, 22, 188)">算法竞赛</a><a href="/tags/QQ-bot/" style="font-size: 1.15em; color: rgb(152, 155, 41)">QQ bot</a><a href="/tags/%E9%A2%98%E8%A7%A3/" style="font-size: 1.22em; color: rgb(66, 60, 155)">题解</a><a href="/tags/Makefile/" style="font-size: 1.15em; color: rgb(38, 134, 157)">Makefile</a><a href="/tags/CMake/" style="font-size: 1.15em; color: rgb(171, 182, 7)">CMake</a><a href="/tags/STL/" style="font-size: 1.17em; color: rgb(137, 161, 3)">STL</a><a href="/tags/GitHub-Actions/" style="font-size: 1.2em; color: rgb(128, 133, 2)">GitHub Actions</a><a href="/tags/CICD/" style="font-size: 1.2em; color: rgb(128, 73, 150)">CICD</a><a href="/tags/Webhook/" style="font-size: 1.15em; color: rgb(54, 186, 173)">Webhook</a><a href="/tags/Docker/" style="font-size: 1.17em; color: rgb(121, 189, 125)">Docker</a><a href="/tags/GitHub/" style="font-size: 1.15em; color: rgb(128, 153, 2)">GitHub</a><a href="/tags/Redis/" style="font-size: 1.17em; color: rgb(141, 139, 176)">Redis</a><a href="/tags/go-zero/" style="font-size: 1.17em; color: rgb(27, 30, 63)">go-zero</a><a href="/tags/grpc/" style="font-size: 1.17em; color: rgb(61, 148, 7)">grpc</a><a href="/tags/tus/" style="font-size: 1.15em; color: rgb(145, 130, 162)">tus</a><a href="/tags/Flamego/" style="font-size: 1.15em; color: rgb(174, 90, 4)">Flamego</a><a href="/tags/JWT/" style="font-size: 1.15em; color: rgb(38, 172, 147)">JWT</a><a href="/tags/OSPP/" style="font-size: 1.17em; color: rgb(96, 103, 38)">OSPP</a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.17em; color: rgb(156, 115, 109)">运维</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/" style="font-size: 1.17em; color: rgb(46, 34, 185)">数据备份</a><a href="/tags/Windows/" style="font-size: 1.17em; color: rgb(146, 200, 155)">Windows</a><a href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/" style="font-size: 1.43em; color: rgb(17, 33, 35)">字节青训营</a><a href="/tags/Others/" style="font-size: 1.2em; color: rgb(160, 74, 8)">Others</a><a href="/tags/Twikoo/" style="font-size: 1.15em; color: rgb(3, 79, 126)">Twikoo</a><a href="/tags/WSL/" style="font-size: 1.2em; color: rgb(190, 161, 173)">WSL</a><a href="/tags/Clash/" style="font-size: 1.15em; color: rgb(60, 75, 174)">Clash</a><a href="/tags/hduhelp/" style="font-size: 1.17em; color: rgb(200, 173, 42)">hduhelp</a><a href="/tags/k8s/" style="font-size: 1.15em; color: rgb(29, 83, 163)">k8s</a><a href="/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/" style="font-size: 1.15em; color: rgb(157, 194, 106)">位运算</a><a href="/tags/BFS/" style="font-size: 1.22em; color: rgb(118, 33, 143)">BFS</a><a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.15em; color: rgb(109, 98, 63)">数学</a><a href="/tags/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/" style="font-size: 1.15em; color: rgb(88, 193, 77)">排列组合</a><a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1.15em; color: rgb(182, 85, 135)">链表</a><a href="/tags/DFS/" style="font-size: 1.15em; color: rgb(12, 159, 121)">DFS</a><a href="/tags/IDDFS/" style="font-size: 1.15em; color: rgb(112, 161, 8)">IDDFS</a><a href="/tags/IDA/" style="font-size: 1.15em; color: rgb(160, 95, 161)">IDA*</a><a href="/tags/%E8%88%9E%E8%B9%88%E9%93%BE-DLX/" style="font-size: 1.15em; color: rgb(104, 67, 163)">舞蹈链/DLX</a><a href="/tags/%E9%9D%A2%E8%AF%95%E5%B7%A5%E4%BD%9C/" style="font-size: 1.15em; color: rgb(167, 144, 34)">面试工作</a><a href="/tags/618%E5%A5%BD%E7%89%A9/" style="font-size: 1.15em; color: rgb(61, 41, 156)">618好物</a><a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 1.17em; color: rgb(167, 151, 32)">面试</a><a href="/tags/docker/" style="font-size: 1.15em; color: rgb(199, 175, 155)">docker</a><a href="/tags/%E6%97%85%E6%B8%B8/" style="font-size: 1.15em; color: rgb(85, 46, 175)">旅游</a><a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 1.24em; color: rgb(145, 180, 127)">微信小程序</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
-    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/10/"><span class="card-archive-list-date">十月 2025</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">十二月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">十月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/07/"><span class="card-archive-list-date">七月 2024</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">六月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/05/"><span class="card-archive-list-date">五月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/03/"><span class="card-archive-list-date">三月 2024</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/12/"><span class="card-archive-list-date">十二月 2023</span><span class="card-archive-list-count">3</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">300</div></div><div class="webinfo-item"><div class="item-name">已运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2021-11-12T16:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">355.3k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-11-17T19:40:06.926Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: #0d0d0d"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Nick Xu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"></div><div id="rightside-config-show"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><div class="js-pjax"><script>window.typedJSFn = {
-  init: (str) => {
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.27em; color: rgb(50, 50, 50);">Linux</a><a href="/tags/SSH/" style="font-size: 1.17em; color: rgb(135, 69, 165);">SSH</a><a href="/tags/GORM/" style="font-size: 1.33em; color: rgb(50, 119, 63);">GORM</a><a href="/tags/Go/" style="font-size: 1.45em; color: rgb(57, 157, 50);">Go</a><a href="/tags/MySQL/" style="font-size: 1.22em; color: rgb(103, 50, 140);">MySQL</a><a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 1.22em; color: rgb(134, 83, 170);">树莓派</a><a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 1.27em; color: rgb(142, 50, 81);">随笔</a><a href="/tags/Gin/" style="font-size: 1.27em; color: rgb(182, 159, 54);">Gin</a><a href="/tags/%E5%BB%BA%E7%AB%99%E6%8A%80%E5%B7%A7/" style="font-size: 1.29em; color: rgb(140, 88, 77);">建站技巧</a><a href="/tags/Minecraft/" style="font-size: 1.17em; color: rgb(117, 50, 146);">Minecraft</a><a href="/tags/Python/" style="font-size: 1.36em; color: rgb(50, 88, 179);">Python</a><a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 1.2em; color: rgb(50, 50, 51);">环境配置</a><a href="/tags/SQL/" style="font-size: 1.38em; color: rgb(91, 124, 163);">SQL</a><a href="/tags/C-C/" style="font-size: 1.4em; color: rgb(163, 123, 50);">C/C++</a><a href="/tags/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/" style="font-size: 1.31em; color: rgb(107, 90, 50);">算法竞赛</a><a href="/tags/QQ-bot/" style="font-size: 1.15em; color: rgb(184, 162, 124);">QQ bot</a><a href="/tags/%E9%A2%98%E8%A7%A3/" style="font-size: 1.22em; color: rgb(197, 137, 70);">题解</a><a href="/tags/Makefile/" style="font-size: 1.15em; color: rgb(112, 131, 155);">Makefile</a><a href="/tags/CMake/" style="font-size: 1.15em; color: rgb(113, 170, 50);">CMake</a><a href="/tags/STL/" style="font-size: 1.17em; color: rgb(139, 199, 56);">STL</a><a href="/tags/GitHub-Actions/" style="font-size: 1.2em; color: rgb(133, 136, 63);">GitHub Actions</a><a href="/tags/CICD/" style="font-size: 1.2em; color: rgb(175, 50, 115);">CICD</a><a href="/tags/Webhook/" style="font-size: 1.15em; color: rgb(65, 50, 168);">Webhook</a><a href="/tags/Docker/" style="font-size: 1.17em; color: rgb(52, 71, 89);">Docker</a><a href="/tags/GitHub/" style="font-size: 1.15em; color: rgb(67, 119, 75);">GitHub</a><a href="/tags/grpc/" style="font-size: 1.17em; color: rgb(52, 50, 165);">grpc</a><a href="/tags/Redis/" style="font-size: 1.17em; color: rgb(50, 121, 200);">Redis</a><a href="/tags/go-zero/" style="font-size: 1.17em; color: rgb(87, 149, 88);">go-zero</a><a href="/tags/tus/" style="font-size: 1.15em; color: rgb(85, 90, 52);">tus</a><a href="/tags/Flamego/" style="font-size: 1.15em; color: rgb(97, 96, 50);">Flamego</a><a href="/tags/JWT/" style="font-size: 1.15em; color: rgb(50, 55, 50);">JWT</a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.17em; color: rgb(120, 50, 176);">运维</a><a href="/tags/OSPP/" style="font-size: 1.17em; color: rgb(97, 50, 50);">OSPP</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/" style="font-size: 1.17em; color: rgb(88, 137, 50);">数据备份</a><a href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/" style="font-size: 1.43em; color: rgb(53, 72, 50);">字节青训营</a><a href="/tags/Others/" style="font-size: 1.2em; color: rgb(50, 56, 53);">Others</a><a href="/tags/Windows/" style="font-size: 1.17em; color: rgb(67, 53, 52);">Windows</a><a href="/tags/Twikoo/" style="font-size: 1.15em; color: rgb(159, 194, 57);">Twikoo</a><a href="/tags/WSL/" style="font-size: 1.2em; color: rgb(56, 50, 136);">WSL</a><a href="/tags/Clash/" style="font-size: 1.15em; color: rgb(70, 169, 129);">Clash</a><a href="/tags/hduhelp/" style="font-size: 1.17em; color: rgb(163, 50, 64);">hduhelp</a><a href="/tags/k8s/" style="font-size: 1.15em; color: rgb(50, 50, 199);">k8s</a><a href="/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/" style="font-size: 1.15em; color: rgb(81, 107, 50);">位运算</a><a href="/tags/BFS/" style="font-size: 1.22em; color: rgb(122, 134, 91);">BFS</a><a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.15em; color: rgb(50, 131, 102);">数学</a><a href="/tags/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/" style="font-size: 1.15em; color: rgb(99, 97, 166);">排列组合</a><a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1.15em; color: rgb(81, 76, 162);">链表</a><a href="/tags/DFS/" style="font-size: 1.15em; color: rgb(175, 96, 50);">DFS</a><a href="/tags/IDDFS/" style="font-size: 1.15em; color: rgb(138, 89, 140);">IDDFS</a><a href="/tags/IDA/" style="font-size: 1.15em; color: rgb(154, 149, 164);">IDA*</a><a href="/tags/%E8%88%9E%E8%B9%88%E9%93%BE-DLX/" style="font-size: 1.15em; color: rgb(50, 119, 196);">舞蹈链/DLX</a><a href="/tags/%E9%9D%A2%E8%AF%95%E5%B7%A5%E4%BD%9C/" style="font-size: 1.15em; color: rgb(69, 50, 158);">面试工作</a><a href="/tags/618%E5%A5%BD%E7%89%A9/" style="font-size: 1.15em; color: rgb(50, 50, 119);">618好物</a><a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 1.17em; color: rgb(162, 73, 144);">面试</a><a href="/tags/docker/" style="font-size: 1.15em; color: rgb(99, 161, 186);">docker</a><a href="/tags/%E6%97%85%E6%B8%B8/" style="font-size: 1.15em; color: rgb(158, 141, 70);">旅游</a><a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 1.24em; color: rgb(50, 73, 158);">微信小程序</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/10/">
+            <span class="card-archive-list-date">
+              十月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/12/">
+            <span class="card-archive-list-date">
+              十二月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/10/">
+            <span class="card-archive-list-date">
+              十月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/07/">
+            <span class="card-archive-list-date">
+              七月 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/06/">
+            <span class="card-archive-list-date">
+              六月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/05/">
+            <span class="card-archive-list-date">
+              五月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/03/">
+            <span class="card-archive-list-date">
+              三月 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2023/12/">
+            <span class="card-archive-list-date">
+              十二月 2023
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">300</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">355.3k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-12-17T17:20:44.506Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2025 By Nick Xu</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="/js/tw_cn.js?v=5.5.3"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
     window.typed = new Typed('#subtitle', Object.assign({
       strings: str,
       startDelay: 300,
@@ -650,23 +270,40 @@ make(T)用于创建 3 种内建的引用类型：切片、map 和 channel，如�
       backSpeed: 50,
     }, null))
   },
-  run: (subtitleType) => {
+  run: subtitleType => {
     if (true) {
       if (typeof Typed === 'function') {
         subtitleType()
       } else {
-        getScript('/pluginsSrc/typed.js/dist/typed.umd.js').then(subtitleType)
+        btf.getScript('/pluginsSrc/typed.js/dist/typed.umd.js?v=2.1.0').then(subtitleType)
       }
     } else {
       subtitleType()
     }
+  },
+  processSubtitle: (content, extraContents = []) => {
+    if (true) {
+      const sub = ["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"].slice()
+
+      if (extraContents.length > 0) {
+        sub.unshift(...extraContents)
+      }
+
+      if (typeof content === 'string') {
+        sub.unshift(content)
+      } else if (Array.isArray(content)) {
+        sub.unshift(...content)
+      }
+
+      sub.length > 0 && typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = typeof content === 'string' ? content :
+        (Array.isArray(content) && content.length > 0 ? content[0] : '')
+    }
   }
 }
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
 </script><script>function subtitleType () {
-  if (true) {
-    typedJSFn.init(["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"])
-  } else {
-    document.getElementById("subtitle").textContent = "求知若饥&#44;虚心若愚"
-  }
+  typedJSFn.processSubtitle(["求知若饥&#44;虚心若愚","Stay hungry, stay foolish"])
 }
-typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
+typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js?v=1.1.6" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>

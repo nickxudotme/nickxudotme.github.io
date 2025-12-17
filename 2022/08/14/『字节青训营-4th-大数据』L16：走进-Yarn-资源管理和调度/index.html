@@ -1,31 +1,159 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『字节青训营-4th-大数据』L16：走进 Yarn 资源管理和调度 | NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="相关链接🎶 学员手册：【大数据专场 学习资料六】第四届字节跳动青训营 - 掘金     YARN 概述 初识调度系统 场景导入  一种简易分配模型  优化的分配模型   调度系统演进 调度系统发展的背景  调度系统解决的问题  调度系统预达的目标  调度系统模型  主要是前两者用的比较多 YARN"><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/2022/08/14/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL16%EF%BC%9A%E8%B5%B0%E8%BF%9B-Yarn-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E5%92%8C%E8%B0%83%E5%BA%A6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『字节青训营-4th-大数据』L16：走进 Yarn 资源管理和调度 | NX の 博客</title><meta name="author" content="Nick Xu"><meta name="copyright" content="Nick Xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="相关链接🎶 学员手册：【大数据专场 学习资料六】第四届字节跳动青训营 - 掘金     YARN 概述 初识调度系统 场景导入  一种简易分配模型  优化的分配模型   调度系统演进 调度系统发展的背景  调度系统解决的问题  调度系统预达的目标  调度系统模型  主要是前两者用的比较多 Y..."><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "『字节青训营-4th-大数据』L16：走进 Yarn 资源管理和调度",
+  "url": "https://nickxu.me/2022/08/14/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL16%EF%BC%9A%E8%B5%B0%E8%BF%9B-Yarn-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E5%92%8C%E8%B0%83%E5%BA%A6/",
+  "image": "https://nickxu.me/static/202202230023069.jpg",
+  "datePublished": "2022-08-14T13:46:34.000Z",
+  "dateModified": "2023-08-15T05:42:18.229Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Nick Xu",
+      "url": "https://nickxu.me"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/static/icon.png"><link rel="canonical" href="https://nickxu.me/2022/08/14/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL16%EF%BC%9A%E8%B5%B0%E8%BF%9B-Yarn-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E5%92%8C%E8%B0%83%E5%BA%A6/index.html"><link rel="preconnect"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css?v=7.1.0"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?3573ab9aac9d53e5c34fea51e076a07d";
-  var s = document.getElementsByTagName("script")[0]; 
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-VBKFEG3YFD');
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-VBKFEG3YFD"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-VBKFEG3YFD')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-VBKFEG3YFD', {'page_path': window.location.pathname})
+}, 'google_analytics')
 </script><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  localSearch: undefined,
   translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
-  noticeOutdate: {"limitDay":300,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":800},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
   copy: {
     success: '复制成功',
-    error: '复制错误',
+    error: '复制失败',
     noSupport: '浏览器不支持'
   },
   relativeDate: {
     homepage: false,
     post: false
   },
-  runtime: '天',
+  runtime: '',
   dateSuffix: {
     just: '刚刚',
     min: '分钟前',
@@ -34,135 +162,28 @@ gtag('config', 'G-VBKFEG3YFD');
     month: '个月前'
   },
   copyright: undefined,
-  lightbox: 'fancybox',
+  lightbox: 'null',
   Snackbar: undefined,
-  source: {
-    justifiedGallery: {
-      js: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: '/pluginsSrc/flickr-justified-gallery/dist/fjGallery.css'
-    }
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js?v=4.12.0',
+    buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
-  islazyload: false,
+  islazyloadPlugin: false,
   isAnchor: false,
   percent: {
     toc: true,
     rightside: false,
   },
-  autoDarkmode: false
+  autoDarkmode: true
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '『字节青训营-4th-大数据』L16：走进 Yarn 资源管理和调度',
-  isPost: true,
-  isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2023-08-15 13:42:18'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
-        }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
-      }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
-      win.activateDarkMode = function () {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      win.activateLightMode = function () {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-      const t = saveToLocal.get('theme')
-    
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        if (asideStatus === 'hide') {
-          document.documentElement.classList.add('hide-aside')
-        } else {
-          document.documentElement.classList.remove('hide-aside')
-        }
-      }
-    
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-    })(window)</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/static/my.css"><script async src="https://analytics.umami.is/script.js" data-website-id="cabaee36-5ea6-431c-8f56-4127be850896"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="NX の 博客" type="application/atom+xml">
 <link rel="alternate" href="/rss2.xml" title="NX の 博客" type="application/rss+xml">
-</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/static/favicon.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/static/202202230023069.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="NX の 博客"><span class="site-name">NX の 博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『字节青训营-4th-大数据』L16：走进 Yarn 资源管理和调度</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-08-14T13:46:34.000Z" title="发表于 2022-08-14 21:46:34">2022-08-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-15T05:42:18.229Z" title="更新于 2023-08-15 13:42:18">2023-08-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE/">字节跳动-4th-大数据</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">481</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><details class="toggle" ><summary class="toggle-button" style="">相关链接</summary><div class="toggle-content"><p>🎶 学员手册：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7130131931722678308#heading-10">【大数据专场 学习资料六】第四届字节跳动青训营 - 掘金</a></p>
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/static/202202230023069.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">NX の 博客</span></a><a class="nav-page-title" href="/"><span class="site-name">『字节青训营-4th-大数据』L16：走进 Yarn 资源管理和调度</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-coffee"></i><span> 更多</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/contact/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/bookmarks/"><i class="fa-fw fas fa-bookmark"></i><span> 网址收藏</span></a></li><li><a class="site-page child" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">『字节青训营-4th-大数据』L16：走进 Yarn 资源管理和调度</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-08-14T13:46:34.000Z" title="发表于 2022-08-14 21:46:34">2022-08-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-15T05:42:18.229Z" title="更新于 2023-08-15 13:42:18">2023-08-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/">青训营</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%92%E8%AE%AD%E8%90%A5/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE/">字节跳动-4th-大数据</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">481</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:300,&quot;messagePrev&quot;:&quot;It has been&quot;,&quot;messageNext&quot;:&quot;days since the last update, the content of the article may be outdated.&quot;,&quot;postUpdate&quot;:&quot;2023-08-15 13:42:18&quot;}" hidden></div><details class="toggle" ><summary class="toggle-button" style="">相关链接</summary><div class="toggle-content"><p>🎶 学员手册：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7130131931722678308#heading-10">【大数据专场 学习资料六】第四届字节跳动青训营 - 掘金</a></p>
 </div></details>
 <p><img src="https://image.nickxu.me/202208231029986.png" alt="image-20220823102905340"></p>
 <p><img src="https://image.nickxu.me/202208231030342.png" alt="image-20220823103044121"></p>
@@ -299,68 +320,84 @@ gtag('config', 'G-VBKFEG3YFD');
 <p><img src="https://image.nickxu.me/202208231618107.png" alt="image-20220823161820950"></p>
 <h1 id="课程总结">课程总结</h1>
 <p><img src="https://image.nickxu.me/202208231618398.png" alt="image-20220823161844259"></p>
-</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/">字节青训营</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/08/13/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL15%EF%BC%9A%E6%B5%85%E8%B0%88%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/" title="『字节青训营-4th-大数据』L15：浅谈分布式一致性协议"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">『字节青训营-4th-大数据』L15：浅谈分布式一致性协议</div></div></a></div><div class="next-post pull-right"><a href="/2022/08/16/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL17%EF%BC%9A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-K8S-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E5%92%8C%E8%B0%83%E5%BA%A6/" title="『字节青训营-4th-大数据』L17：深入理解 K8S 资源管理和调度"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">『字节青训营-4th-大数据』L17：深入理解 K8S 资源管理和调度</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Giscus</span><span class="switch-btn"></span><span class="second-comment">Twikoo</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Nick Xu</div><div class="author-info__description">这家伙真勤奋，什么都留下了</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#YARN-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">YARN 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E8%AF%86%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.1.</span> <span class="toc-text">初识调度系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E5%AF%BC%E5%85%A5"><span class="toc-number">1.1.1.</span> <span class="toc-text">场景导入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E7%A7%8D%E7%AE%80%E6%98%93%E5%88%86%E9%85%8D%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">一种简易分配模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E9%85%8D%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.3.</span> <span class="toc-text">优化的分配模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E6%BC%94%E8%BF%9B"><span class="toc-number">1.2.</span> <span class="toc-text">调度系统演进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B1%95%E7%9A%84%E8%83%8C%E6%99%AF"><span class="toc-number">1.2.1.</span> <span class="toc-text">调度系统发展的背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.2.</span> <span class="toc-text">调度系统解决的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E9%A2%84%E8%BE%BE%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.3.</span> <span class="toc-text">调度系统预达的目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.4.</span> <span class="toc-text">调度系统模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YARN-%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="toc-number">1.3.</span> <span class="toc-text">YARN 设计思想</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%94%E5%8C%96%E8%83%8C%E6%99%AF"><span class="toc-number">1.3.1.</span> <span class="toc-text">演化背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E7%94%9F%E6%80%81"><span class="toc-number">1.3.2.</span> <span class="toc-text">离线生态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E4%B8%B4%E6%8C%91%E6%88%98"><span class="toc-number">1.3.3.</span> <span class="toc-text">面临挑战</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YARN-%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text">YARN 整体架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="toc-number">1.4.1.</span> <span class="toc-text">系统架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E8%BF%90%E8%A1%8C%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.2.</span> <span class="toc-text">任务运行生命周期核心流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97"><span class="toc-number">2.</span> <span class="toc-text">核心模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Resource-Manager"><span class="toc-number">2.1.</span> <span class="toc-text">Resource Manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">2.1.1.</span> <span class="toc-text">整体架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E8%81%8C%E8%B4%A3"><span class="toc-number">2.1.2.</span> <span class="toc-text">主要职责</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E7%AE%A1%E7%90%86"><span class="toc-number">2.1.3.</span> <span class="toc-text">状态机管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RMApp-%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-number">2.1.3.1.</span> <span class="toc-text">RMApp 状态机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RMAppAttempt"><span class="toc-number">2.1.3.2.</span> <span class="toc-text">RMAppAttempt</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RMContainer"><span class="toc-number">2.1.3.3.</span> <span class="toc-text">RMContainer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RMNode"><span class="toc-number">2.1.3.4.</span> <span class="toc-text">RMNode</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E5%99%A8%E5%88%86%E6%9E%90"><span class="toc-number">2.1.4.</span> <span class="toc-text">调度器分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1-%E8%B5%84%E6%BA%90%E7%BB%84%E7%BB%87"><span class="toc-number">2.1.4.1.</span> <span class="toc-text">任务&#x2F;资源组织</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B"><span class="toc-number">2.1.4.2.</span> <span class="toc-text">调度流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B8%E5%9E%8B%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">2.1.4.3.</span> <span class="toc-text">典型调度器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-Manager"><span class="toc-number">2.2.</span> <span class="toc-text">Node Manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84-2"><span class="toc-number">2.2.1.</span> <span class="toc-text">整体架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E8%81%8C%E8%B4%A3-2"><span class="toc-number">2.2.2.</span> <span class="toc-text">主要职责</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E7%AE%A1%E7%90%86-2"><span class="toc-number">2.2.3.</span> <span class="toc-text">状态机管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Application"><span class="toc-number">2.2.3.1.</span> <span class="toc-text">Application</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Container"><span class="toc-number">2.2.3.2.</span> <span class="toc-text">Container</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LocalizedResource"><span class="toc-number">2.2.3.3.</span> <span class="toc-text">LocalizedResource</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%81%A5%E5%BA%B7%E6%A3%80%E6%B5%8B%E6%9C%BA%E5%88%B6"><span class="toc-number">2.2.4.</span> <span class="toc-text">节点健康检测机制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E6%9C%BA%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">重要机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="toc-number">3.1.</span> <span class="toc-text">调度策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Fair-Share-%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E8%83%8C%E6%99%AF"><span class="toc-number">3.1.1.</span> <span class="toc-text">Fair Share 调度策略背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Instantaneous-Fair-Share-%E5%AE%9A%E4%B9%89"><span class="toc-number">3.1.2.</span> <span class="toc-text">Instantaneous Fair Share 定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Instantaneous-Fair-Share-%E8%AE%A1%E7%AE%97%E9%80%BB%E8%BE%91"><span class="toc-number">3.1.3.</span> <span class="toc-text">Instantaneous Fair Share 计算逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DRF-%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="toc-number">3.1.4.</span> <span class="toc-text">DRF 调度策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DRF-%E8%B0%83%E6%9F%A5%E7%AD%96%E7%95%A5%E6%8F%8F%E8%BF%B0"><span class="toc-number">3.1.5.</span> <span class="toc-text">DRF 调查策略描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DRF-%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E8%AE%A1%E7%AE%97%E9%80%BB%E8%BE%91"><span class="toc-number">3.1.6.</span> <span class="toc-text">DRF 调度策略计算逻辑</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E6%9C%BA%E5%88%B6"><span class="toc-number">3.2.</span> <span class="toc-text">事件机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E7%AE%A1%E7%90%86-3"><span class="toc-number">3.2.1.</span> <span class="toc-text">状态机管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%A8%A1%E5%9E%8B"><span class="toc-number">3.2.2.</span> <span class="toc-text">事件处理模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E9%94%99%E6%9C%BA%E5%88%B6"><span class="toc-number">3.3.</span> <span class="toc-text">容错机制</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AC%E5%8F%B8%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.</span> <span class="toc-text">公司实践</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Gang-%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">4.1.</span> <span class="toc-text">Gang 调度器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%BC%80%E5%8F%91-Gang-%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">4.1.1.</span> <span class="toc-text">为什么要开发 Gang 调度器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gang-%E8%B0%83%E5%BA%A6%E5%99%A8%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B8%E5%9E%8B%E7%89%B9%E7%82%B9"><span class="toc-number">4.1.2.</span> <span class="toc-text">Gang 调度器有什么典型特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gang-%E8%B0%83%E5%BA%A6%E5%99%A8%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B"><span class="toc-number">4.1.3.</span> <span class="toc-text">Gang 调度器调度流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E8%8A%82%E5%86%85%E9%83%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">4.1.4.</span> <span class="toc-text">字节内部使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">4.2.</span> <span class="toc-text">反调度器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%BC%80%E5%8F%91%E5%8F%8D%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">4.2.1.</span> <span class="toc-text">为什么需要开发反调度器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B"><span class="toc-number">4.2.2.</span> <span class="toc-text">反调度流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E8%B0%83%E5%BA%A6%E5%99%A8%E4%B8%8E-Gang-%E8%B0%83%E5%BA%A6%E5%99%A8%E5%85%B3%E7%B3%BB"><span class="toc-number">4.2.3.</span> <span class="toc-text">反调度器与 Gang 调度器关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E8%8A%82%E5%86%85%E9%83%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">4.2.4.</span> <span class="toc-text">字节内部使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E9%9B%86%E7%BE%A4%E8%A7%84%E6%A8%A1%E7%AA%81%E7%A0%B4-50K"><span class="toc-number">4.3.</span> <span class="toc-text">单集群规模突破 50K</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%8F%90%E5%8D%87%E5%8D%95%E9%9B%86%E7%BE%A4%E8%A7%84%E6%A8%A1"><span class="toc-number">4.3.1.</span> <span class="toc-text">为什么需要提升单集群规模</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RPC-%E7%93%B6%E9%A2%88"><span class="toc-number">4.3.2.</span> <span class="toc-text">RPC 瓶颈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dispatcher-%E7%93%B6%E9%A2%88"><span class="toc-number">4.3.3.</span> <span class="toc-text">Dispatcher 瓶颈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Scheduler-%E7%93%B6%E9%A2%88"><span class="toc-number">4.3.4.</span> <span class="toc-text">Scheduler 瓶颈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%83%E8%B7%B3%E5%8F%8D%E5%8E%8B%E6%9C%BA%E5%88%B6"><span class="toc-number">4.3.5.</span> <span class="toc-text">心跳反压机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96"><span class="toc-number">4.3.6.</span> <span class="toc-text">其他优化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">课程总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div></div></div></main><footer id="footer" style="background: #0d0d0d"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Nick Xu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="/pluginsSrc/katex/dist/katex.min.css"><script src="/pluginsSrc/katex/dist/contrib/copy-tex.min.js"></script><script>(() => {
-  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
-    btf.wrap(item, 'div', { class: 'katex-wrap'})
-  })
-})()</script><script>function getGiscusTheme (theme) {
-  return theme === 'dark' ? 'dark' : 'light'
-}
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5/">字节青训营</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/08/13/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL15%EF%BC%9A%E6%B5%85%E8%B0%88%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/" title="『字节青训营-4th-大数据』L15：浅谈分布式一致性协议"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">『字节青训营-4th-大数据』L15：浅谈分布式一致性协议</div></div><div class="info-2"><div class="info-item-1">相关链接🎶 学员手册：【大数据专场 学习资料六】第四届字节跳动青训营 - 掘金    分布式系统 分布式系统面临的挑战  理想中的分布式系统  从 HDFS 开始  案例 - KV   小结  一致性与共识算法 从复制开始   最好不要都接受请求，应设置一个主一个从 如何复制  两种策略，但是第一种的代价太高了  关于读操作  什么是一致性   复制协议 当失效发生  小结  共识算法    小结  从 Raft 入手 Paxos  Raft  复制状态机（RSM）  Raft 角色    客户端向 s2 发送请求 s2 把请求转成 log ，然后发送给 follower 多数完成，就回复客户     旧 leader 无响应后，发现的节点发起投票，获得半数投票即成为新 leader Raft 日志复制  小箭头：确认已经提交了的 log Raft 从节点失效  没有真正对比 log 的内容，只需要对比 term 和 index Raft Term  Raft 主节点失效  Raft Leader failure  格子上面的数字是几号 term 为什么第一个状态 s1 的 term 都是 1 ？可以想象之前 s1 是 leader，然后突然卡死了，选了 s2 是新 leader 此时 s2 挂了，然后 s3 请求成为 leader  ，s1 的 term 后面也变成了 3 状态是怎么复制的呢？一直往前检查，如果有冲突就从节点服从主节点 Raft 安全性 同 Term  跨 Term   小结  实现细节以及未来 案例 - KV    为什么读操作不能直接读的问题   ...</div></div></div></a><a class="pagination-related" href="/2022/08/16/%E3%80%8E%E5%AD%97%E8%8A%82%E9%9D%92%E8%AE%AD%E8%90%A5-4th-%E5%A4%A7%E6%95%B0%E6%8D%AE%E3%80%8FL17%EF%BC%9A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-K8S-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E5%92%8C%E8%B0%83%E5%BA%A6/" title="『字节青训营-4th-大数据』L17：深入理解 K8S 资源管理和调度"><img class="cover" src="/static/202202230023069.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">『字节青训营-4th-大数据』L17：深入理解 K8S 资源管理和调度</div></div><div class="info-2"><div class="info-item-1">相关链接🎶 学员手册：【大数据专场 学习资料六】第四届字节跳动青训营 - 掘金      Kubernetes 简介 为什么要 k8s  k8s 是什么  k8s 核心概念   Pod   spec：pod的核心配置，可以配置多个 containers  Volume/PV/PVC/StrorageClass  Volume 太老了直接跳过 Deployment  template 就是一个 pod 的声明 StatefulSet  Node  k8s 设计准则   声明式而不是命令式：告诉 k8s 最终想要什么状态，而不是具体要做什么做什么 控制循环：怎么生成中间步骤呢？通过控制循环 简单 模块化 向下兼容 开放  k8s 架构   k8s 核心通信机制 List-Watch  这里老师讲得真的很清楚，而且认为这个机制是 k8s 最大的特色 k8s 核心功能  资源管理  资源上报  节点资源样例  资源分配   状态维护  资源回收   调度 资源申请   request和limits：底线和上限  调度流程   示例  MySQL  WordPress    优化实践 k8s 还可以更好  字节的一些工作 资源管理  功能增强  性能优化  调度质量  k8s 和 Yarn 的一些不同   k8s：拿着应用找节点 yarn：拿着节点找应用  k8s的调度质量高，但是性能差 课程总结  </div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div class="comment-switch"><span class="first-comment">Giscus</span><span id="switch-btn"></span><span class="second-comment">Twikoo</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/static/favicon.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Nick Xu</div><div class="author-info-description">这家伙真勤奋，什么都留下了</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">300</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">41</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/nickxudotme"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="tencent://message/?uin=976180942&amp;Site=tool.520101.com&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="/static/weixin.jpg" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="mailto:nx@nickxu.me" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/rss2.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">因为本人最近工作和学习都很忙，所以博客更新会比较慢，敬请谅解！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#YARN-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">YARN 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E8%AF%86%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.1.</span> <span class="toc-text">初识调度系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E5%AF%BC%E5%85%A5"><span class="toc-number">1.1.1.</span> <span class="toc-text">场景导入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E7%A7%8D%E7%AE%80%E6%98%93%E5%88%86%E9%85%8D%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">一种简易分配模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E7%9A%84%E5%88%86%E9%85%8D%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.3.</span> <span class="toc-text">优化的分配模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E6%BC%94%E8%BF%9B"><span class="toc-number">1.2.</span> <span class="toc-text">调度系统演进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B1%95%E7%9A%84%E8%83%8C%E6%99%AF"><span class="toc-number">1.2.1.</span> <span class="toc-text">调度系统发展的背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.2.</span> <span class="toc-text">调度系统解决的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E9%A2%84%E8%BE%BE%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.3.</span> <span class="toc-text">调度系统预达的目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.4.</span> <span class="toc-text">调度系统模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YARN-%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="toc-number">1.3.</span> <span class="toc-text">YARN 设计思想</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%94%E5%8C%96%E8%83%8C%E6%99%AF"><span class="toc-number">1.3.1.</span> <span class="toc-text">演化背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E7%94%9F%E6%80%81"><span class="toc-number">1.3.2.</span> <span class="toc-text">离线生态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E4%B8%B4%E6%8C%91%E6%88%98"><span class="toc-number">1.3.3.</span> <span class="toc-text">面临挑战</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YARN-%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text">YARN 整体架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="toc-number">1.4.1.</span> <span class="toc-text">系统架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E8%BF%90%E8%A1%8C%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.2.</span> <span class="toc-text">任务运行生命周期核心流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97"><span class="toc-number">2.</span> <span class="toc-text">核心模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Resource-Manager"><span class="toc-number">2.1.</span> <span class="toc-text">Resource Manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">2.1.1.</span> <span class="toc-text">整体架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E8%81%8C%E8%B4%A3"><span class="toc-number">2.1.2.</span> <span class="toc-text">主要职责</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E7%AE%A1%E7%90%86"><span class="toc-number">2.1.3.</span> <span class="toc-text">状态机管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RMApp-%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-number">2.1.3.1.</span> <span class="toc-text">RMApp 状态机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RMAppAttempt"><span class="toc-number">2.1.3.2.</span> <span class="toc-text">RMAppAttempt</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RMContainer"><span class="toc-number">2.1.3.3.</span> <span class="toc-text">RMContainer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RMNode"><span class="toc-number">2.1.3.4.</span> <span class="toc-text">RMNode</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E5%99%A8%E5%88%86%E6%9E%90"><span class="toc-number">2.1.4.</span> <span class="toc-text">调度器分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1-%E8%B5%84%E6%BA%90%E7%BB%84%E7%BB%87"><span class="toc-number">2.1.4.1.</span> <span class="toc-text">任务&#x2F;资源组织</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B"><span class="toc-number">2.1.4.2.</span> <span class="toc-text">调度流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B8%E5%9E%8B%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">2.1.4.3.</span> <span class="toc-text">典型调度器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-Manager"><span class="toc-number">2.2.</span> <span class="toc-text">Node Manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84-2"><span class="toc-number">2.2.1.</span> <span class="toc-text">整体架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E8%81%8C%E8%B4%A3-2"><span class="toc-number">2.2.2.</span> <span class="toc-text">主要职责</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E7%AE%A1%E7%90%86-2"><span class="toc-number">2.2.3.</span> <span class="toc-text">状态机管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Application"><span class="toc-number">2.2.3.1.</span> <span class="toc-text">Application</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Container"><span class="toc-number">2.2.3.2.</span> <span class="toc-text">Container</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LocalizedResource"><span class="toc-number">2.2.3.3.</span> <span class="toc-text">LocalizedResource</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%81%A5%E5%BA%B7%E6%A3%80%E6%B5%8B%E6%9C%BA%E5%88%B6"><span class="toc-number">2.2.4.</span> <span class="toc-text">节点健康检测机制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E6%9C%BA%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">重要机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="toc-number">3.1.</span> <span class="toc-text">调度策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Fair-Share-%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E8%83%8C%E6%99%AF"><span class="toc-number">3.1.1.</span> <span class="toc-text">Fair Share 调度策略背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Instantaneous-Fair-Share-%E5%AE%9A%E4%B9%89"><span class="toc-number">3.1.2.</span> <span class="toc-text">Instantaneous Fair Share 定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Instantaneous-Fair-Share-%E8%AE%A1%E7%AE%97%E9%80%BB%E8%BE%91"><span class="toc-number">3.1.3.</span> <span class="toc-text">Instantaneous Fair Share 计算逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DRF-%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="toc-number">3.1.4.</span> <span class="toc-text">DRF 调度策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DRF-%E8%B0%83%E6%9F%A5%E7%AD%96%E7%95%A5%E6%8F%8F%E8%BF%B0"><span class="toc-number">3.1.5.</span> <span class="toc-text">DRF 调查策略描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DRF-%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E8%AE%A1%E7%AE%97%E9%80%BB%E8%BE%91"><span class="toc-number">3.1.6.</span> <span class="toc-text">DRF 调度策略计算逻辑</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E6%9C%BA%E5%88%B6"><span class="toc-number">3.2.</span> <span class="toc-text">事件机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E7%AE%A1%E7%90%86-3"><span class="toc-number">3.2.1.</span> <span class="toc-text">状态机管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%A8%A1%E5%9E%8B"><span class="toc-number">3.2.2.</span> <span class="toc-text">事件处理模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E9%94%99%E6%9C%BA%E5%88%B6"><span class="toc-number">3.3.</span> <span class="toc-text">容错机制</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AC%E5%8F%B8%E5%AE%9E%E8%B7%B5"><span class="toc-number">4.</span> <span class="toc-text">公司实践</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Gang-%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">4.1.</span> <span class="toc-text">Gang 调度器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%BC%80%E5%8F%91-Gang-%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">4.1.1.</span> <span class="toc-text">为什么要开发 Gang 调度器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gang-%E8%B0%83%E5%BA%A6%E5%99%A8%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B8%E5%9E%8B%E7%89%B9%E7%82%B9"><span class="toc-number">4.1.2.</span> <span class="toc-text">Gang 调度器有什么典型特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gang-%E8%B0%83%E5%BA%A6%E5%99%A8%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B"><span class="toc-number">4.1.3.</span> <span class="toc-text">Gang 调度器调度流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E8%8A%82%E5%86%85%E9%83%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">4.1.4.</span> <span class="toc-text">字节内部使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">4.2.</span> <span class="toc-text">反调度器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%BC%80%E5%8F%91%E5%8F%8D%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">4.2.1.</span> <span class="toc-text">为什么需要开发反调度器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B"><span class="toc-number">4.2.2.</span> <span class="toc-text">反调度流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E8%B0%83%E5%BA%A6%E5%99%A8%E4%B8%8E-Gang-%E8%B0%83%E5%BA%A6%E5%99%A8%E5%85%B3%E7%B3%BB"><span class="toc-number">4.2.3.</span> <span class="toc-text">反调度器与 Gang 调度器关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E8%8A%82%E5%86%85%E9%83%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="toc-number">4.2.4.</span> <span class="toc-text">字节内部使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E9%9B%86%E7%BE%A4%E8%A7%84%E6%A8%A1%E7%AA%81%E7%A0%B4-50K"><span class="toc-number">4.3.</span> <span class="toc-text">单集群规模突破 50K</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%8F%90%E5%8D%87%E5%8D%95%E9%9B%86%E7%BE%A4%E8%A7%84%E6%A8%A1"><span class="toc-number">4.3.1.</span> <span class="toc-text">为什么需要提升单集群规模</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RPC-%E7%93%B6%E9%A2%88"><span class="toc-number">4.3.2.</span> <span class="toc-text">RPC 瓶颈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dispatcher-%E7%93%B6%E9%A2%88"><span class="toc-number">4.3.3.</span> <span class="toc-text">Dispatcher 瓶颈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Scheduler-%E7%93%B6%E9%A2%88"><span class="toc-number">4.3.4.</span> <span class="toc-text">Scheduler 瓶颈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%83%E8%B7%B3%E5%8F%8D%E5%8E%8B%E6%9C%BA%E5%88%B6"><span class="toc-number">4.3.5.</span> <span class="toc-text">心跳反压机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96"><span class="toc-number">4.3.6.</span> <span class="toc-text">其他优化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">课程总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/from-hello-world-to-tencent.html" title="编程十年：那些人，那些事，那些瞬间">编程十年：那些人，那些事，那些瞬间</a><time datetime="2025-10-28T17:59:49.000Z" title="发表于 2025-10-29 01:59:49">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/six-months-in-Tencent.html" title="腾讯六月：未曾拥有过的美好时光😘">腾讯六月：未曾拥有过的美好时光😘</a><time datetime="2024-12-07T08:24:50.000Z" title="发表于 2024-12-07 16:24:50">2024-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/be-your-authentic-self.html" title="做原汁原味的自己">做原汁原味的自己</a><time datetime="2024-10-15T17:28:43.000Z" title="发表于 2024-10-16 01:28:43">2024-10-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-3.html" title="『七个月的挣扎之路』支线合集">『七个月的挣扎之路』支线合集</a><time datetime="2024-07-15T13:59:55.000Z" title="发表于 2024-07-15 21:59:55">2024-07-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/seven-months-of-struggle-main-part-2.html" title="『七个月的挣扎之路』主线：简历、面试与找工作（下）">『七个月的挣扎之路』主线：简历、面试与找工作（下）</a><time datetime="2024-07-15T13:56:53.000Z" title="发表于 2024-07-15 21:56:53">2024-07-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2025 By Nick Xu</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="/js/tw_cn.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
 
-function loadGiscus () {
-  const config = Object.assign({
-    src: 'https://giscus.app/client.js',
-    'data-repo': 'NX-Official/NX-Official.github.io',
-    'data-repo-id': 'R_kgDOGzWHdw',
-    'data-category-id': 'DIC_kwDOGzWHd84CX4Hy',
-    'data-mapping': 'pathname',
-    'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
-    'data-reactions-enabled': '1',
-    crossorigin: 'anonymous',
-    async: true
-  },null)
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
 
-  let ele = document.createElement('script')
-  for (let key in config) {
-    ele.setAttribute(key, config[key])
-  }
-  document.getElementById('giscus-wrap').insertAdjacentElement('afterbegin',ele)
-}
-
-function changeGiscusTheme (theme) {
-  function sendMessage(message) {
-    const iframe = document.querySelector('iframe.giscus-frame')
-    if (!iframe) return
-    iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app')
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
   }
 
-  sendMessage({
-    setConfig: {
-      theme: getGiscusTheme(theme)
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'nickxudotme/nickxudotme.github.io',
+      'data-repo-id': 'R_kgDOGzWHdw',
+      'data-category-id': 'DIC_kwDOGzWHd84CX4Hy',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
     }
-  });
-}
 
-btf.addModeChange('giscus', changeGiscusTheme)
+    const scriptElement = createScriptElement(giscusConfig)
 
-if ('Giscus' === 'Giscus' || !false) {
-  if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
-  else loadGiscus()
-} else {
-  function loadOtherComment () {
-    loadGiscus()
-  }
-}</script><script>(()=>{
-  const init = () => {
-    twikoo.init(Object.assign({
-      el: '#twikoo-wrap',
-      envId: 'https://twikoo.nickxu.top/',
-      region: 'ap-shanghai',
-      onCommentLoaded: function () {
-        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
       }
-    }, null))
+    }
   }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
 
   const getCount = () => {
     const countELement = document.getElementById('twikoo-count')
@@ -370,32 +407,51 @@ if ('Giscus' === 'Giscus' || !false) {
       region: 'ap-shanghai',
       urls: [window.location.pathname],
       includeReply: false
-    }).then(function (res) {
+    }).then(res => {
       countELement.textContent = res[0].count
-    }).catch(function (err) {
-      console.error(err);
-    });
+    }).catch(err => {
+      console.error(err)
+    })
   }
 
-  const runFn = () => {
-    init()
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.nickxu.top/',
+      region: 'ap-shanghai',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
     
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
   }
 
-  const loadTwikoo = () => {
-    if (typeof twikoo === 'object') {
-      setTimeout(runFn,0)
-      return
-    } 
-    getScript('/pluginsSrc/twikoo/dist/twikoo.all.min.js').then(runFn)
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('/pluginsSrc/twikoo/dist/twikoo.all.min.js?v=1.6.44').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Giscus' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
   }
 
   if ('Giscus' === 'Twikoo' || !false) {
     if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
     else loadTwikoo()
   } else {
-    window.loadOtherComment = () => {
-      loadTwikoo()
-    }
+    window.loadOtherComment = loadTwikoo
   }
-})()</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
+})()</script></div><script defer="defer" id="ribbon" src="/pluginsSrc/butterfly-extsrc/dist/canvas-ribbon.min.js?v=1.1.6" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
