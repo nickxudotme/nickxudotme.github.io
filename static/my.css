@@ -111,7 +111,13 @@ figure.highlight pre .addition {
   }
 }
 
-/* Custom Footer Background */
-#footer {
-  background: #0d0d0d !important;
+
+/* 浅色模式 footer */
+[data-theme="light"] #footer {
+  background: #000;
+}
+
+/* 深色模式 footer */
+[data-theme="dark"] #footer {
+  background: #000;
 }
