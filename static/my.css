@@ -112,12 +112,12 @@ figure.highlight pre .addition {
 }
 
 
-/* 浅色模式 footer */
-[data-theme="light"] #footer {
-  background: #000;
+[data-theme="light"] #footer,
+[data-theme="light"] #footer-wrap {
+  background: transparent;
 }
 
-/* 深色模式 footer */
-[data-theme="dark"] #footer {
-  background: #000;
+[data-theme="dark"] #footer,
+[data-theme="dark"] #footer-wrap {
+  background: transparent;
 }
